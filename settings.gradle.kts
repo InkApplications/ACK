@@ -1,3 +1,4 @@
+include("cli")
 include("client")
 include("structures")
 
