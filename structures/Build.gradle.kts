@@ -8,13 +8,14 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-common"))
+                api(kotlin("stdlib-common"))
+                api(Klock.core)
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("stdlib"))
+                api(kotlin("stdlib"))
             }
         }
     }
