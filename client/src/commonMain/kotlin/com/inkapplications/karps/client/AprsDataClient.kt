@@ -1,0 +1,13 @@
+package com.inkapplications.karps.client
+
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
+
+interface AprsDataClient {
+    suspend fun connect(
+        server: String,
+        port: Int,
+        credentials: Credentials,
+        onConnect: suspend (read: ReceiveChannel<String>, write: SendChannel<String>) -> Unit
+    )
+}
