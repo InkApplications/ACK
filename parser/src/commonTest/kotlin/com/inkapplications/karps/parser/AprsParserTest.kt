@@ -16,7 +16,10 @@ class AprsParserTest {
         assertEquals("APDR15", result.destination.callsign)
         assertEquals(0, result.source.ssid)
 
-        assertEquals(listOf("APDR15", "TCPIP*", "qAC", "T2HUN"), result.digipeaters.map { it.callsign })
-        assertEquals(listOf(0, 0, 0, 0).map { it.toByte() }, result.digipeaters.map { it.ssid })
+        assertEquals(listOf("TCPIP", "qAC", "T2HUN"), result.digipeaters.map { it.address.callsign })
+        assertEquals(listOf(0, 0, 0).map { it.toByte() }, result.digipeaters.map { it.address.ssid })
+        assertEquals(listOf(true, false, false), result.digipeaters.map { it.repeated })
+
+        assertEquals('=', result.dataTypeIdentifier)
     }
 }

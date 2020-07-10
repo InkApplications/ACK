@@ -11,3 +11,4 @@ data class Address(
         require(ssid in 0..15) { "Address SSID must be 0-15" }
     }
 }
+

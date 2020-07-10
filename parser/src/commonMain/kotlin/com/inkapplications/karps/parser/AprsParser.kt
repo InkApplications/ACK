@@ -5,26 +5,26 @@ import com.soywiz.klock.DateTime
 
 class AprsParser {
     fun fromString(frame: String): AprsPacket {
-        val digipeaters = parseDigipeaters(frame)
+        val source = frame.substringBefore('>').parseAddress()
+        val route = frame.substringAfter('>')
+            .substringBefore(':')
+            .split(',')
+        val destination = route[0].parseAddress()
+
+        val digipeaters = route.slice(1 until route.size).map {
+            Digipeater(it.trimEnd('*').parseAddress(), it.endsWith('*'))
+        }
+
+        val body = frame.substringAfter(':')
 
         return AprsPacket.Unknown(
             received = DateTime.now(),
-            dataTypeIdentifier = '{',
-            source = parseSource(frame),
-            destination = digipeaters[0],
+            dataTypeIdentifier = body[0],
+            source = source,
+            destination = destination,
             digipeaters = digipeaters
         )
     }
-
-    private fun parseSource(frame: String): Address = frame.substringBefore('>').parseAddress()
-
-    private fun parseDigipeaters(frame: String): List<Address> {
-        return frame.substringAfter('>')
-            .substringBefore(':')
-            .split(',')
-            .map { it.parseAddress() }
-    }
-
     private fun String.parseAddress() = Address(
         callsign = substringBefore('-'),
         ssid = substringAfter('-', "0").toByte()

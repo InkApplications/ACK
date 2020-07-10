@@ -10,14 +10,14 @@ sealed class AprsPacket {
     abstract val dataTypeIdentifier: Char
     abstract val source: Address
     abstract val destination: Address
-    abstract val digipeaters: List<Address>
+    abstract val digipeaters: List<Digipeater>
 
     data class Position(
         override val received: DateTime,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
-        override val digipeaters: List<Address>
+        override val digipeaters: List<Digipeater>
     ): AprsPacket()
 
     data class Unknown(
@@ -25,7 +25,7 @@ sealed class AprsPacket {
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
-        override val digipeaters: List<Address>
+        override val digipeaters: List<Digipeater>
     ): AprsPacket()
 }
 
