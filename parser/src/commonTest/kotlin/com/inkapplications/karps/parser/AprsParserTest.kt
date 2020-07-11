@@ -1,7 +1,9 @@
 package com.inkapplications.karps.parser
 
+import com.inkapplications.karps.structures.AprsPacket
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class AprsParserTest {
     @Test
@@ -21,5 +23,9 @@ class AprsParserTest {
         assertEquals(listOf(true, false, false), result.digipeaters.map { it.repeated })
 
         assertEquals('=', result.dataTypeIdentifier)
+        assertTrue(result is AprsPacket.Position, "Packet is parsed as a position")
+
+        assertEquals(37.778667, result.coordinates.latitude.decimal, 0.000001)
+        assertEquals(-84.0365, result.coordinates.longitude.decimal, 0.000001)
     }
 }

@@ -17,7 +17,8 @@ sealed class AprsPacket {
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
-        override val digipeaters: List<Digipeater>
+        override val digipeaters: List<Digipeater>,
+        val coordinates: Coordinates
     ): AprsPacket()
 
     data class Unknown(
@@ -28,4 +29,3 @@ sealed class AprsPacket {
         override val digipeaters: List<Digipeater>
     ): AprsPacket()
 }
-
