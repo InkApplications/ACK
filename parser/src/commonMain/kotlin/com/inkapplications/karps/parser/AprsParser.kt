@@ -41,7 +41,7 @@ class AprsParser {
 
     private fun String.parseAddress() = Address(
         callsign = substringBefore('-'),
-        ssid = substringAfter('-', "0").toByte()
+        ssid = substringAfter('-', "0")
     )
 
     private fun String.charAfter(other: Char) = this[indexOf(other) + 1]

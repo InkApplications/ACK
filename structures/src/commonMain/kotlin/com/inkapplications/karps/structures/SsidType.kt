@@ -29,5 +29,7 @@ enum class SsidType {
     /** Weather stations */
     Weather,
     /** Truckers or generally full time drivers */
-    Trucking
+    Trucking,
+    /** Unclassified types */
+    Unknown
 }
