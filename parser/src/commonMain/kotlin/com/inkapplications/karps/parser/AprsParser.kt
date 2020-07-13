@@ -5,7 +5,10 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
 import com.soywiz.klock.DateTime
 
-class AprsParser {
+class AprsParser(
+    private val parsers: List<PacketInformationParser> = listOf(PlainPositionParser),
+    private val onError: (error: Throwable, message: String) -> Unit = { _, _ -> }
+) {
     fun fromString(frame: String): AprsPacket {
         val source = frame.substringBefore('>').parseAddress()
         val route = frame.substringAfter('>')
@@ -19,24 +22,24 @@ class AprsParser {
             it.slice(1 until it.length)
         }
         val dataType = frame.charAfter(':')
+        val prototype = AprsPacket.Unknown(
+            received = DateTime.now(),
+            dataTypeIdentifier = dataType,
+            source = source,
+            destination = destination,
+            digipeaters = digipeaters,
+            body = body
+        )
 
-        return when (dataType) {
-            '!', '=' -> AprsPacket.Position(
-                received = DateTime.now(),
-                dataTypeIdentifier = dataType,
-                source = source,
-                destination = destination,
-                digipeaters = digipeaters,
-                coordinates = CoordinatesParser.fromStringBody(body)
-            )
-            else -> AprsPacket.Unknown(
-                received = DateTime.now(),
-                dataTypeIdentifier = dataType,
-                source = source,
-                destination = destination,
-                digipeaters = digipeaters
-            )
+        parsers.forEach {
+            try {
+                return it.parse(prototype)
+            } catch (error: PacketFormatException) {
+                onError(error, "Unsupported Packet")
+            }
         }
+
+        return prototype
     }
 
     private fun String.parseAddress() = Address(

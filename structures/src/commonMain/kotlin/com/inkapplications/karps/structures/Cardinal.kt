@@ -13,4 +13,4 @@ enum class Cardinal(val symbol: Char, internal val decimalSign: Int) {
 /**
  * Convert a single character to a cardinal direction.
  */
-fun Char.toCardinal(): Cardinal = Cardinal.values().first { it.symbol == this }
+fun Char.toCardinal(): Cardinal = Cardinal.values().first { it.symbol == toUpperCase() }

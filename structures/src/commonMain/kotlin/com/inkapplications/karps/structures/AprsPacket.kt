@@ -26,6 +26,7 @@ sealed class AprsPacket {
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
-        override val digipeaters: List<Digipeater>
+        override val digipeaters: List<Digipeater>,
+        val body: String
     ): AprsPacket()
 }
