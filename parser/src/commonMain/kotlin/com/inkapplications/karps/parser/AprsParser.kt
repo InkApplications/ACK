@@ -6,8 +6,10 @@ import com.inkapplications.karps.structures.Digipeater
 import com.soywiz.klock.DateTime
 
 class AprsParser(
-    private val parsers: List<PacketInformationParser> = listOf(PlainPositionParser),
-    private val onError: (error: Throwable, message: String) -> Unit = { _, _ -> }
+    private val parsers: List<PacketInformationParser> = listOf(
+        PlainPositionParser,
+        CompressedPositionParser
+    )
 ) {
     fun fromString(frame: String): AprsPacket {
         val source = frame.substringBefore('>').parseAddress()
@@ -31,13 +33,12 @@ class AprsParser(
             body = body
         )
 
-        parsers.forEach {
-            try {
-                return it.parse(prototype)
-            } catch (error: PacketFormatException) {
-                onError(error, "Unsupported Packet")
+        parsers.filter { prototype.dataTypeIdentifier in it.supportedDataTypes }
+            .forEach {
+                try {
+                    return it.parse(prototype)
+                } catch (error: PacketFormatException) {}
             }
-        }
 
         return prototype
     }

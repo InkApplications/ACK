@@ -1,7 +1,6 @@
 package com.inkapplications.karps.structures
 
 import kotlin.math.abs
-import kotlin.math.truncate
 
 /**
  * A Latitude/Longitude line.
@@ -53,7 +52,6 @@ data class Longitude(
     )
 }
 
-private val Double.degrees: Int get() = truncate(abs(this)).toInt()
-private val Double.minutes: Int get() = truncate((this - degrees) * 60).toInt()
-private val Double.seconds: Double get() = truncate((this - degrees - minutes) * 60)
-
+private val Double.degrees: Int get() = abs(toInt())
+private val Double.minutes: Int get() = ((abs(this) - degrees) * 60).toInt()
+private val Double.seconds: Double get() = ((abs(this) - degrees - (minutes / 60.0)) * 3600)
