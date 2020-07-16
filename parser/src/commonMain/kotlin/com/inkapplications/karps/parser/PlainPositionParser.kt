@@ -4,10 +4,11 @@ import com.inkapplications.karps.structures.*
 
 object PlainPositionParser: PacketInformationParser {
     override val supportedDataTypes = arrayOf('!', '/', '@', '=')
-    private val format = Regex("""^([0-9]{6}[0-9z/h])?([0-9\s]{2})([0-9\s]{2})[!-~]([0-9\s]{2})([NnSs]).([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])[!-~]""")
+    private val format = Regex("""^(${TIMESTAMP})?([0-9\s]{2})([0-9\s]{2})[!-~]([0-9\s]{2})([NnSs]).([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])[!-~](.*)$""")
+    private val String.value: Double get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
 
-    private fun fromStringBody(body: String): Coordinates {
-        val result = format.find(body) ?: throw PacketFormatException("Invalid coordinate format: $body")
+    override fun parse(packet: AprsPacket.Unknown): AprsPacket {
+        val result = format.find(packet.body) ?: throw PacketFormatException("Invalid coordinate format: ${packet.body}")
 
         val (
             timestamp,
@@ -18,7 +19,8 @@ object PlainPositionParser: PacketInformationParser {
             longDegrees,
             longMinutes,
             longSeconds,
-            longCardinal
+            longCardinal,
+            comment
         ) = result.destructured
 
         val latitude = Latitude(
@@ -34,19 +36,15 @@ object PlainPositionParser: PacketInformationParser {
             cardinal = longCardinal.single().toCardinal()
         )
 
-        return Coordinates(latitude, longitude)
-    }
-
-    private val String.value: Double get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
-
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         return AprsPacket.Position(
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            coordinates = fromStringBody(packet.body)
+            coordinates = Coordinates(latitude, longitude),
+            comment = comment,
+            timestamp = runCatching { timestamp.takeUnless { it.isEmpty() }?.let { Timestamps().parse(it) } }.getOrNull()
         )
     }
 }

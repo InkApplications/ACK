@@ -49,7 +49,7 @@ internal class KtorAprsDataClient(
                     }
                 }
             }
-            sendChannel.send("user ${credentials.callsign} pass ${credentials.passcode} vers $version")
+            sendChannel.send("user ${credentials.callsign} pass ${credentials.passcode} vers $version filter r/45.0563/-93.2687/100")
             onConnect(receiveChannel, sendChannel)
         }
     }
