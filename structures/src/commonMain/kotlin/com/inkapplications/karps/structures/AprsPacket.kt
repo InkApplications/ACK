@@ -21,7 +21,12 @@ sealed class AprsPacket {
         val coordinates: Coordinates,
         val comment: String,
         val timestamp: DateTime? = null
-    ): AprsPacket()
+    ): AprsPacket() {
+        val supportsMessaging = when (dataTypeIdentifier) {
+            '=', '@' -> true
+            else -> false
+        }
+    }
 
     data class Unknown(
         override val received: DateTime,
