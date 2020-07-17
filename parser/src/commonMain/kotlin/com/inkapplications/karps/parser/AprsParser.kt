@@ -6,10 +6,7 @@ import com.inkapplications.karps.structures.Digipeater
 import com.soywiz.klock.DateTime
 
 class AprsParser(
-    private val parsers: List<PacketInformationParser> = listOf(
-        PlainPositionParser,
-        CompressedPositionParser
-    )
+    private val parsers: List<PacketInformationParser>
 ) {
     fun fromString(frame: String): AprsPacket {
         val source = frame.substringBefore('>').parseAddress()

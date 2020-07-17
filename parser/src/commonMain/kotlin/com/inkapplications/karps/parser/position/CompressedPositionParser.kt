@@ -1,13 +1,20 @@
-package com.inkapplications.karps.parser
+package com.inkapplications.karps.parser.position
 
+import com.inkapplications.karps.parser.Base91
+import com.inkapplications.karps.parser.PacketFormatException
+import com.inkapplications.karps.parser.PacketInformationParser
+import com.inkapplications.karps.parser.timestamp.TIMESTAMP
+import com.inkapplications.karps.parser.timestamp.TimestampParser
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Coordinates
 import com.inkapplications.karps.structures.Latitude
 import com.inkapplications.karps.structures.Longitude
 
-object CompressedPositionParser: PacketInformationParser {
+class CompressedPositionParser(
+    private val timestampParser: TimestampParser
+): PacketInformationParser {
     override val supportedDataTypes: Array<Char> = arrayOf('!', '/', '@', '=')
-    private val format = Regex("""^(${TIMESTAMP})?[!-~]([!-|]{4})([!-|]{4})[!-~](.*)$""")
+    private val format = Regex("""^($TIMESTAMP)?[!-~]([!-|]{4})([!-|]{4})[!-~](.*)$""")
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val result = format.find(packet.body) ?: throw PacketFormatException("Invalid coordinate format: ${packet.body}")
@@ -24,7 +31,7 @@ object CompressedPositionParser: PacketInformationParser {
                 longitude = Longitude(-180 + (Base91.toInt(longitude) / 190463.0))
             ),
             comment = comment,
-            timestamp = runCatching { timestamp.takeUnless { it.isEmpty() }?.let { Timestamps().parse(it) } }.getOrNull()
+            timestamp = runCatching { timestampParser.parse(timestamp) }.getOrNull()
         )
     }
 }

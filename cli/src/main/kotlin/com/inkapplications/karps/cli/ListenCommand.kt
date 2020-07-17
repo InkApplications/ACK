@@ -9,6 +9,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import com.inkapplications.karps.client.AprsClientModule
 import com.inkapplications.karps.client.Credentials
+import com.inkapplications.karps.parser.ParserModule
 import com.inkapplications.karps.parser.AprsParser
 import com.inkapplications.karps.structures.AprsPacket
 
@@ -30,7 +31,7 @@ class ListenCommand: CliktCommand() {
         help = "APRS server to connect to."
     ).int().default(10152)
 
-    private val parser = AprsParser()
+    private val parser = ParserModule().parser()
 
     override fun run() {
         runBlocking {
@@ -43,7 +44,7 @@ class ListenCommand: CliktCommand() {
                 read.consumeEach { data ->
                     if (!data.startsWith('#')) parser.fromString(data).also {
                         when (it) {
-                            is AprsPacket.Position -> println("${it.javaClass.simpleName}: ${it.source.callsign} @ ${it.coordinates.latitude.decimal}, ${it.coordinates.longitude.decimal}")
+                            is AprsPacket.Position -> println("$it")
                             else -> println("Unknown: $data")
                         }
 
