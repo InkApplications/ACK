@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 class AprsParserTest {
     @Test
     fun parsePosition() {
-        val parser = AprsParser()
+        val parser = ParserModule().parser()
 
         val result = parser.fromString("KV4JW>APDR15,TCPIP*,qAC,T2HUN:=3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/")
 
@@ -32,7 +32,7 @@ class AprsParserTest {
 
     @Test
     fun parseCompressedPosition() {
-        val parser = AprsParser()
+        val parser = ParserModule().parser()
 
         val result = parser.fromString("REDKNL>APOT30,KE7JVX-10*,WIDE2-1,qAR,K7YI-4:!S;an%2#Co# st130F N7YSE Red Knoll")
 

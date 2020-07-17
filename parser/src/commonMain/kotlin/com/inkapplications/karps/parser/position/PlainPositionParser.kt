@@ -1,10 +1,16 @@
-package com.inkapplications.karps.parser
+package com.inkapplications.karps.parser.position
 
+import com.inkapplications.karps.parser.PacketFormatException
+import com.inkapplications.karps.parser.PacketInformationParser
+import com.inkapplications.karps.parser.timestamp.TIMESTAMP
+import com.inkapplications.karps.parser.timestamp.TimestampParser
 import com.inkapplications.karps.structures.*
 
-object PlainPositionParser: PacketInformationParser {
+class PlainPositionParser(
+    private val timestampParser: TimestampParser
+): PacketInformationParser {
     override val supportedDataTypes = arrayOf('!', '/', '@', '=')
-    private val format = Regex("""^(${TIMESTAMP})?([0-9\s]{2})([0-9\s]{2})[!-~]([0-9\s]{2})([NnSs]).([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])[!-~](.*)$""")
+    private val format = Regex("""^($TIMESTAMP)?([0-9\s]{2})([0-9\s]{2})[!-~]([0-9\s]{2})([NnSs]).([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])[!-~](.*)$""")
     private val String.value: Double get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
@@ -44,7 +50,7 @@ object PlainPositionParser: PacketInformationParser {
             digipeaters = packet.digipeaters,
             coordinates = Coordinates(latitude, longitude),
             comment = comment,
-            timestamp = runCatching { timestamp.takeUnless { it.isEmpty() }?.let { Timestamps().parse(it) } }.getOrNull()
+            timestamp = runCatching { timestampParser.parse(timestamp) }.getOrNull()
         )
     }
 }
