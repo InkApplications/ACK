@@ -27,11 +27,13 @@ internal class KtorAprsDataClient(
         server: String,
         port: Int,
         credentials: Credentials,
+        filters: List<String>?,
         onConnect: suspend (ReceiveChannel<String>, SendChannel<String>) -> Unit
     ) {
         val socket = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp().connect(InetSocketAddress(server, port))
         val socketWrite = socket.openWriteChannel(autoFlush = true)
         val socketRead = socket.openReadChannel()
+        val commands = filters?.let { "filter ${it.joinToString(" ")}" } ?: ""
         coroutineScope {
             launch {
                 while (isActive && !socketRead.isClosedForRead) {
@@ -49,7 +51,7 @@ internal class KtorAprsDataClient(
                     }
                 }
             }
-            sendChannel.send("user ${credentials.callsign} pass ${credentials.passcode} vers $version filter r/45.0563/-93.2687/100")
+            sendChannel.send("user ${credentials.callsign} pass ${credentials.passcode} vers $version $commands")
             onConnect(receiveChannel, sendChannel)
         }
     }

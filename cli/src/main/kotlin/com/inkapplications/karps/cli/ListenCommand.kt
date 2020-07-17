@@ -3,12 +3,14 @@ package com.inkapplications.karps.cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import com.inkapplications.karps.client.AprsClientModule
 import com.inkapplications.karps.client.Credentials
+import com.inkapplications.karps.parser.ParserModule
 import com.inkapplications.karps.parser.AprsParser
 import com.inkapplications.karps.structures.AprsPacket
 
@@ -30,7 +32,12 @@ class ListenCommand: CliktCommand() {
         help = "APRS server to connect to."
     ).int().default(10152)
 
-    private val parser = AprsParser()
+    private val filter by option(
+        names = *arrayOf("--filter"),
+        help = "Raw filter to specify as a server command."
+    ).multiple()
+
+    private val parser = ParserModule().parser()
 
     override fun run() {
         runBlocking {
@@ -38,13 +45,21 @@ class ListenCommand: CliktCommand() {
             client.connect(
                 credentials = Credentials(callsign),
                 server = server,
-                port = port
+                port = port,
+                filters = filter
             ) { read, write ->
                 read.consumeEach { data ->
                     if (!data.startsWith('#')) parser.fromString(data).also {
                         when (it) {
-                            is AprsPacket.Position -> println("${it.javaClass.simpleName}: ${it.source.callsign} @ ${it.coordinates.latitude.decimal}, ${it.coordinates.longitude.decimal}")
-                            else -> println("Unknown: $data")
+                            is AprsPacket.Position -> {
+                                echo("\n# Position from: ${it.source}")
+                                echo(" - Coordinates: ${it.coordinates}")
+                                echo(" - ${it.comment}")
+                            }
+                            is AprsPacket.Unknown -> {
+                                echo("\n# Unknown Packet from: ${it.source}")
+                                echo(" - ${it.body}")
+                            }
                         }
 
                     }

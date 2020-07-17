@@ -1,6 +1,7 @@
 package com.inkapplications.karps.structures
 
 import kotlin.math.abs
+import kotlin.math.round
 
 /**
  * A Latitude/Longitude line.
@@ -14,8 +15,6 @@ sealed class GeoLine {
     abstract val seconds: Double
     abstract val cardinal: Cardinal
     val decimal: Double get() = (degrees.toDouble() + (minutes.toDouble() / 60.0) + (seconds / 3600.0)) * cardinal.decimalSign
-
-    override fun toString(): String = "${degrees}º$minutes'$seconds\"${cardinal.symbol}"
 }
 
 /**
@@ -33,6 +32,8 @@ data class Latitude(
         seconds = decimal.seconds,
         cardinal = if (decimal < 0) Cardinal.South else Cardinal.North
     )
+
+    override fun toString(): String = "${degrees}º$minutes'${seconds.format}\"${cardinal.symbol}"
 }
 
 /**
@@ -50,8 +51,11 @@ data class Longitude(
         seconds = decimal.seconds,
         cardinal = if (decimal < 0) Cardinal.West else Cardinal.East
     )
+
+    override fun toString(): String = "${degrees}º$minutes'${seconds.format}\"${cardinal.symbol}"
 }
 
 private val Double.degrees: Int get() = abs(toInt())
 private val Double.minutes: Int get() = ((abs(this) - degrees) * 60).toInt()
 private val Double.seconds: Double get() = ((abs(this) - degrees - (minutes / 60.0)) * 3600)
+private val Double.format: String get() = (round(this * 10) / 10).toString()

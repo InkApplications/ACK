@@ -8,6 +8,7 @@ interface AprsDataClient {
         server: String,
         port: Int,
         credentials: Credentials,
+        filters: List<String>? = null,
         onConnect: suspend (read: ReceiveChannel<String>, write: SendChannel<String>) -> Unit
     )
 }

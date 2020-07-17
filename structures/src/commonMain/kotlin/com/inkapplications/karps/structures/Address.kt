@@ -27,4 +27,8 @@ data class Address(
         "14" -> Trucking
         else -> Unknown
     }
+
+    override fun toString(): String {
+        return "$callsign-$ssid"
+    }
 }
