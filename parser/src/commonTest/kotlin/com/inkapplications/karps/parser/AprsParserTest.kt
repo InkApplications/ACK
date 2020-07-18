@@ -21,7 +21,7 @@ class AprsParserTest {
 
         assertEquals(listOf("TCPIP", "qAC", "T2HUN"), result.digipeaters.map { it.address.callsign })
         assertEquals(listOf("0", "0", "0"), result.digipeaters.map { it.address.ssid })
-        assertEquals(listOf(true, false, false), result.digipeaters.map { it.repeated })
+        assertEquals(listOf(true, false, false), result.digipeaters.map { it.heard })
 
         assertEquals('=', result.dataTypeIdentifier)
         assertTrue(result is AprsPacket.Position, "Packet is parsed as a position")
@@ -44,7 +44,7 @@ class AprsParserTest {
 
         assertEquals(listOf("KE7JVX", "WIDE2", "qAR", "K7YI"), result.digipeaters.map { it.address.callsign })
         assertEquals(listOf("10", "1", "0", "4"), result.digipeaters.map { it.address.ssid })
-        assertEquals(listOf(true, false, false, false), result.digipeaters.map { it.repeated })
+        assertEquals(listOf(true, false, false, false), result.digipeaters.map { it.heard })
 
         assertEquals('!', result.dataTypeIdentifier)
         assertTrue(result is AprsPacket.Position, "Packet is parsed as a position")
