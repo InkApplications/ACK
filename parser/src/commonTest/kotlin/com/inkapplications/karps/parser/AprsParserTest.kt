@@ -2,6 +2,7 @@ package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Cardinal
+import com.inkapplications.karps.structures.Symbol
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -28,6 +29,11 @@ class AprsParserTest {
 
         assertEquals(37.778667, result.coordinates.latitude.decimal, 0.000001)
         assertEquals(-84.0365, result.coordinates.longitude.decimal, 0.000001)
+
+        result.symbol.run {
+            assertTrue(this is Symbol.Primary)
+            assertEquals('$', id)
+        }
     }
 
     @Test
@@ -58,5 +64,12 @@ class AprsParserTest {
         assertEquals(38, result.coordinates.longitude.minutes)
         assertEquals(7.87, result.coordinates.longitude.seconds, .01)
         assertEquals(Cardinal.West, result.coordinates.longitude.cardinal)
+
+        result.symbol.run {
+            assertTrue(this is Symbol.Alternate)
+            assertEquals('#', id)
+            assertEquals('S', overlay)
+            assertTrue(alphaNumeric)
+        }
     }
 }

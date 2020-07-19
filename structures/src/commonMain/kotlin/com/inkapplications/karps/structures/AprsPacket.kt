@@ -19,6 +19,7 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         val coordinates: Coordinates,
+        val symbol: Symbol,
         val comment: String,
         val timestamp: DateTime? = null
     ): AprsPacket() {
