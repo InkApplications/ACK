@@ -37,7 +37,7 @@ class ListenCommand: CliktCommand() {
         help = "Raw filter to specify as a server command."
     ).multiple()
 
-    private val parser = ParserModule().parser()
+    private val parser = ParserModule().defaultParser()
 
     override fun run() {
         runBlocking {
@@ -57,7 +57,7 @@ class ListenCommand: CliktCommand() {
                                 echo(" - ${it.comment}")
                             }
                             is AprsPacket.Unknown -> {
-                                echo("\n# Unknown Packet from: ${it.source}")
+                                echo("\nd# Unknown Packet from: ${it.source}")
                                 echo(" - ${it.body}")
                             }
                         }
