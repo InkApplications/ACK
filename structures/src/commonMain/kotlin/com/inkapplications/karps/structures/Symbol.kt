@@ -3,6 +3,7 @@ package com.inkapplications.karps.structures
 private const val CHAR_RANGE_START = '!'
 private const val CHAR_RANGE_END = '~'
 private val SUPPORTS_OVERLAY = arrayOf('#','&','0','>','A','W','^','_','s','u','v','z')
+private val VALID_OVERLAY = ('0'..'9') + ('a'..'j') + ('A'..'Z') + '/' + '\\'
 
 /**
  * APRS Symbol data to describe a graphical symbol.
@@ -19,7 +20,7 @@ sealed class Symbol {
     data class Primary(val id: Char): Symbol() {
         init {
             require(id in CHAR_RANGE_START..CHAR_RANGE_END) {
-                "Code Identifier $id out of bounds."
+                "Code Identifier '$id' out of bounds."
             }
         }
     }
@@ -38,10 +39,10 @@ sealed class Symbol {
 
         init {
             require(id in CHAR_RANGE_START..CHAR_RANGE_END) {
-                "Code Identifier out of bounds."
+                "Code Identifier '$id' out of bounds."
             }
-            require(overlay in ('0'..'9') + ('a'..'j') + ('A'..'Z') + '/' + '\\') {
-                "Table Identifier out of bounds."
+            require(overlay == null || overlay in VALID_OVERLAY) {
+                "Table Identifier '$overlay' out of bounds."
             }
         }
     }
