@@ -29,6 +29,15 @@ sealed class AprsPacket {
         }
     }
 
+    data class Weather(
+        override val received: DateTime,
+        override val dataTypeIdentifier: Char,
+        override val source: Address,
+        override val destination: Address,
+        override val digipeaters: List<Digipeater>,
+        val temperature: Degrees? = null
+    ): AprsPacket()
+
     data class Unknown(
         override val received: DateTime,
         override val dataTypeIdentifier: Char,
@@ -38,3 +47,4 @@ sealed class AprsPacket {
         val body: String
     ): AprsPacket()
 }
+
