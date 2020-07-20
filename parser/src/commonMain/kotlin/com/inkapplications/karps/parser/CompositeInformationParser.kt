@@ -12,7 +12,10 @@ import com.inkapplications.karps.structures.AprsPacket
 class CompositeInformationParser(
     private vararg val delegates: PacketInformationParser
 ): PacketInformationParser {
-    override val supportedDataTypes: Array<Char> = delegates.flatMap { it.supportedDataTypes.toList() }.toTypedArray()
+    override val supportedDataTypes: CharArray = delegates
+        .flatMap { it.supportedDataTypes.toList() }
+        .distinct()
+        .toCharArray()
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         delegates.filter { packet.dataTypeIdentifier in it.supportedDataTypes }

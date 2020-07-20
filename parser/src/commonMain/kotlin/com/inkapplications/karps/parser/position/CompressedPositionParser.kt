@@ -10,7 +10,7 @@ import com.inkapplications.karps.structures.*
 class CompressedPositionParser(
     private val timestampParser: TimestampParser
 ): PacketInformationParser {
-    override val supportedDataTypes: Array<Char> = arrayOf('!', '/', '@', '=')
+    override val supportedDataTypes: CharArray = charArrayOf('!', '/', '@', '=')
     private val format = Regex("""^($TIMESTAMP)?([!-~])([!-|]{4})([!-|]{4})([!-~])(.*)$""")
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {

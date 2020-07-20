@@ -9,7 +9,7 @@ interface PacketInformationParser {
     /**
      * Supported Data Type Identifiers that this parser may be able to parse.
      */
-    val supportedDataTypes: Array<Char>
+    val supportedDataTypes: CharArray
 
     /**
      * Attempt to parse the unknown packet's data.

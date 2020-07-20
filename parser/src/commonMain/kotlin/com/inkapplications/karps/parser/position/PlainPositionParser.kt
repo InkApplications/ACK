@@ -9,7 +9,7 @@ import com.inkapplications.karps.structures.*
 class PlainPositionParser(
     private val timestampParser: TimestampParser
 ): PacketInformationParser {
-    override val supportedDataTypes = arrayOf('!', '/', '@', '=')
+    override val supportedDataTypes = charArrayOf('!', '/', '@', '=')
     private val format = Regex("""^($TIMESTAMP)?([0-9\s]{2})([0-9\s]{2})\.([0-9\s]{2})([NnSs])([!-~])([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])([!-~])(.*)$""")
     private val String.value: Double get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
 
