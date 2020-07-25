@@ -10,6 +10,8 @@ inline class Degrees(val fahrenheit: Float) {
      * A Silly unit for temperature.
      */
     val celsius: Float get() = (fahrenheit - 32f) * (5f/9f)
+
+    override fun toString(): String = "${fahrenheit}ºF / ${celsius}ºC"
 }
 
 /**
