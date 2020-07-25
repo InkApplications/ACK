@@ -47,4 +47,3 @@ sealed class AprsPacket {
         val body: String
     ): AprsPacket()
 }
-
