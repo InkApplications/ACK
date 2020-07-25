@@ -15,6 +15,10 @@ import com.inkapplications.karps.parser.AprsParser
 import com.inkapplications.karps.structures.AprsPacket
 
 const val esc: Char = 27.toChar()
+const val blue = "${esc}[1;34m"
+const val yellow = "${esc}[1;33m"
+const val red = "${esc}[0;31m"
+const val normal = "${esc}[0m"
 
 class ListenCommand: CliktCommand() {
     private val callsign by argument(
@@ -52,12 +56,16 @@ class ListenCommand: CliktCommand() {
                     if (!data.startsWith('#')) parser.fromString(data).also {
                         when (it) {
                             is AprsPacket.Position -> {
-                                echo("\n# Position from: ${it.source}")
+                                echo("\n${blue}# Position from: ${it.source}${normal}")
                                 echo(" - Coordinates: ${it.coordinates}")
                                 echo(" - ${it.comment}")
                             }
+                            is AprsPacket.Weather -> {
+                                echo("\n${yellow}# Weather from: ${it.source}${normal}")
+                                echo(" - Temperature: ${it.temperature}")
+                            }
                             is AprsPacket.Unknown -> {
-                                echo("\nd# Unknown Packet from: ${it.source}")
+                                echo("\n${red}# Unknown Packet from: ${it.source}${normal}")
                                 echo(" - ${it.body}")
                             }
                         }
