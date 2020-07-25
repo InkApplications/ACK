@@ -7,7 +7,7 @@ import com.inkapplications.karps.structures.SsidType.*
  */
 data class Address(
     val callsign: String,
-    val ssid: String
+    val ssid: String = "0"
 ) {
     /**
      * Assumed SSID type based on recommended categories.

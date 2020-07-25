@@ -11,7 +11,7 @@ class PlainPositionParser(
 ): PacketInformationParser {
     override val supportedDataTypes = charArrayOf('!', '/', '@', '=')
     private val format = Regex("""^($TIMESTAMP)?([0-9\s]{2})([0-9\s]{2})\.([0-9\s]{2})([NnSs])([!-~])([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])([!-~])(.*)$""")
-    private val String.value: Double get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
+    private val String.value: Float get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toFloat() ?: 0.0f
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val result = format.find(packet.body) ?: throw PacketFormatException("Invalid coordinate format: ${packet.body}")
@@ -19,12 +19,12 @@ class PlainPositionParser(
         val timestamp = runCatching { timestampParser.parse(result.groupValues[1]) }.getOrNull()
         val latDegrees = result.groupValues[2].value.toInt()
         val latMinutes = result.groupValues[3].value.toInt()
-        val latSeconds = result.groupValues[4].value * .6
+        val latSeconds = result.groupValues[4].value * .6f
         val latCardinal = result.groupValues[5].single().toCardinal()
         val tableIdentifier = result.groupValues[6].single()
         val longDegrees = result.groupValues[7].value.toInt()
         val longMinutes = result.groupValues[8].value.toInt()
-        val longSeconds = result.groupValues[9].value * .6
+        val longSeconds = result.groupValues[9].value * .6f
         val longCardinal = result.groupValues[10].single().toCardinal()
         val codeIdentifier = result.groupValues[11].single()
         val comment = result.groupValues[12]

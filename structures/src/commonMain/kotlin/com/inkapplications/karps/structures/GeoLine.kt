@@ -12,7 +12,7 @@ import kotlin.math.round
 sealed class GeoLine {
     abstract val degrees: Int
     abstract val minutes: Int
-    abstract val seconds: Double
+    abstract val seconds: Float
     abstract val cardinal: Cardinal
     val decimal: Double get() = (degrees.toDouble() + (minutes.toDouble() / 60.0) + (seconds / 3600.0)) * cardinal.decimalSign
 }
@@ -23,7 +23,7 @@ sealed class GeoLine {
 data class Latitude(
     override val degrees: Int,
     override val minutes: Int,
-    override val seconds: Double,
+    override val seconds: Float,
     override val cardinal: Cardinal
 ): GeoLine() {
     constructor(decimal: Double): this(
@@ -42,7 +42,7 @@ data class Latitude(
 data class Longitude(
     override val degrees: Int,
     override val minutes: Int,
-    override val seconds: Double,
+    override val seconds: Float,
     override val cardinal: Cardinal
 ): GeoLine() {
     constructor(decimal: Double): this(
@@ -57,5 +57,5 @@ data class Longitude(
 
 private val Double.degrees: Int get() = abs(toInt())
 private val Double.minutes: Int get() = ((abs(this) - degrees) * 60).toInt()
-private val Double.seconds: Double get() = ((abs(this) - degrees - (minutes / 60.0)) * 3600)
-private val Double.format: String get() = (round(this * 10) / 10).toString()
+private val Double.seconds: Float get() = ((abs(this) - degrees - (minutes / 60.0)) * 3600).toFloat()
+private val Float.format: String get() = (round(this * 10) / 10).toString()
