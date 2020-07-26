@@ -1,6 +1,7 @@
 package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.structures.*
+import com.inkapplications.karps.structures.unit.*
 import com.soywiz.klock.DateTime
 
 object TestData {

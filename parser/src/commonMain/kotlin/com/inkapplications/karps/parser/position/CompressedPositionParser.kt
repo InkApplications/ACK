@@ -6,6 +6,9 @@ import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.parser.timestamp.TimestampParser
 import com.inkapplications.karps.structures.*
+import com.inkapplications.karps.structures.unit.Coordinates
+import com.inkapplications.karps.structures.unit.Latitude
+import com.inkapplications.karps.structures.unit.Longitude
 
 class CompressedPositionParser(
     private val timestampParser: TimestampParser

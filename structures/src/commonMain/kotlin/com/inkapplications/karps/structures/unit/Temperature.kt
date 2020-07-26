@@ -1,4 +1,4 @@
-package com.inkapplications.karps.structures
+package com.inkapplications.karps.structures.unit
 
 /**
  * Temperature unit.
@@ -22,4 +22,4 @@ val Number.degreesFahrenheit get() = Temperature(toFloat())
 /**
  * Use the given number as a temperature unit in degrees Celsius.
  */
-val Number.degreesCelsius get() = Temperature((toFloat() * (9f/5f)) + 32f)
+val Number.degreesCelsius get() = Temperature((toFloat() * (9f / 5f)) + 32f)

@@ -1,5 +1,7 @@
 package com.inkapplications.karps.structures
 
+import com.inkapplications.karps.structures.unit.degreesCelsius
+import com.inkapplications.karps.structures.unit.degreesFahrenheit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

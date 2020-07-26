@@ -1,4 +1,4 @@
-package com.inkapplications.karps.structures
+package com.inkapplications.karps.structures.unit
 
 /**
  * Geographic Direction

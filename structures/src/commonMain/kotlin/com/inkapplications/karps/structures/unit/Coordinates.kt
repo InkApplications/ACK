@@ -1,4 +1,7 @@
-package com.inkapplications.karps.structures
+package com.inkapplications.karps.structures.unit
+
+import com.inkapplications.karps.structures.unit.Latitude
+import com.inkapplications.karps.structures.unit.Longitude
 
 /**
  * Geo-positioning coordinates.

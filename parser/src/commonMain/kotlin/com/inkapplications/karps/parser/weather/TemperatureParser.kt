@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.weather
 
-import com.inkapplications.karps.structures.Temperature
+import com.inkapplications.karps.structures.unit.Temperature
 
 /**
  * Parse real temperature from APRS notation.

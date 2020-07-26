@@ -3,7 +3,7 @@ package com.inkapplications.karps.parser.weather
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.structures.Address
 import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.degreesFahrenheit
+import com.inkapplications.karps.structures.unit.degreesFahrenheit
 import com.soywiz.klock.DateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals

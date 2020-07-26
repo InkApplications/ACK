@@ -1,5 +1,8 @@
 package com.inkapplications.karps.structures
 
+import com.inkapplications.karps.structures.unit.Cardinal
+import com.inkapplications.karps.structures.unit.Latitude
+import com.inkapplications.karps.structures.unit.Longitude
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
