@@ -35,7 +35,7 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        val temperature: Degrees? = null
+        val temperature: Temperature? = null
     ): AprsPacket()
 
     data class Unknown(

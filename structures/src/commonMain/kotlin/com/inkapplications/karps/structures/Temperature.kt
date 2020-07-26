@@ -5,7 +5,7 @@ package com.inkapplications.karps.structures
  *
  * @param fahrenheit a sensible unit for temperature.
  */
-inline class Degrees(val fahrenheit: Float) {
+inline class Temperature(val fahrenheit: Float) {
     /**
      * A Silly unit for temperature.
      */
@@ -17,9 +17,9 @@ inline class Degrees(val fahrenheit: Float) {
 /**
  * Use the given number as a temperature unit in degrees Fahrenheit.
  */
-val Number.degreesFahrenheit get() = Degrees(toFloat())
+val Number.degreesFahrenheit get() = Temperature(toFloat())
 
 /**
  * Use the given number as a temperature unit in degrees Celsius.
  */
-val Number.degreesCelsius get() = Degrees((toFloat() * (9f/5f)) + 32f)
+val Number.degreesCelsius get() = Temperature((toFloat() * (9f/5f)) + 32f)
