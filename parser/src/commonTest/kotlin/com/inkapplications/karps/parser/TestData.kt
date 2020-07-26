@@ -65,7 +65,8 @@ object TestData {
                 Digipeater(Address("SEVENTH"))
             ),
             windData = WindData(
-                220.degreesBearing
+                direction = 220.degreesBearing,
+                speed = 4.mph
             ),
             temperature = 77.degreesFahrenheit
         )
