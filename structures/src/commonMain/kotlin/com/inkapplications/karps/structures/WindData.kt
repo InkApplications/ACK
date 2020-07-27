@@ -8,5 +8,6 @@ import com.inkapplications.karps.structures.unit.Speed
  */
 data class WindData(
     val direction: Bearing?,
-    val speed: Speed?
+    val speed: Speed?,
+    val gust: Speed?
 )

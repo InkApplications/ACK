@@ -66,7 +66,8 @@ object TestData {
             ),
             windData = WindData(
                 direction = 220.degreesBearing,
-                speed = 4.mph
+                speed = 4.mph,
+                gust = 4.mph
             ),
             temperature = 77.degreesFahrenheit
         )

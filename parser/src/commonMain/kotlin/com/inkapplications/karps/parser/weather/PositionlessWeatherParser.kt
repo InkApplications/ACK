@@ -24,7 +24,7 @@ import com.inkapplications.karps.structures.WindData
  * on the project page.
  */
 class PositionlessWeatherParser: PacketInformationParser {
-    private val format = Regex("""(${TIMESTAMP})(${WindDirectionParser.regex.pattern})(${WindSpeedParser.regex.pattern})(g(\d{3}|\.{3}|\s{3}))(${TemperatureParser.regex.pattern})([a-zA-Z]\d{2,5})*(.)?(.{2,4})?$""")
+    private val format = Regex("""(${TIMESTAMP})(${WindDirectionParser.regex.pattern})(${WindSpeedParser.regex.pattern})(${GustParser.regex.pattern})(${TemperatureParser.regex.pattern})([a-zA-Z]\d{2,5})*(.)?(.{2,4})?$""")
     override val supportedDataTypes: CharArray = charArrayOf('_')
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
@@ -38,7 +38,8 @@ class PositionlessWeatherParser: PacketInformationParser {
             digipeaters = packet.digipeaters,
             windData = WindData(
                 direction = WindDirectionParser.parse(results.groupValues[2]),
-                speed = WindSpeedParser.parse(results.groupValues[4])
+                speed = WindSpeedParser.parse(results.groupValues[4]),
+                gust = GustParser.parse(results.groupValues[6])
             ),
             temperature = TemperatureParser.parse(results.groupValues[8])
         )
