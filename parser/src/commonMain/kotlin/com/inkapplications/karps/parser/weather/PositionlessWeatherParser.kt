@@ -5,6 +5,11 @@ import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.WindData
+import com.inkapplications.karps.structures.unit.degreesBearing
+import com.inkapplications.karps.structures.unit.degreesFahrenheit
+import com.inkapplications.karps.structures.unit.mph
+
+private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
 
 /**
  * Parse Positionless weather packets.
@@ -24,11 +29,12 @@ import com.inkapplications.karps.structures.WindData
  * on the project page.
  */
 class PositionlessWeatherParser: PacketInformationParser {
-    private val format = Regex("""(${TIMESTAMP})(${WindDirectionParser.regex.pattern})(${WindSpeedParser.regex.pattern})(${GustParser.regex.pattern})(${TemperatureParser.regex.pattern})([a-zA-Z]\d{2,5})*(.)?(.{2,4})?$""")
+    private val format = Regex("""^(${TIMESTAMP})([Cc]${CHUNK}[Ss]${CHUNK}[Gg]${CHUNK}[Tt]${CHUNK}(?:[a-zA-Z]${CHUNK})*)(.)?(.{2,4})?$""")
     override val supportedDataTypes: CharArray = charArrayOf('_')
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val results = format.find(packet.body) ?: throw PacketFormatException("Not a weather packet.")
+        val data = WeatherChunkParser.getChunks(packet.body)
 
         return AprsPacket.Weather(
             received = packet.received,
@@ -37,11 +43,11 @@ class PositionlessWeatherParser: PacketInformationParser {
             destination = packet.destination,
             digipeaters = packet.digipeaters,
             windData = WindData(
-                direction = WindDirectionParser.parse(results.groupValues[2]),
-                speed = WindSpeedParser.parse(results.groupValues[4]),
-                gust = GustParser.parse(results.groupValues[6])
+                direction = data['c']?.degreesBearing,
+                speed = data['s']?.mph,
+                gust = data['g']?.mph
             ),
-            temperature = TemperatureParser.parse(results.groupValues[8])
+            temperature = data['t']?.degreesFahrenheit
         )
     }
 }
