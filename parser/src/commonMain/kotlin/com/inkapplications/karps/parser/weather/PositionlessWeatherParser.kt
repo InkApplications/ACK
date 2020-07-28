@@ -34,7 +34,7 @@ class PositionlessWeatherParser: PacketInformationParser {
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val results = format.find(packet.body) ?: throw PacketFormatException("Not a weather packet.")
-        val data = WeatherChunkParser.getChunks(packet.body)
+        val data = WeatherChunkParser.getChunks(results.groupValues[2])
 
         return AprsPacket.Weather(
             received = packet.received,
