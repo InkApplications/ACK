@@ -32,7 +32,7 @@ internal class KarpsParser(
 
         return try {
             infoParser.parse(prototype)
-        } catch (error: PacketFormatException) {
+        } catch (error: IllegalArgumentException) {
             prototype
         }
     }
