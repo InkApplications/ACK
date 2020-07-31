@@ -38,6 +38,7 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         val windData: WindData,
+        val rainData: RainData,
         val temperature: Temperature? = null
     ): AprsPacket()
 

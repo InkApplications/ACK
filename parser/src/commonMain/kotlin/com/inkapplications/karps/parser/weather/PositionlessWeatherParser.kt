@@ -4,9 +4,11 @@ import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.RainData
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.degreesBearing
 import com.inkapplications.karps.structures.unit.degreesFahrenheit
+import com.inkapplications.karps.structures.unit.hundredthsOfInch
 import com.inkapplications.karps.structures.unit.mph
 
 private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
@@ -29,7 +31,7 @@ private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
  * on the project page.
  */
 class PositionlessWeatherParser: PacketInformationParser {
-    private val format = Regex("""^(${TIMESTAMP})([Cc]${CHUNK}[Ss]${CHUNK}[Gg]${CHUNK}[Tt]${CHUNK}(?:[a-zA-Z]${CHUNK})*)(.)?(.{2,4})?$""")
+    private val format = Regex("""^(${TIMESTAMP})(c${CHUNK}s${CHUNK}g${CHUNK}t${CHUNK}(?:[a-zA-Z]${CHUNK})*)(.)?(.{2,4})?$""")
     override val supportedDataTypes: CharArray = charArrayOf('_')
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
@@ -46,6 +48,11 @@ class PositionlessWeatherParser: PacketInformationParser {
                 direction = data['c']?.degreesBearing,
                 speed = data['s']?.mph,
                 gust = data['g']?.mph
+            ),
+            rainData = RainData(
+                lastHour = data['r']?.hundredthsOfInch,
+                last24hours = data['p']?.hundredthsOfInch,
+                today = data['P']?.hundredthsOfInch
             ),
             temperature = data['t']?.degreesFahrenheit
         )

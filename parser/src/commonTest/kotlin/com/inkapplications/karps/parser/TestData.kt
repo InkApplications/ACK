@@ -53,7 +53,7 @@ object TestData {
     }
 
     object PositionlessWeather {
-        const val string = "W0YC-5>APX200,TCPIP*,qAC,SEVENTH:_10090556c220s004g005t077r000p000P000h50b09900wRSW"
+        const val string = "W0YC-5>APX200,TCPIP*,qAC,SEVENTH:_10090556c220s004g005t077r002p006P004h50b09900wRSW"
         val expected = AprsPacket.Weather(
             received = now,
             dataTypeIdentifier = '_',
@@ -67,7 +67,12 @@ object TestData {
             windData = WindData(
                 direction = 220.degreesBearing,
                 speed = 4.mph,
-                gust = 4.mph
+                gust = 5.mph
+            ),
+            rainData = RainData(
+                lastHour = 2.hundredthsOfInch,
+                last24hours = 6.hundredthsOfInch,
+                today = 4.hundredthsOfInch
             ),
             temperature = 77.degreesFahrenheit
         )

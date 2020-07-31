@@ -50,8 +50,8 @@ class IntegrationTests {
         assertBaseEquals(expected, result)
         assertType(AprsPacket.Weather::class, result) {
             assertEquals(expected.temperature, temperature)
-            assertEquals(expected.windData.direction, windData.direction)
-            assertEquals(expected.windData.speed, windData.speed)
+            assertEquals(expected.windData, windData)
+            assertEquals(expected.rainData, rainData)
         }
     }
 
