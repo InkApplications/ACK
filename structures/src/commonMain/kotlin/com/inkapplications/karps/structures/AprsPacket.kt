@@ -2,6 +2,7 @@ package com.inkapplications.karps.structures
 
 import com.inkapplications.karps.structures.unit.Coordinates
 import com.inkapplications.karps.structures.unit.Percentage
+import com.inkapplications.karps.structures.unit.Pressure
 import com.inkapplications.karps.structures.unit.Temperature
 import com.soywiz.klock.DateTime
 
@@ -41,7 +42,8 @@ sealed class AprsPacket {
         val windData: WindData,
         val rainData: RainData,
         val temperature: Temperature? = null,
-        val humidity: Percentage? = null
+        val humidity: Percentage? = null,
+        val pressure: Pressure? = null
     ): AprsPacket()
 
     data class Unknown(

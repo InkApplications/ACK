@@ -75,7 +75,8 @@ object TestData {
                 today = 4.hundredthsOfInch
             ),
             temperature = 77.degreesFahrenheit,
-            humidity = 50.percent
+            humidity = 50.percent,
+            pressure = 9900.decapascals
         )
     }
 }

@@ -52,7 +52,8 @@ class PositionlessWeatherParser: PacketInformationParser {
                 today = data['P']?.hundredthsOfInch
             ),
             temperature = data['t']?.degreesFahrenheit,
-            humidity = data['h']?.percent
+            humidity = data['h']?.percent,
+            pressure = data['b']?.decapascals
         )
     }
 }
