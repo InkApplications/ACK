@@ -10,7 +10,7 @@ package com.inkapplications.karps.parser.weather
  * identifier is a single character.
  */
 object WeatherChunkParser {
-    private val pattern = Regex("""([a-zA-Z])(\d{2,5}|\.{2,5})""")
+    private val pattern = Regex("""([a-zA-Z#])(\d{2,5}|\.{2,5})""")
 
     fun getChunks(data: String): Map<Char, Int> {
         return pattern.findAll(data)
