@@ -69,10 +69,10 @@ object TestData {
                 speed = 4.mph,
                 gust = 5.mph
             ),
-            rainData = RainData(
-                lastHour = 2.hundredthsOfInch,
-                last24hours = 6.hundredthsOfInch,
-                today = 4.hundredthsOfInch
+            precipitation = Precipitation(
+                rainLastHour = 2.hundredthsOfInch,
+                rainLast24Hours = 6.hundredthsOfInch,
+                rainToday = 4.hundredthsOfInch
             ),
             temperature = 77.degreesFahrenheit,
             humidity = 50.percent,

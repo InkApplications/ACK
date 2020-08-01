@@ -4,7 +4,7 @@ import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.RainData
+import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
 
@@ -46,10 +46,10 @@ class PositionlessWeatherParser: PacketInformationParser {
                 speed = data['s']?.mph,
                 gust = data['g']?.mph
             ),
-            rainData = RainData(
-                lastHour = data['r']?.hundredthsOfInch,
-                last24hours = data['p']?.hundredthsOfInch,
-                today = data['P']?.hundredthsOfInch
+            precipitation = Precipitation(
+                rainLastHour = data['r']?.hundredthsOfInch,
+                rainLast24Hours = data['p']?.hundredthsOfInch,
+                rainToday = data['P']?.hundredthsOfInch
             ),
             temperature = data['t']?.degreesFahrenheit,
             humidity = data['h']?.percent,
