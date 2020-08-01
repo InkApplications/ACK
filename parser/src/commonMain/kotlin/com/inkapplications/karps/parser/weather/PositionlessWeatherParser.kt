@@ -28,7 +28,7 @@ private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
  * on the project page.
  */
 class PositionlessWeatherParser: PacketInformationParser {
-    private val format = Regex("""^(${TIMESTAMP})(c${CHUNK}s${CHUNK}g${CHUNK}t${CHUNK}(?:[a-zA-Z]${CHUNK})*)(.)?(.{2,4})?$""")
+    private val format = Regex("""^(${TIMESTAMP})(c${CHUNK}s${CHUNK}g${CHUNK}t${CHUNK}(?:[a-zA-Z#]${CHUNK})*)(.)?(.{2,4})?$""")
     override val supportedDataTypes: CharArray = charArrayOf('_')
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
@@ -49,7 +49,8 @@ class PositionlessWeatherParser: PacketInformationParser {
             precipitation = Precipitation(
                 rainLastHour = data['r']?.hundredthsOfInch,
                 rainLast24Hours = data['p']?.hundredthsOfInch,
-                rainToday = data['P']?.hundredthsOfInch
+                rainToday = data['P']?.hundredthsOfInch,
+                rawRain = data['#']
             ),
             temperature = data['t']?.degreesFahrenheit,
             humidity = data['h']?.percent,

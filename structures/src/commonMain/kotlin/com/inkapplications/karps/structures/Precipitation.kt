@@ -9,5 +9,6 @@ data class Precipitation(
     val rainLastHour: Length? = null,
     val rainLast24Hours: Length? = null,
     val rainToday: Length? = null,
-    val snowLast24Hours: Length? = null
+    val snowLast24Hours: Length? = null,
+    val rawRain: Int? = null
 )
