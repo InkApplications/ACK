@@ -6,10 +6,7 @@ import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.RainData
 import com.inkapplications.karps.structures.WindData
-import com.inkapplications.karps.structures.unit.degreesBearing
-import com.inkapplications.karps.structures.unit.degreesFahrenheit
-import com.inkapplications.karps.structures.unit.hundredthsOfInch
-import com.inkapplications.karps.structures.unit.mph
+import com.inkapplications.karps.structures.unit.*
 
 private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
 
@@ -54,7 +51,8 @@ class PositionlessWeatherParser: PacketInformationParser {
                 last24hours = data['p']?.hundredthsOfInch,
                 today = data['P']?.hundredthsOfInch
             ),
-            temperature = data['t']?.degreesFahrenheit
+            temperature = data['t']?.degreesFahrenheit,
+            humidity = data['h']?.percent
         )
     }
 }

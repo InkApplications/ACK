@@ -52,6 +52,7 @@ class IntegrationTests {
             assertEquals(expected.temperature, temperature)
             assertEquals(expected.windData, windData)
             assertEquals(expected.rainData, rainData)
+            assertEquals(expected.humidity, humidity)
         }
     }
 

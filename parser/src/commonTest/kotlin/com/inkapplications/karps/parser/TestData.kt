@@ -74,7 +74,8 @@ object TestData {
                 last24hours = 6.hundredthsOfInch,
                 today = 4.hundredthsOfInch
             ),
-            temperature = 77.degreesFahrenheit
+            temperature = 77.degreesFahrenheit,
+            humidity = 50.percent
         )
     }
 }
