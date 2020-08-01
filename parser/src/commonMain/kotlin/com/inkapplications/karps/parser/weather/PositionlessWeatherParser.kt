@@ -53,7 +53,8 @@ class PositionlessWeatherParser: PacketInformationParser {
             ),
             temperature = data['t']?.degreesFahrenheit,
             humidity = data['h']?.percent,
-            pressure = data['b']?.decapascals
+            pressure = data['b']?.decapascals,
+            irradiance = data['L']?.wattsPerSquareMeter ?: data['l']?.plus(1000)?.wattsPerSquareMeter
         )
     }
 }

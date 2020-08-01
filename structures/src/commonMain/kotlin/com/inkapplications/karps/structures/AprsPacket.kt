@@ -1,9 +1,6 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Coordinates
-import com.inkapplications.karps.structures.unit.Percentage
-import com.inkapplications.karps.structures.unit.Pressure
-import com.inkapplications.karps.structures.unit.Temperature
+import com.inkapplications.karps.structures.unit.*
 import com.soywiz.klock.DateTime
 
 /**
@@ -43,8 +40,12 @@ sealed class AprsPacket {
         val rainData: RainData,
         val temperature: Temperature? = null,
         val humidity: Percentage? = null,
-        val pressure: Pressure? = null
-    ): AprsPacket()
+        val pressure: Pressure? = null,
+        val irradiance: Irradiance? = null
+    ): AprsPacket() {
+        @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"))
+        val luminosity = irradiance
+    }
 
     data class Unknown(
         override val received: DateTime,
