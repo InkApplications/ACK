@@ -2,6 +2,7 @@ package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.parser.position.PositionParser
 import com.inkapplications.karps.parser.timestamp.*
+import com.inkapplications.karps.parser.weather.CompleteWeatherParser
 import com.inkapplications.karps.parser.weather.PositionlessWeatherParser
 
 /**
@@ -16,8 +17,9 @@ class ParserModule {
     )
 
     fun defaultParsers(timestampParser: TimestampParser): Array<PacketInformationParser> = arrayOf(
-        PositionParser(timestampParser),
-        PositionlessWeatherParser()
+        CompleteWeatherParser(timestampParser),
+        PositionlessWeatherParser(timestampParser),
+        PositionParser(timestampParser)
     )
 
     fun parser(

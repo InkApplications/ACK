@@ -3,12 +3,13 @@ package com.inkapplications.karps.parser.weather
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.timestamp.TIMESTAMP
+import com.inkapplications.karps.parser.timestamp.TimestampParser
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
-
-private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
+import com.inkapplications.karps.parser.weather.WeatherChunkParser.ID
+import com.inkapplications.karps.parser.weather.WeatherChunkParser.DATA
 
 /**
  * Parse Positionless weather packets.
@@ -27,13 +28,16 @@ private const val CHUNK = """(?:\d{2,5}|\.{2,5})"""
  * If there is a more correct way to parse this ambiguity, please open an issue
  * on the project page.
  */
-class PositionlessWeatherParser: PacketInformationParser {
-    private val format = Regex("""^(${TIMESTAMP})(c${CHUNK}s${CHUNK}g${CHUNK}t${CHUNK}(?:[a-zA-Z#]${CHUNK})*)(.)?(.{2,4})?$""")
+class PositionlessWeatherParser(
+    private val timestampParser: TimestampParser
+): PacketInformationParser {
+    private val format = Regex("""^(${TIMESTAMP})(c${DATA}s${DATA}g${DATA}t${DATA}(?:${ID}${DATA})*)(.)?(.{2,4})?$""")
     override val supportedDataTypes: CharArray = charArrayOf('_')
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val results = format.find(packet.body) ?: throw PacketFormatException("Not a weather packet.")
         val data = WeatherChunkParser.getChunks(results.groupValues[2])
+        val timestamp = runCatching { timestampParser.parse(results.groupValues[1]) }.getOrNull()
 
         return AprsPacket.Weather(
             received = packet.received,
@@ -55,7 +59,8 @@ class PositionlessWeatherParser: PacketInformationParser {
             temperature = data['t']?.degreesFahrenheit,
             humidity = data['h']?.percent,
             pressure = data['b']?.decapascals,
-            irradiance = data['L']?.wattsPerSquareMeter ?: data['l']?.plus(1000)?.wattsPerSquareMeter
+            irradiance = data['L']?.wattsPerSquareMeter ?: data['l']?.plus(1000)?.wattsPerSquareMeter,
+            timestamp = timestamp
         )
     }
 }

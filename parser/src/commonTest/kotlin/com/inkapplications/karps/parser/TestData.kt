@@ -80,4 +80,33 @@ object TestData {
             irradiance = 1234.wattsPerSquareMeter
         )
     }
+
+    object CompleteWeather {
+        const val string = "W0YC-5>APX200,TCPIP*,qAC,SEVENTH:@092345z4903.50N/07201.75W_220/004g005t-07r002p006P004h50b09900l234wRSW"
+        val expected = AprsPacket.Weather(
+            received = now,
+            dataTypeIdentifier = '@',
+            source = Address("W0YC", "5"),
+            destination = Address("APX200"),
+            digipeaters = listOf(
+                Digipeater(Address("TCPIP"), heard = true),
+                Digipeater(Address("qAC")),
+                Digipeater(Address("SEVENTH"))
+            ),
+            windData = WindData(
+                direction = 220.degreesBearing,
+                speed = 4.mph,
+                gust = 5.mph
+            ),
+            precipitation = Precipitation(
+                rainLastHour = 2.hundredthsOfInch,
+                rainLast24Hours = 6.hundredthsOfInch,
+                rainToday = 4.hundredthsOfInch
+            ),
+            temperature = (-7).degreesFahrenheit,
+            humidity = 50.percent,
+            pressure = 9900.decapascals,
+            irradiance = 1234.wattsPerSquareMeter
+        )
+    }
 }

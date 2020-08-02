@@ -58,6 +58,24 @@ class IntegrationTests {
         }
     }
 
+    @Test
+    fun parseCompleteWeather() {
+        val parser = ParserModule().defaultParser()
+
+        val result = parser.fromString(TestData.CompleteWeather.string)
+        val expected = TestData.CompleteWeather.expected
+
+        assertBaseEquals(expected, result)
+        assertType(AprsPacket.Weather::class, result) {
+            assertEquals(expected.temperature, temperature)
+            assertEquals(expected.windData, windData)
+            assertEquals(expected.precipitation, precipitation)
+            assertEquals(expected.humidity, humidity)
+            assertEquals(expected.pressure, pressure)
+            assertEquals(expected.irradiance, irradiance)
+        }
+    }
+
     private fun assertBaseEquals(expected: AprsPacket, actual: AprsPacket) {
         assertEquals(expected.dataTypeIdentifier, actual.dataTypeIdentifier)
         assertEquals(expected.source, actual.source)

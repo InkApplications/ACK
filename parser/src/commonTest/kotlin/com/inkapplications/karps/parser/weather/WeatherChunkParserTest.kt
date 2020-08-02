@@ -47,4 +47,15 @@ class WeatherChunkParserTest {
 
         assertEquals(expected, result)
     }
+
+    @Test
+    fun negative() {
+        val data = "a-12"
+        val result = WeatherChunkParser.getChunks(data)
+        val expected = mapOf(
+            'a' to -12
+        )
+
+        assertEquals(expected, result)
+    }
 }
