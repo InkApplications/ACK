@@ -5,7 +5,9 @@ import com.inkapplications.karps.structures.unit.Cardinal.*
 /**
  * Direction represented as an angle in degrees.
  */
-inline class Bearing(val degrees: Short)
+inline class Bearing(val degrees: Short) {
+    override fun toString() = "${degrees}º"
+}
 
 /**
  * Convert a number of absolute degrees to a [Bearing].

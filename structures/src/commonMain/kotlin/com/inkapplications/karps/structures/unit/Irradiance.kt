@@ -6,7 +6,9 @@ package com.inkapplications.karps.structures.unit
  * In APRS, this is the unit used for "Luminosity", however this is not a unit
  * of luminance.
  */
-inline class Irradiance(val wattsPerSquareMeter: Int)
+inline class Irradiance(val wattsPerSquareMeter: Int) {
+    override fun toString() = "$wattsPerSquareMeter W/m^2"
+}
 
 /**
  * Use the given number as a measure of irradiance in watts/meter^2

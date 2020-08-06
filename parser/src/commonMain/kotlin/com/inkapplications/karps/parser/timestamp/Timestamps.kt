@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.soywiz.klock.DateTime
+import com.inkapplications.karps.structures.unit.Timestamp
 
 /**
  * Regex format that matches all APRS timestamps.
@@ -17,5 +17,5 @@ interface TimestampParser {
      * @param timestamp a string matching [TIMESTAMP] format to be parsed.
      * @return a UTC local date/time.
      */
-    fun parse(timestamp: String): DateTime
+    fun parse(timestamp: String): Timestamp
 }

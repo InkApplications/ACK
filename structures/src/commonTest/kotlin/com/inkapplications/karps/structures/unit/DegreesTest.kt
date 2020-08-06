@@ -1,7 +1,5 @@
-package com.inkapplications.karps.structures
+package com.inkapplications.karps.structures.unit
 
-import com.inkapplications.karps.structures.unit.degreesCelsius
-import com.inkapplications.karps.structures.unit.degreesFahrenheit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,13 +14,13 @@ class DegreesTest {
         assertEquals(77.degreesFahrenheit,25.degreesCelsius)
         assertEquals((-40).degreesFahrenheit, (-40).degreesCelsius)
 
-        assertEquals(32f, 0.degreesCelsius.fahrenheit)
+        assertEquals(32, 0.degreesCelsius.fahrenheit)
         assertEquals(0f, 32.degreesFahrenheit.celsius)
 
-        assertEquals(68f, 20.degreesCelsius.fahrenheit)
-        assertEquals(22.22f, 72.degreesFahrenheit.celsius, .01f)
+        assertEquals(68, 20.degreesCelsius.fahrenheit)
+        com.inkapplications.karps.structures.assertEquals(22.22f, 72.degreesFahrenheit.celsius, .01f)
 
-        assertEquals(-40f, (-40f).degreesCelsius.fahrenheit)
-        assertEquals((-40f), (-40f).degreesFahrenheit.celsius)
+        assertEquals(-40, (-40).degreesCelsius.fahrenheit)
+        assertEquals((-40f), (-40).degreesFahrenheit.celsius)
     }
 }

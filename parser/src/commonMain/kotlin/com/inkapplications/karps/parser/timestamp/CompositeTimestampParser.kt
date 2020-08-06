@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.timestamp
 
 import com.inkapplications.karps.parser.PacketFormatException
-import com.soywiz.klock.DateTime
+import com.inkapplications.karps.structures.unit.Timestamp
 
 /**
  * Delegate timestamp parsing to a series of parsers.
@@ -12,7 +12,7 @@ import com.soywiz.klock.DateTime
 class CompositeTimestampParser(
     private vararg val delegates: TimestampParser
 ): TimestampParser {
-    override fun parse(timestamp: String): DateTime {
+    override fun parse(timestamp: String): Timestamp {
         delegates.forEach { parser ->
             try {
                 return parser.parse(timestamp)

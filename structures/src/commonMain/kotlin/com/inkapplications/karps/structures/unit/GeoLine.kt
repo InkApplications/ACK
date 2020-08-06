@@ -18,44 +18,62 @@ sealed class GeoLine {
 }
 
 /**
- * Latitude/parallel position of a coordinate.
+ * Latitude/parallel position of a coordinate stored with decisecond precision.
  */
 data class Latitude(
     override val degrees: Int,
     override val minutes: Int,
-    override val seconds: Float,
+    private val deciseconds: Int,
     override val cardinal: Cardinal
 ): GeoLine() {
+    constructor(
+        degrees: Int,
+        minutes: Int,
+        seconds: Float,
+        cardinal: Cardinal
+    ): this(degrees, minutes, (seconds * 10).toInt(), cardinal)
+
     constructor(decimal: Double): this(
         degrees = decimal.degrees,
         minutes = decimal.minutes,
-        seconds = decimal.seconds,
+        deciseconds = decimal.deciseconds,
         cardinal = if (decimal < 0) Cardinal.South else Cardinal.North
     )
 
-    override fun toString(): String = "${degrees}º$minutes'${seconds.format}\"${cardinal.symbol}"
+    override val seconds: Float = deciseconds.toFloat() / 10f
+
+    override fun toString() = "${degrees}º$minutes'${seconds.format}\"${cardinal.symbol}"
 }
 
 /**
- * Longitude/meridian position of a coordinate.
+ * Longitude/meridian position of a coordinate stored with decisecond precision.
  */
 data class Longitude(
     override val degrees: Int,
     override val minutes: Int,
-    override val seconds: Float,
+    private val deciseconds: Int,
     override val cardinal: Cardinal
 ): GeoLine() {
+    constructor(
+        degrees: Int,
+        minutes: Int,
+        seconds: Float,
+        cardinal: Cardinal
+    ): this(degrees, minutes, (seconds * 10).toInt(), cardinal)
+
     constructor(decimal: Double): this(
         degrees = decimal.degrees,
         minutes = decimal.minutes,
-        seconds = decimal.seconds,
+        deciseconds = decimal.deciseconds,
         cardinal = if (decimal < 0) Cardinal.West else Cardinal.East
     )
 
-    override fun toString(): String = "${degrees}º$minutes'${seconds.format}\"${cardinal.symbol}"
+    override val seconds: Float = deciseconds.toFloat() / 10f
+
+    override fun toString() = "${degrees}º$minutes'${seconds.format}\"${cardinal.symbol}"
 }
 
 private val Double.degrees: Int get() = abs(toInt())
 private val Double.minutes: Int get() = ((abs(this) - degrees) * 60).toInt()
-private val Double.seconds: Float get() = ((abs(this) - degrees - (minutes / 60.0)) * 3600).toFloat()
+private val Double.deciseconds: Int get() = ((abs(this) - degrees - (minutes / 60.0)) * 36000).toInt()
 private val Float.format: String get() = (round(this * 10) / 10).toString()

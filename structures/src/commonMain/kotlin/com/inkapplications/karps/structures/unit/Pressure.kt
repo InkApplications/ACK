@@ -1,12 +1,14 @@
 package com.inkapplications.karps.structures.unit
 
 /**
- * Unit of pressure.
+ * Unit of pressure stored with decapascal precision.
  */
 inline class Pressure(val decapascals: Int) {
     val pascals: Int get() = decapascals * 10
     val millibars: Int get() = decapascals / 10
     val bars: Float get() = decapascals / 10_000f
+
+    override fun toString() = "${decapascals} mb"
 }
 
 /**

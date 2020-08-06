@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
+import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -7,14 +8,17 @@ import kotlin.test.assertEquals
 class HmsParserTest {
     @Test
     fun parse() {
-        val now = DateTime.now()
+        val expected = DateTime.now()
+            .copyDayOfMonth(
+                hours = 23,
+                minutes = 45,
+                seconds = 17,
+                milliseconds = 0
+            )
+            .unixMillisLong
+            .asTimestamp
         val result = HmsParser().parse("234517h")
 
-        assertEquals(now.year, result.year)
-        assertEquals(now.month, result.month)
-        assertEquals(now.dayOfMonth, result.dayOfMonth)
-        assertEquals(23, result.hours)
-        assertEquals(45, result.minutes)
-        assertEquals(17, result.seconds)
+        assertEquals(expected, result)
     }
 }

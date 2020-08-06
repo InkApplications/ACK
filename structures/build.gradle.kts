@@ -9,7 +9,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(kotlin("stdlib-common"))
-                api(Klock.core)
             }
         }
 

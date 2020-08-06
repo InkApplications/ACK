@@ -1,7 +1,8 @@
 package com.inkapplications.karps.parser.timestamp
 
 import com.inkapplications.karps.parser.PacketFormatException
-import com.soywiz.klock.DateTime
+import com.inkapplications.karps.structures.unit.Timestamp
+import com.inkapplications.karps.structures.unit.asTimestamp
 import kotlin.test.*
 
 class CompositeTimestampParserTest {
@@ -23,8 +24,8 @@ class CompositeTimestampParserTest {
     fun orderedPriority() {
         val first = ParserSpy()
         val second = object: TimestampParser {
-            override fun parse(timestamp: String): DateTime {
-                return DateTime.EPOCH
+            override fun parse(timestamp: String): Timestamp {
+                return 123L.asTimestamp
             }
         }
         val third = ParserSpy()
@@ -32,7 +33,7 @@ class CompositeTimestampParserTest {
 
         val result = composite.parse("not-real")
 
-        assertEquals(DateTime.EPOCH, result)
+        assertEquals(123L, result.epochMilliseconds)
         assertTrue(first.called, "First parser should be invoked if called in-order")
         assertFalse(third.called, "Third parser should not be invoked if a result was provided.")
 
@@ -41,7 +42,7 @@ class CompositeTimestampParserTest {
 
 private class ParserSpy: TimestampParser {
     var called = false
-    override fun parse(timestamp: String): DateTime {
+    override fun parse(timestamp: String): Timestamp {
         called = true
         throw PacketFormatException()
     }

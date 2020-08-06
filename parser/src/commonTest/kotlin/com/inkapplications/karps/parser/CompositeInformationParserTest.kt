@@ -2,12 +2,11 @@ package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.structures.Address
 import com.inkapplications.karps.structures.AprsPacket
-import com.soywiz.klock.DateTime
 import kotlin.test.*
 
 class CompositeTimestampParserTest {
     private val prototype = AprsPacket.Unknown(
-        received = DateTime.now(),
+        received = SystemClock.current,
         dataTypeIdentifier = '!',
         source = Address("KE0YOG", "7"),
         digipeaters = emptyList(),

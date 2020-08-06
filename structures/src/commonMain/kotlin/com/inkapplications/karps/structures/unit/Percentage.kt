@@ -1,39 +1,21 @@
 package com.inkapplications.karps.structures.unit
 
 /**
- * A fractional percentage value.
+ * A fractional percentage value stored with hundredth (1%) precision.
  *
- * @param fractionalValue percentage as a fraction of 1. ie. `.55f` for `55%`
+ * @param intValue percentage as a whole percentage integer.
  */
-inline class Percentage(val fractionalValue: Float) {
+inline class Percentage(val intValue: Int) {
     /**
-     * Express the value as a whole percentage integer.
+     * Express the value as a percentage as a fraction of 1. ie. `.55f` for `55%`
      *
      * ex.
-     *     Percentage(.55f).intValue // Int(55)
+     *     Percentage(55).fractionalValue // 0.55f
      */
-    val intValue get() = (fractionalValue * 100).toInt()
+    val fractionalValue get() = intValue / 100f
+
+    override fun toString() = "${intValue}%"
 }
-
-/**
- * Express with a fractional percentage.
- *
- * This is a fraction value, not a whole percentage!
- * ex: `0.55f.asPercentage` is 55%
- *
- * @see percent to convert a whole percentage value.
- */
-val Float.asPercentage get() = Percentage(toFloat())
-
-/**
- * Express with a fractional percentage.
- *
- * This is a fraction value, not a whole percentage!
- * ex: `0.55f.asPercentage` is 55%
- *
- * @see percent to convert a whole percentage value.
- */
-val Double.asPercentage get() = Percentage(toFloat())
 
 /**
  * Express a percentage as a whole number.
@@ -43,4 +25,24 @@ val Double.asPercentage get() = Percentage(toFloat())
  *
  * @see asPercentage to convert a fractional value such as `.55`
  */
-val Number.percent get() = Percentage(toFloat() / 100f)
+val Number.percent get() = Percentage(toInt())
+
+/**
+ * Express with a fractional percentage.
+ *
+ * This is a fraction value, not a whole percentage!
+ * ex: `0.55f.asPercentage` is 55%
+ *
+ * @see percent to convert a whole percentage value.
+ */
+val Float.asPercentage get() = (this * 100).percent
+
+/**
+ * Express with a fractional percentage.
+ *
+ * This is a fraction value, not a whole percentage!
+ * ex: `0.55f.asPercentage` is 55%
+ *
+ * @see percent to convert a whole percentage value.
+ */
+val Double.asPercentage get() = (this * 100).percent

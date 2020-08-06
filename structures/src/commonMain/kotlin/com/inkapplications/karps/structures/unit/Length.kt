@@ -6,12 +6,14 @@ private const val RATIO = .254f
  * A small length measurement system, used for measuring rainfall.
  *
  * This is intended to store short lengths at high accuracy, not
- * larger distances like miles.
+ * larger distances like miles. Stored with hundredths of an inch precision.
  */
 inline class Length(val hundredthsOfInches: Int) {
     val inches: Float get() = hundredthsOfInches / 100f
     val centimeters: Float get() = hundredthsOfInches * RATIO / 10f
     val millimeters: Float get() = hundredthsOfInches * RATIO
+
+    override fun toString() = "${inches}\""
 }
 
 /**

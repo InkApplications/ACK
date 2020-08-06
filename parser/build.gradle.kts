@@ -11,11 +11,13 @@ kotlin {
                 api(kotlin("stdlib-common"))
                 api(Coroutines.common)
                 api(project(":structures"))
+                implementation(Klock.core)
             }
         }
 
         val commonTest by getting {
             dependencies {
+                implementation(kotlin("reflect"))
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
             }
@@ -30,6 +32,7 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
+                implementation(kotlin("reflect"))
                 implementation(kotlin("test-junit"))
             }
         }

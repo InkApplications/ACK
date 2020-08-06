@@ -28,7 +28,5 @@ data class Address(
         else -> Unknown
     }
 
-    override fun toString(): String {
-        return "$callsign-$ssid"
-    }
+    override fun toString() = "$callsign-$ssid"
 }

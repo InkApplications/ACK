@@ -3,10 +3,10 @@ package com.inkapplications.karps.parser
 import com.inkapplications.karps.structures.Address
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
-import com.soywiz.klock.DateTime
 
 internal class KarpsParser(
-    private val infoParser: PacketInformationParser
+    private val infoParser: PacketInformationParser,
+    private val clock: Clock = SystemClock
 ): AprsParser {
     override fun fromString(packet: String): AprsPacket {
         val source = packet.substringBefore('>').parseAddress()
@@ -22,7 +22,7 @@ internal class KarpsParser(
         }
         val dataType = packet.charAfter(':')
         val prototype = AprsPacket.Unknown(
-            received = DateTime.now(),
+            received = clock.current,
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
