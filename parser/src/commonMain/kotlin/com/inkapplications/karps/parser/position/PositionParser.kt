@@ -6,6 +6,9 @@ import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.parser.timestamp.TimestampParser
 import com.inkapplications.karps.structures.AprsPacket
 
+/**
+ * Parse a position packet.
+ */
 class PositionParser(
     private val timestampParser: TimestampParser
 ): PacketInformationParser {

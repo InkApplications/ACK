@@ -2,6 +2,12 @@ package com.inkapplications.karps.parser.position
 
 import kotlin.experimental.and
 
+/**
+ * APRS "Compression Type" field.
+ *
+ * This contains some arbitrary information that is needed to parse the
+ * extra compressed data.
+ */
 internal data class CompressionInfo(
     val gpsFix: FixType,
     val nemaSource: NemaSourceType,
@@ -30,6 +36,9 @@ internal enum class FixType {
     Current
 }
 
+/**
+ * Parses information out of the "compression type" field from a byte.
+ */
 internal object CompressionInfoParser {
     fun fromByte(data: Byte) = CompressionInfo(
         gpsFix = when ((data and 0b00_1_00_000).toInt() ushr 5) {

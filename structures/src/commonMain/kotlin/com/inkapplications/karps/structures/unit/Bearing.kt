@@ -4,6 +4,8 @@ import com.inkapplications.karps.structures.unit.Cardinal.*
 
 /**
  * Direction represented as an angle in degrees.
+ *
+ * APRS often incorrectly calls this value a "course".
  */
 inline class Bearing(val degrees: Short) {
     override fun toString() = "${degrees}º"
