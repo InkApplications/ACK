@@ -9,7 +9,7 @@ internal object Base91 {
     private const val OFFSET = 33
     private const val BASE = 91
 
-    fun toInt(characters: String): Int {
+    fun decode(characters: String): Int {
         return characters
             .map { it - OFFSET }
             .mapIndexed { index, character ->
@@ -19,7 +19,7 @@ internal object Base91 {
             .sum()
     }
 
-    fun fromInt(value: Int): String {
+    fun encode(value: Int): String {
         val characters = StringBuilder()
         var quotient = value
         do {
@@ -31,6 +31,6 @@ internal object Base91 {
         return characters.reverse().toString()
     }
 
-    fun toInt(value: Char) = toInt(value.toString())
+    fun decode(value: Char) = decode(value.toString())
 }
 

@@ -73,14 +73,14 @@ internal object PositionDataParser {
         if (chunk[0] !in '!'..'z') return null
 
 
-        return (Base91.toInt(chunk[0]) * 4).degreesBearing
+        return (Base91.decode(chunk[0]) * 4).degreesBearing
     }
 
     private fun getSpeed(result: MatchResult): Speed? {
         val chunk = result.groupValues[15]
         if (chunk.isBlank()) return null
         if (chunk[0] !in '!'..'z') return null
-        val exponent = Base91.toInt(chunk[1]) - 1
+        val exponent = Base91.decode(chunk[1]) - 1
 
         return 1.08.pow(exponent).minus(1).knots
     }
@@ -89,14 +89,14 @@ internal object PositionDataParser {
         val chunk = result.groupValues[15]
         if (chunk.isBlank()) return null
 
-        return 1.002.pow((Base91.toInt(chunk[0]) * 91) + Base91.toInt(chunk[1])).feet
+        return 1.002.pow((Base91.decode(chunk[0]) * 91) + Base91.decode(chunk[1])).feet
     }
 
     private fun getRange(result: MatchResult): Distance? {
         val chunk = result.groupValues[15]
         if (chunk.isBlank()) return null
 
-        return 2.16.pow(Base91.toInt(chunk[1])).miles
+        return 2.16.pow(Base91.decode(chunk[1])).miles
     }
 
     private val String.value: Float get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toFloat() ?: 0.0f
@@ -130,8 +130,8 @@ internal object PositionDataParser {
 
     private fun parseCompressed(result: MatchResult): Coordinates {
         return Coordinates(
-            latitude = Latitude(90 - (Base91.toInt(result.groupValues[12]) / 380926.0)),
-            longitude = Longitude(-180 + (Base91.toInt(result.groupValues[13]) / 190463.0))
+            latitude = Latitude(90 - (Base91.decode(result.groupValues[12]) / 380926.0)),
+            longitude = Longitude(-180 + (Base91.decode(result.groupValues[13]) / 190463.0))
         )
     }
 
