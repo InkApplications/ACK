@@ -73,14 +73,14 @@ internal object PositionDataParser {
         if (chunk[0] !in '!'..'z') return null
 
 
-        return ((chunk[0] - 33).toShort() * 4).degreesBearing
+        return (Base91.toInt(chunk[0]) * 4).degreesBearing
     }
 
     private fun getSpeed(result: MatchResult): Speed? {
         val chunk = result.groupValues[15]
         if (chunk.isBlank()) return null
         if (chunk[0] !in '!'..'z') return null
-        val exponent = (chunk[1] - 33).toInt() - 1
+        val exponent = Base91.toInt(chunk[1]) - 1
 
         return 1.08.pow(exponent).minus(1).knots
     }
@@ -96,7 +96,7 @@ internal object PositionDataParser {
         val chunk = result.groupValues[15]
         if (chunk.isBlank()) return null
 
-        return 2.16.pow(chunk[1].toInt() - 33).miles
+        return 2.16.pow(Base91.toInt(chunk[1])).miles
     }
 
     private val String.value: Float get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toFloat() ?: 0.0f
