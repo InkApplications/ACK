@@ -21,8 +21,9 @@ sealed class AprsPacket {
         val coordinates: Coordinates,
         val symbol: Symbol,
         val comment: String,
-        val course: Bearing? = null,
-        val speed: Speed? = null,
+        val altitude: Distance? = null,
+        val trajectory: Trajectory? = null,
+        val range: Distance? = null,
         val timestamp: Timestamp? = null
     ): AprsPacket() {
         val supportsMessaging = when (dataTypeIdentifier) {

@@ -16,9 +16,27 @@ internal object PositionDataParser {
         return PositionEncodedData(
             coordinates = getCoordinates(result),
             symbol = getEmbeddedSymbol(result),
-            course = getCourse(result),
-            speed = getSpeed(result)
+            extra = getExtra(result)
         )
+    }
+
+    private fun getExtra(result: MatchResult): PositionExtraUnion? {
+        val compressionInfo = getCompressionInfo(result)
+        return when {
+            compressionInfo?.nemaSource == NemaSourceType.GGA -> PositionExtraUnion.Altitude(
+                compressionInfo,
+                getAltitude(result)
+            )
+            result.groupValues[15].getOrNull(0) == '{' -> PositionExtraUnion.Range(
+                compressionInfo,
+                getRange(result)
+            )
+            result.groupValues[15].isNotBlank() -> PositionExtraUnion.Course(
+                compressionInfo,
+                getBearing(result) at getSpeed(result)
+            )
+            else -> null
+        }
     }
 
     private fun getCoordinates(result: MatchResult): Coordinates {
@@ -41,9 +59,17 @@ internal object PositionDataParser {
         }
     }
 
-    private fun getCourse(result: MatchResult): Bearing? {
+    private fun getCompressionInfo(result: MatchResult): CompressionInfo? {
+        val chunk = result.groupValues[16]
+        if (chunk.isBlank()) return null
+        val data = chunk.single().toByte()
+
+        return CompressionInfoParser.fromByte(data)
+    }
+
+    private fun getBearing(result: MatchResult): Bearing? {
         val chunk = result.groupValues[15]
-        if (chunk.isEmpty()) return null
+        if (chunk.isBlank()) return null
         if (chunk[0] !in '!'..'z') return null
 
 
@@ -52,11 +78,25 @@ internal object PositionDataParser {
 
     private fun getSpeed(result: MatchResult): Speed? {
         val chunk = result.groupValues[15]
-        if (chunk.isEmpty()) return null
+        if (chunk.isBlank()) return null
         if (chunk[0] !in '!'..'z') return null
         val exponent = (chunk[1] - 33).toInt() - 1
 
         return 1.08.pow(exponent).minus(1).knots
+    }
+
+    private fun getAltitude(result: MatchResult): Distance? {
+        val chunk = result.groupValues[15]
+        if (chunk.isBlank()) return null
+
+        return 1.002.pow(((chunk[0].toInt() - 33) * 91) + chunk[1].toInt()).feet
+    }
+
+    private fun getRange(result: MatchResult): Distance? {
+        val chunk = result.groupValues[15]
+        if (chunk.isBlank()) return null
+
+        return 2.16.pow(chunk[1].toInt() - 33).miles
     }
 
     private val String.value: Float get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toFloat() ?: 0.0f

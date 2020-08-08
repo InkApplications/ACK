@@ -39,6 +39,76 @@ object TestData {
         )
     }
 
+    object CompressedPosition: Parsable {
+        override val packet = "REDKNL>APOT30,KE7JVX-10*,WIDE2-1,qAR,K7YI-4:!S;an%2#Co#   130F N7YSE Red Knoll"
+        override val expected = AprsPacket.Position(
+            received = now,
+            dataTypeIdentifier = '!',
+            source = Address("REDKNL"),
+            destination = Address("APOT30"),
+            coordinates = Coordinates(
+                Latitude(37, 9, 19.83f, Cardinal.North),
+                Longitude(112, 38, 7.87f, Cardinal.West)
+            ),
+            digipeaters = listOf(
+                Digipeater(Address("KE7JVX", "10"), heard = true),
+                Digipeater(Address("WIDE2", "1")),
+                Digipeater(Address("qAR")),
+                Digipeater(Address("K7YI", "4"))
+            ),
+            symbol = Symbol.Alternate('#', overlay = 'S'),
+            comment = "130F N7YSE Red Knoll",
+            timestamp = null
+        )
+    }
+
+    object CompressedPositionWithRange: Parsable {
+        override val packet = "PD9MWO-10>APX210,TCPIP*,qAC,SEVENTH:=/4'HcO]?;-{!Chttps://megasounds.nl/externalradio"
+        override val expected = AprsPacket.Position(
+            received = now,
+            dataTypeIdentifier = '=',
+            source = Address("PD9MWO", "10"),
+            destination = Address("APX210"),
+            coordinates = Coordinates(
+                Latitude(52, 16,  23.2f, Cardinal.North),
+                Longitude(4, 37, 23.3f, Cardinal.East)
+            ),
+            digipeaters = listOf(
+                Digipeater(Address("TCPIP"), heard = true),
+                Digipeater(Address("qAC")),
+                Digipeater(Address("SEVENTH"))
+            ),
+            symbol = Symbol.Primary('-'),
+            comment = "https://megasounds.nl/externalradio",
+            range = 5280.feet,
+            timestamp = null
+        )
+    }
+
+    object CompressedPositionWithAltitude: Parsable {
+        override val packet = "YO8KGA-2>APDS01,YO8A-2,YO8M-2*,qAR,YO8SDE-10:!/6Eu'U,b+#Gw6Suceava DIGI"
+        override val expected = AprsPacket.Position(
+            received = now,
+            dataTypeIdentifier = '!',
+            source = Address("YO8KGA", "2"),
+            destination = Address("APDS01"),
+            coordinates = Coordinates(
+                Latitude(47, 39,  13.7f, Cardinal.North),
+                Longitude(26, 14, 54.5f, Cardinal.East)
+            ),
+            digipeaters = listOf(
+                Digipeater(Address("YO8A", "2")),
+                Digipeater(Address("YO8M", "2"), heard = true),
+                Digipeater(Address("qAR")),
+                Digipeater(Address("YO8SDE", "10"))
+            ),
+            symbol = Symbol.Primary('#'),
+            comment = "Suceava DIGI",
+            altitude = 1270.feet,
+            timestamp = null
+        )
+    }
+
     object CompressedPositionWithCourse: Parsable {
         override val packet = "HS4TGK-10>APNN08,WIDE1-1,qAS,HS2PQV-1:!/Gdzph(=kkJMG/A=000106VIN:13.9V"
         override val expected = AprsPacket.Position(
@@ -57,8 +127,7 @@ object TestData {
             ),
             symbol = Symbol.Primary('k'),
             comment = "/A=000106VIN:13.9V",
-            course = 164.degreesBearing,
-            speed = 30.mph,
+            trajectory = 164.degreesBearing at 30.mph,
             timestamp = null
         )
     }
