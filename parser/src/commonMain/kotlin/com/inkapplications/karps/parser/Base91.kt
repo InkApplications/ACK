@@ -30,5 +30,7 @@ internal object Base91 {
 
         return characters.reverse().toString()
     }
+
+    fun toInt(value: Char) = toInt(value.toString())
 }
 

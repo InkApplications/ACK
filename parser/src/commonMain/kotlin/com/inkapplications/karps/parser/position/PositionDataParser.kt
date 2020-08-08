@@ -89,7 +89,7 @@ internal object PositionDataParser {
         val chunk = result.groupValues[15]
         if (chunk.isBlank()) return null
 
-        return 1.002.pow(((chunk[0].toInt() - 33) * 91) + chunk[1].toInt()).feet
+        return 1.002.pow((Base91.toInt(chunk[0]) * 91) + Base91.toInt(chunk[1])).feet
     }
 
     private fun getRange(result: MatchResult): Distance? {

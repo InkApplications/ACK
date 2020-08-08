@@ -104,7 +104,7 @@ object TestData {
             ),
             symbol = Symbol.Primary('#'),
             comment = "Suceava DIGI",
-            altitude = 1270.feet,
+            altitude = 1189.feet,
             timestamp = null
         )
     }
