@@ -4,26 +4,31 @@ import com.inkapplications.karps.parser.Base91
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.structures.Symbol
 import com.inkapplications.karps.structures.symbolOf
-import com.inkapplications.karps.structures.unit.Coordinates
-import com.inkapplications.karps.structures.unit.Latitude
-import com.inkapplications.karps.structures.unit.Longitude
-import com.inkapplications.karps.structures.unit.toCardinal
+import com.inkapplications.karps.structures.unit.*
+import kotlin.math.pow
 
 internal object PositionDataParser {
-    val format = Regex("""(?:([0-9\s]{2})([0-9\s]{2})\.([0-9\s]{2})([NnSs])([!-~])([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])([!-~])|([!-~])([!-|]{4})([!-|]{4})([!-~]))""")
+    val format = Regex("""(?:([0-9\s]{2})([0-9\s]{2})\.([0-9\s]{2})([NnSs])([!-~])([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])([!-~])|([!-~])([!-|]{4})([!-|]{4})([!-~])([!-{\s]{2})(.))""")
 
-    fun getCoordinates(data: String): Coordinates {
+    fun parse(data: String): PositionEncodedData {
         val result = format.matchEntire(data) ?: throw PacketFormatException("Illegal position data: $data")
 
+        return PositionEncodedData(
+            coordinates = getCoordinates(result),
+            symbol = getEmbeddedSymbol(result),
+            course = getCourse(result),
+            speed = getSpeed(result)
+        )
+    }
+
+    private fun getCoordinates(result: MatchResult): Coordinates {
         return when {
             result.groupValues[1].isNotEmpty() -> parsePlain(result)
             else -> parseCompressed(result)
         }
     }
 
-    fun getEmbeddedSymbol(data: String): Symbol {
-        val result = format.matchEntire(data) ?: throw PacketFormatException("Illegal position data: $data")
-
+    private fun getEmbeddedSymbol(result: MatchResult): Symbol {
         return when {
             result.groupValues[5].isNotEmpty() -> symbolOf(
                 tableIdentifier = result.groupValues[5].single(),
@@ -34,6 +39,24 @@ internal object PositionDataParser {
                 codeIdentifier = result.groupValues[14].single()
             )
         }
+    }
+
+    private fun getCourse(result: MatchResult): Bearing? {
+        val chunk = result.groupValues[15]
+        if (chunk.isEmpty()) return null
+        if (chunk[0] !in '!'..'z') return null
+
+
+        return ((chunk[0] - 33).toShort() * 4).degreesBearing
+    }
+
+    private fun getSpeed(result: MatchResult): Speed? {
+        val chunk = result.groupValues[15]
+        if (chunk.isEmpty()) return null
+        if (chunk[0] !in '!'..'z') return null
+        val exponent = (chunk[1] - 33).toInt() - 1
+
+        return 1.08.pow(exponent).minus(1).knots
     }
 
     private val String.value: Float get() = replace(' ', '0').takeIf { it.isNotEmpty() }?.toFloat() ?: 0.0f

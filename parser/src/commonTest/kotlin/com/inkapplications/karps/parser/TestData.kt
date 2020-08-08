@@ -39,25 +39,26 @@ object TestData {
         )
     }
 
-    object CompressedPosition: Parsable {
-        override val packet = "REDKNL>APOT30,KE7JVX-10*,WIDE2-1,qAR,K7YI-4:!S;an%2#Co# st130F N7YSE Red Knoll"
+    object CompressedPositionWithCourse: Parsable {
+        override val packet = "HS4TGK-10>APNN08,WIDE1-1,qAS,HS2PQV-1:!/Gdzph(=kkJMG/A=000106VIN:13.9V"
         override val expected = AprsPacket.Position(
             received = now,
             dataTypeIdentifier = '!',
-            source = Address("REDKNL"),
-            destination = Address("APOT30"),
+            source = Address("HS4TGK", "10"),
+            destination = Address("APNN08"),
             coordinates = Coordinates(
-                Latitude(37, 9, 19.83f, Cardinal.North),
-                Longitude(112, 38, 7.87f, Cardinal.West)
+                Latitude(13, 20,  53.1f, Cardinal.North),
+                Longitude(101, 13, 52.1f, Cardinal.East)
             ),
             digipeaters = listOf(
-                Digipeater(Address("KE7JVX", "10"), heard = true),
-                Digipeater(Address("WIDE2", "1")),
-                Digipeater(Address("qAR")),
-                Digipeater(Address("K7YI", "4"))
+                Digipeater(Address("WIDE1", "1")),
+                Digipeater(Address("qAS")),
+                Digipeater(Address("HS2PQV", "1"))
             ),
-            symbol = Symbol.Alternate('#', overlay = 'S'),
-            comment = " st130F N7YSE Red Knoll",
+            symbol = Symbol.Primary('k'),
+            comment = "/A=000106VIN:13.9V",
+            course = 164.degreesBearing,
+            speed = 30.mph,
             timestamp = null
         )
     }

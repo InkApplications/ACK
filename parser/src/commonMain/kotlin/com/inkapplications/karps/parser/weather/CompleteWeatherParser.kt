@@ -16,14 +16,13 @@ class CompleteWeatherParser(
     private val timestampParser: TimestampParser
 ): PacketInformationParser {
     override val supportedDataTypes: CharArray = charArrayOf('!', '=', '/', '@')
-    val format = Regex("""(${TIMESTAMP})?(${PositionDataParser.format.pattern})(\d{3}|\.{3})/(\d{3}|\.{3})((?:${ID}${DATA})*)(.)?(.{2,4})?""")
+    val format = Regex("""(${TIMESTAMP})?(${PositionDataParser.format.pattern})(?:()|(\d{3}|\.{3})/(\d{3}|\.{3}))((?:${ID}${DATA})*)(.)?(.{2,4})?""")
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val result = format.matchEntire(packet.body) ?: throw PacketFormatException("Not a complete weather packet")
 
         val timestamp = runCatching { timestampParser.parse(result.groupValues[1]) }.getOrNull()
-        val position = PositionDataParser.getCoordinates(result.groupValues[2])
-        val symbol = PositionDataParser.getEmbeddedSymbol(result.groupValues[2])
+        val positionData = PositionDataParser.parse(result.groupValues[2])
         val data = WeatherChunkParser.getChunks(result.groupValues[result.groupValues.size - 3])
 
         return AprsPacket.Weather(
@@ -48,8 +47,8 @@ class CompleteWeatherParser(
             pressure = data['b']?.decapascals,
             irradiance = data['L']?.wattsPerSquareMeter ?: data['l']?.plus(1000)?.wattsPerSquareMeter,
             timestamp = timestamp,
-            coordinates = position,
-            symbol = symbol
+            coordinates = positionData.coordinates,
+            symbol = positionData.symbol
         )
     }
 }

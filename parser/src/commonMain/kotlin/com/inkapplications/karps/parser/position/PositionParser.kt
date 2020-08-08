@@ -16,8 +16,7 @@ class PositionParser(
         val result = format.find(packet.body) ?: throw PacketFormatException("Invalid coordinate format: ${packet.body}")
 
         val timestamp = runCatching { timestampParser.parse(result.groupValues[1]) }.getOrNull()
-        val coordinates = PositionDataParser.getCoordinates(result.groupValues[2])
-        val symbol = PositionDataParser.getEmbeddedSymbol(result.groupValues[2])
+        val data = PositionDataParser.parse(result.groupValues[2])
         val comment = result.groupValues[result.groupValues.size - 1]
 
         return AprsPacket.Position(
@@ -26,9 +25,11 @@ class PositionParser(
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            coordinates = coordinates,
-            symbol = symbol,
+            coordinates = data.coordinates,
+            symbol = data.symbol,
             comment = comment,
+            course = data.course,
+            speed = data.speed,
             timestamp = timestamp
         )
     }
