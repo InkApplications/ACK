@@ -3,6 +3,8 @@ package com.inkapplications.karps.parser.position
 import com.inkapplications.karps.parser.Base91
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.structures.Symbol
+import com.inkapplications.karps.structures.Trajectory
+import com.inkapplications.karps.structures.at
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
 import kotlin.math.pow

@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.structures.unit.Distance
-import com.inkapplications.karps.structures.unit.Trajectory
+import com.inkapplications.karps.structures.Trajectory
 
 /**
  * Encoded data extra field.

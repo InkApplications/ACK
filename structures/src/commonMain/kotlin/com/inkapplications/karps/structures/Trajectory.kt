@@ -1,4 +1,7 @@
-package com.inkapplications.karps.structures.unit
+package com.inkapplications.karps.structures
+
+import com.inkapplications.karps.structures.unit.Bearing
+import com.inkapplications.karps.structures.unit.Speed
 
 /**
  * Pair of data representing a direction and a speed.

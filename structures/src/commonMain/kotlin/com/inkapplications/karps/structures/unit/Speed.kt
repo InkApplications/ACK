@@ -1,5 +1,7 @@
 package com.inkapplications.karps.structures.unit
 
+import kotlin.math.roundToInt
+
 private const val KM_RATIO = .621371
 private const val KNOTS_RATIO = 1.15078
 
@@ -14,5 +16,5 @@ inline class Speed(val milesPerHour: Short) {
 }
 
 val Number.mph get() = toShort().let(::Speed)
-val Number.kph get() = (toDouble() * KM_RATIO).mph
-val Number.knots get() = (toDouble() * KNOTS_RATIO).mph
+val Number.kph get() = (toDouble() * KM_RATIO).roundToInt().mph
+val Number.knots get() = (toDouble() * KNOTS_RATIO).roundToInt().mph

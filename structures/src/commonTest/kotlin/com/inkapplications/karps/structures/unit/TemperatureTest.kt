@@ -3,7 +3,7 @@ package com.inkapplications.karps.structures.unit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class DegreesTest {
+class TemperatureTest {
     @Test
     fun conversions() {
         assertEquals(0.degreesCelsius, 32.degreesFahrenheit)
