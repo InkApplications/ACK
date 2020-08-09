@@ -2,6 +2,7 @@ package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.structures.unit.Distance
 import com.inkapplications.karps.structures.Trajectory as TrajectoryValue
+import com.inkapplications.karps.structures.TransmitterInfo as TransmitterInfoValue
 
 /**
  * Encoded data extension field.
@@ -20,5 +21,9 @@ internal sealed class PositionExtensionUnion {
 
     data class Range(
         val value: Distance?
+    ): PositionExtensionUnion()
+
+    data class TransmitterInfo(
+        val value: TransmitterInfoValue
     ): PositionExtensionUnion()
 }

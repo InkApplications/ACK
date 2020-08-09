@@ -2,10 +2,7 @@ package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.parser.Base91
 import com.inkapplications.karps.parser.PacketFormatException
-import com.inkapplications.karps.structures.Symbol
-import com.inkapplications.karps.structures.Trajectory
-import com.inkapplications.karps.structures.at
-import com.inkapplications.karps.structures.symbolOf
+import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
 import kotlin.math.pow
 
@@ -99,6 +96,9 @@ internal object PositionDataParser {
             result.plainExtensionGroup(1).isNotEmpty() -> PositionExtensionUnion.Trajectory(
                 getPlainTrajectory(result)
             )
+            result.plainExtensionGroup(1).startsWith("PHG") -> PositionExtensionUnion.TransmitterInfo(
+                getTransmitterInfo(result)
+            )
             compressionInfo?.nemaSource == NemaSourceType.GGA -> PositionExtensionUnion.Altitude(
                 getAltitude(result)
             )
@@ -187,6 +187,19 @@ internal object PositionDataParser {
             ?.mph
 
         return bearing at speed
+    }
+
+    /**
+     * Get the transmitter info from a plain extension.
+     */
+    private fun getTransmitterInfo(result: MatchResult): TransmitterInfo {
+        val value = result.plainExtensionGroup(3)
+        val power = value[0].toFloat().pow(2).watts
+        val height = 2.0.pow(value[1].toInt()).times(10).feet
+        val gain = value[2].toInt().decibels
+        val direction = value[3].toInt().times(45).takeIf { it != 0 }?.degreesBearing
+
+        return TransmitterInfo(power, height, gain, direction)
     }
 
     /**
