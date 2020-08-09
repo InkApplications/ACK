@@ -34,7 +34,8 @@ object TestData {
                 Digipeater(Address("T2HUN"))
             ),
             symbol = Symbol.Primary('$'),
-            comment = "112/002/A=000761 https://aprsdroid.org/",
+            comment = "/A=000761 https://aprsdroid.org/",
+            trajectory = 112.degreesBearing at 2.mph,
             timestamp = null
         )
     }

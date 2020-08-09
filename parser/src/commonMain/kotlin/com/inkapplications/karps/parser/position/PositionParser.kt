@@ -31,9 +31,9 @@ class PositionParser(
             coordinates = data.coordinates,
             symbol = data.symbol,
             comment = comment,
-            altitude = (data.extra as? PositionExtraUnion.Altitude)?.value,
-            trajectory = (data.extra as? PositionExtraUnion.Course)?.value,
-            range = (data.extra as? PositionExtraUnion.Range)?.value,
+            altitude = (data.extension as? PositionExtensionUnion.Altitude)?.value,
+            trajectory = (data.extension as? PositionExtensionUnion.Trajectory)?.value,
+            range = (data.extension as? PositionExtensionUnion.Range)?.value,
             timestamp = timestamp
         )
     }

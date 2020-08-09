@@ -3,6 +3,7 @@ package com.inkapplications.karps.parser.weather
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.position.PositionDataParser
+import com.inkapplications.karps.parser.position.PositionExtensionUnion
 import com.inkapplications.karps.parser.timestamp.TIMESTAMP
 import com.inkapplications.karps.parser.timestamp.TimestampParser
 import com.inkapplications.karps.parser.weather.WeatherChunkParser.DATA
@@ -16,7 +17,7 @@ class CompleteWeatherParser(
     private val timestampParser: TimestampParser
 ): PacketInformationParser {
     override val supportedDataTypes: CharArray = charArrayOf('!', '=', '/', '@')
-    val format = Regex("""(${TIMESTAMP})?(${PositionDataParser.format.pattern})(?:()|(\d{3}|\.{3})/(\d{3}|\.{3}))((?:${ID}${DATA})*)(.)?(.{2,4})?""")
+    val format = Regex("""(${TIMESTAMP})?(${PositionDataParser.format.pattern})((?:${ID}${DATA})*)(.)?(.{2,4})?""")
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket {
         val result = format.matchEntire(packet.body) ?: throw PacketFormatException("Not a complete weather packet")
@@ -32,8 +33,8 @@ class CompleteWeatherParser(
             destination = packet.destination,
             digipeaters = packet.digipeaters,
             windData = WindData(
-                direction = result.groupValues[result.groupValues.size - 5].toIntOrNull()?.degreesBearing,
-                speed = result.groupValues[result.groupValues.size - 4].toIntOrNull()?.mph,
+                direction = (positionData.extension as? PositionExtensionUnion.Trajectory)?.value?.direction,
+                speed = (positionData.extension as? PositionExtensionUnion.Trajectory)?.value?.speed,
                 gust = data['g']?.mph
             ),
             precipitation = Precipitation(
