@@ -1,28 +1,37 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.parser.PacketFormatException
-import com.inkapplications.karps.structures.unit.Timestamp
+import com.inkapplications.karps.parser.PacketInformation
+import com.inkapplications.karps.parser.PacketInformationParser
+import com.inkapplications.karps.parser.substringIsNumeric
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 
 /**
  * Parse Hours/Minutes/Seconds.
  */
-class HmsParser: TimestampParser {
-    private val pattern = Regex("""^([01][0-9]|2[0-4])([0-5][0-9])([0-5][0-9])[Hh]$""")
+class HmsParser: PacketInformationParser {
+    override fun parse(data: PacketInformation): PacketInformation {
+        if (data.body.length < 7 || data.body[6] != 'h' || !data.body.substringIsNumeric(0, 6)) {
+            return data
+        }
 
-    override fun parse(timestamp: String): Timestamp {
-        val (hours, minutes, seconds) = pattern.find(timestamp)?.destructured
-            ?: throw PacketFormatException("Information does not contain a HMS Timestamp")
+        val hours = data.body.substring(0, 2).toInt().takeIf { it != 0 } ?: return data
+        val minutes = data.body.substring(2, 4).toInt()
+        val seconds = data.body.substring(4, 6).toInt()
 
-        return DateTime.now()
+        val timestamp = DateTime.now()
             .copyDayOfMonth(
-                hours = hours.toInt(),
-                minutes = minutes.toInt(),
-                seconds = seconds.toInt(),
+                hours = hours,
+                minutes = minutes,
+                seconds = seconds,
                 milliseconds = 0
             )
             .unixMillisLong
             .asTimestamp
+
+        return data.copy(
+            body = data.body.substring(7),
+            timestamp = timestamp
+        )
     }
 }

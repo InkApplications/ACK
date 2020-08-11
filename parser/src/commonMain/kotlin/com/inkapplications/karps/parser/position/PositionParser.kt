@@ -1,40 +1,25 @@
 package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.parser.PacketFormatException
+import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.parser.PacketInformationParser
-import com.inkapplications.karps.parser.timestamp.TIMESTAMP
-import com.inkapplications.karps.parser.timestamp.TimestampParser
-import com.inkapplications.karps.structures.AprsPacket
 
 /**
  * Parse a position packet.
  */
 class PositionParser(
-    private val timestampParser: TimestampParser
+    private val positionParsers: Array<PacketInformationParser>
 ): PacketInformationParser {
-    override val supportedDataTypes = charArrayOf('!', '/', '@', '=')
-    private val format = Regex("""^($TIMESTAMP)?(${PositionDataParser.format.pattern})(.*)$""")
+    override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
+    override fun parse(data: PacketInformation): PacketInformation {
+        val result = positionParsers.fold(data) { data, parser ->
+            if (data.position == null) parser.parse(data) else data
+        }
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket {
-        val result = format.find(packet.body) ?: throw PacketFormatException("Invalid coordinate format: ${packet.body}")
+        if (result.dataType in dataTypeFilter && result.position == null) {
+            throw PacketFormatException("Malformed position")
+        }
 
-        val timestamp = runCatching { timestampParser.parse(result.groupValues[1]) }.getOrNull()
-        val data = PositionDataParser.parse(result.groupValues[2])
-        val comment = result.groupValues[result.groupValues.size - 1]
-
-        return AprsPacket.Position(
-            received = packet.received,
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
-            coordinates = data.coordinates,
-            symbol = data.symbol,
-            comment = comment,
-            altitude = (data.extension as? PositionExtensionUnion.Altitude)?.value,
-            trajectory = (data.extension as? PositionExtensionUnion.Trajectory)?.value,
-            range = (data.extension as? PositionExtensionUnion.Range)?.value,
-            timestamp = timestamp
-        )
+        return result
     }
 }

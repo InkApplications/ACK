@@ -1,16 +1,14 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.parser.timestamp.CompositeTimestampParser
+import com.inkapplications.karps.parser.TestData.now
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class IntegrationTests {
     private val module = ParserModule()
-    private val parser = module.defaultTimestampParsers()
-        .let { CompositeTimestampParser(*it) }
-        .let { module.defaultParsers(it) }
-        .let { CompositeInformationParser(*it) }
-        .let { KarpsParser(it, FixedClock(TestData.now)) }
+    private val parser = module.defaultParsers(0.0)
+        .let { KarpsParser(it, FixedClock(now)) }
+
 
     @Test
     fun parseAll() {

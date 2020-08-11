@@ -14,10 +14,12 @@ private val VALID_OVERLAY = ('0'..'9') + ('a'..'j') + ('A'..'Z') + '/' + '\\'
  * http://www.aprs.org/symbols.html
  */
 sealed class Symbol {
+    abstract val id: Char
+
     /**
      * Symbol on the Primary table.
      */
-    data class Primary(val id: Char): Symbol() {
+    data class Primary(override val id: Char): Symbol() {
         init {
             require(id in CHAR_RANGE_START..CHAR_RANGE_END) {
                 "Code Identifier '$id' out of bounds."
@@ -31,7 +33,7 @@ sealed class Symbol {
      * @param id The base symbol to use
      * @param overlay symbol indicating the overlay to use.
      */
-    data class Alternate(val id: Char, val overlay: Char? = null): Symbol() {
+    data class Alternate(override val id: Char, val overlay: Char? = null): Symbol() {
         /**
          * Whether the base symbol supports alphanumeric overlays.
          */

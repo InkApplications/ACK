@@ -5,7 +5,7 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
 
 internal class KarpsParser(
-    private val infoParser: PacketInformationParser,
+    private val infoParsers: Array<PacketInformationParser>,
     private val clock: Clock = SystemClock
 ): AprsParser {
     override fun fromString(packet: String): AprsPacket {
@@ -18,22 +18,60 @@ internal class KarpsParser(
             Digipeater(it.trimEnd('*').parseAddress(), it.endsWith('*'))
         }
         val body = packet.substringAfter(':').let {
-            it.slice(1 until it.length)
+            it.substring(1)
         }
         val dataType = packet.charAfter(':')
-        val prototype = AprsPacket.Unknown(
-            received = clock.current,
-            dataTypeIdentifier = dataType,
-            source = source,
-            destination = destination,
-            digipeaters = digipeaters,
-            body = body
-        )
 
-        return try {
-            infoParser.parse(prototype)
-        } catch (error: IllegalArgumentException) {
-            prototype
+        val startingInfo = PacketInformation(dataType, body)
+        val packetInformation = infoParsers.fold(startingInfo) { info, parser ->
+            if (parser.dataTypeFilter?.contains(info.dataType) == false) info
+            else parser.parse(info)
+        }
+
+        return when {
+            packetInformation.dataType in charArrayOf('_', '!', '/', '@', '=')
+                && (packetInformation.symbol?.id == '_' || packetInformation.dataType == '_')
+                && packetInformation.windData != null
+                && packetInformation.precipitation != null ->
+                AprsPacket.Weather(
+                    received = clock.current,
+                    dataTypeIdentifier = packetInformation.dataType,
+                    source = source,
+                    destination = destination,
+                    digipeaters = digipeaters,
+                    symbol = packetInformation.symbol,
+                    timestamp = packetInformation.timestamp,
+                    position = packetInformation.position,
+                    windData = packetInformation.windData,
+                    precipitation = packetInformation.precipitation,
+                    temperature = packetInformation.temperature,
+                    humidity = packetInformation.humidity,
+                    pressure = packetInformation.pressure,
+                    irradiance = packetInformation.irradiance
+                )
+            packetInformation.dataType in charArrayOf('!', '/', '@', '=')
+            && packetInformation.position != null
+            && packetInformation.symbol != null ->
+                AprsPacket.Position(
+                    received = clock.current,
+                    dataTypeIdentifier = packetInformation.dataType,
+                    source = source,
+                    destination = destination,
+                    digipeaters = digipeaters,
+                    coordinates = packetInformation.position,
+                    symbol = packetInformation.symbol,
+                    comment = packetInformation.body,
+                    extension = packetInformation.extension,
+                    timestamp = null
+                )
+            else -> AprsPacket.Unknown(
+                received = clock.current,
+                dataTypeIdentifier = packetInformation.dataType,
+                source = source,
+                destination = destination,
+                digipeaters = digipeaters,
+                body = packetInformation.toString()
+            )
         }
     }
 

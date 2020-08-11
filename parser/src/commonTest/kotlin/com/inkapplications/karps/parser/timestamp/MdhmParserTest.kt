@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
+import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.Month
@@ -21,8 +22,8 @@ class MdhmParserTest {
             .unixMillisLong
             .asTimestamp
 
-        val result = MdhmParser().parse("10092345")
+        val result = MdhmParser().parse(PacketInformation('/', "10092345"))
 
-        assertEquals(expected, result)
+        assertEquals(expected, result.timestamp)
     }
 }

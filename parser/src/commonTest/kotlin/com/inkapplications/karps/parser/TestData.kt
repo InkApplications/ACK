@@ -35,7 +35,7 @@ object TestData {
             ),
             symbol = Symbol.Primary('$'),
             comment = "/A=000761 https://aprsdroid.org/",
-            trajectory = 112.degreesBearing at 2.mph,
+            extension = DataExtension.TrajectoryExtra(112.degreesBearing at 2.mph),
             timestamp = null
         )
     }
@@ -81,7 +81,7 @@ object TestData {
             ),
             symbol = Symbol.Primary('-'),
             comment = "https://megasounds.nl/externalradio",
-            range = 5280.feet,
+            extension = DataExtension.RangeExtra(5280.feet),
             timestamp = null
         )
     }
@@ -105,7 +105,7 @@ object TestData {
             ),
             symbol = Symbol.Primary('#'),
             comment = "Suceava DIGI",
-            altitude = 1189.feet,
+            extension = DataExtension.AltitudeExtra(1189.feet),
             timestamp = null
         )
     }
@@ -128,7 +128,7 @@ object TestData {
             ),
             symbol = Symbol.Primary('k'),
             comment = "/A=000106VIN:13.9V",
-            trajectory = 164.degreesBearing at 30.mph,
+            extension = DataExtension.TrajectoryExtra(164.degreesBearing at 30.mph),
             timestamp = null
         )
     }
@@ -188,11 +188,49 @@ object TestData {
                 rainLast24Hours = 6.hundredthsOfInch,
                 rainToday = 4.hundredthsOfInch
             ),
-            coordinates = Coordinates(
+            position = Coordinates(
                 Latitude(49, 3, 30f, Cardinal.North),
                 Longitude(72, 1, 45f, Cardinal.West)
             ),
             temperature = (-7).degreesFahrenheit,
+            humidity = 50.percent,
+            pressure = 9900.decapascals,
+            irradiance = 1234.wattsPerSquareMeter,
+            timestamp = DateTime.now()
+                .copyDayOfMonth(dayOfMonth = 9, hours = 23, minutes = 45, seconds = 0, milliseconds = 0)
+                .unixMillisLong
+                .asTimestamp,
+            symbol = Symbol.Primary('_')
+        )
+    }
+
+    object CompressedWeather: Parsable {
+        override val packet = "W0YC-5>APX200,TCPIP*,qAC,SEVENTH:@092345z/5L!!<*e7_7P[g005t077r002p006P004h50b09900l234wRSW"
+        override val expected = AprsPacket.Weather(
+            received = now,
+            dataTypeIdentifier = '@',
+            source = Address("W0YC", "5"),
+            destination = Address("APX200"),
+            digipeaters = listOf(
+                Digipeater(Address("TCPIP"), heard = true),
+                Digipeater(Address("qAC")),
+                Digipeater(Address("SEVENTH"))
+            ),
+            windData = WindData(
+                direction = 88.degreesBearing,
+                speed = 39.mph,
+                gust = 5.mph
+            ),
+            precipitation = Precipitation(
+                rainLastHour = 2.hundredthsOfInch,
+                rainLast24Hours = 6.hundredthsOfInch,
+                rainToday = 4.hundredthsOfInch
+            ),
+            position = Coordinates(
+                Latitude(49, 30, 0f, Cardinal.North),
+                Longitude(72, 45, 0, Cardinal.West)
+            ),
+            temperature = 77.degreesFahrenheit,
             humidity = 50.percent,
             pressure = 9900.decapascals,
             irradiance = 1234.wattsPerSquareMeter,

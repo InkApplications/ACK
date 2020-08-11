@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
+import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.TimezoneOffset
@@ -20,8 +21,8 @@ class DhmlParserTest {
             )
             .unixMillisLong
             .asTimestamp
-        val result = DhmlParser(TimezoneOffset(60.minutes)).parse("092245/")
+        val result = DhmlParser(TimezoneOffset(60.minutes)).parse(PacketInformation('/', "092245/"))
 
-        assertEquals(expected, result)
+        assertEquals(expected, result.timestamp)
     }
 }

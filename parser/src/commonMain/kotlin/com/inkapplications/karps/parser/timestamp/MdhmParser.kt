@@ -1,7 +1,8 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.parser.PacketFormatException
-import com.inkapplications.karps.structures.unit.Timestamp
+import com.inkapplications.karps.parser.PacketInformation
+import com.inkapplications.karps.parser.PacketInformationParser
+import com.inkapplications.karps.parser.substringIsNumeric
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.Month
@@ -9,23 +10,32 @@ import com.soywiz.klock.Month
 /**
  * Parse Month/Day/Hours/Minutes format.
  */
-class MdhmParser: TimestampParser {
-    val regex = Regex("""^(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[01])([01][0-9]|2[0-4])([0-5][0-9])$""")
+class MdhmParser: PacketInformationParser {
+    override fun parse(data: PacketInformation): PacketInformation {
+        if (data.body.length < 8 || !data.body.substringIsNumeric(0, 8)) {
+            return data
+        }
 
-    override fun parse(timestamp: String): Timestamp {
-        val (month, days, hours, minutes) = regex.find(timestamp)?.destructured
-            ?: throw PacketFormatException("Information does not contain a MDHM Timestamp")
+        val month = data.body.substring(0, 2).toInt().takeIf { it != 0 } ?: return data
+        val days = data.body.substring(2, 4).toInt().takeIf { it != 0 } ?: return data
+        val hours = data.body.substring(4, 6).toInt()
+        val minutes = data.body.substring(6, 8).toInt()
 
-        return DateTime.now()
+        val timestamp = DateTime.now()
             .copyDayOfMonth(
-                month = Month.get(month.toInt()),
-                dayOfMonth = days.toInt(),
-                hours = hours.toInt(),
-                minutes = minutes.toInt(),
+                month = Month.get(month),
+                dayOfMonth = days,
+                hours = hours,
+                minutes = minutes,
                 seconds = 0,
                 milliseconds = 0
             )
             .unixMillisLong
             .asTimestamp
+
+        return data.copy(
+            body = data.body.substring(8),
+            timestamp = timestamp
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
+import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import kotlin.test.Test
@@ -17,8 +18,8 @@ class HmsParserTest {
             )
             .unixMillisLong
             .asTimestamp
-        val result = HmsParser().parse("234517h")
+        val result = HmsParser().parse(PacketInformation('/', "234517h"))
 
-        assertEquals(expected, result)
+        assertEquals(expected, result.timestamp)
     }
 }

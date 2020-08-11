@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
+import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import kotlin.test.Test
@@ -19,8 +20,8 @@ class DhmzParserTest {
             .unixMillisLong
             .asTimestamp
 
-        val result = DhmzParser().parse("092245z")
+        val result = DhmzParser().parse(PacketInformation('/', "092245z"))
 
-        assertEquals(expected, result)
+        assertEquals(expected, result.timestamp)
     }
 }

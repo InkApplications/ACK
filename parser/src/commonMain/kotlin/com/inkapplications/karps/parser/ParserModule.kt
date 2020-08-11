@@ -1,37 +1,46 @@
 package com.inkapplications.karps.parser
 
+import com.inkapplications.karps.parser.position.CompressedPositionParser
+import com.inkapplications.karps.parser.position.PlainPositionParser
 import com.inkapplications.karps.parser.position.PositionParser
 import com.inkapplications.karps.parser.timestamp.*
-import com.inkapplications.karps.parser.weather.CompleteWeatherParser
-import com.inkapplications.karps.parser.weather.PositionlessWeatherParser
+import com.inkapplications.karps.parser.weather.WeatherParser
+import com.soywiz.klock.TimezoneOffset
 
 /**
  * Creates Parser instances.
  */
 class ParserModule {
-    fun defaultTimestampParsers(): Array<TimestampParser> = arrayOf(
+    fun defaultTimestampParsers(
+        timezoneOffsetMilliseconds: Double? = null
+    ): Array<PacketInformationParser> = arrayOf(
         DhmzParser(),
         HmsParser(),
         MdhmParser(),
-        DhmlParser()
+        if (timezoneOffsetMilliseconds != null)
+            DhmlParser(TimezoneOffset(timezoneOffsetMilliseconds))
+        else
+            DhmlParser()
     )
 
-    fun defaultParsers(timestampParser: TimestampParser): Array<PacketInformationParser> = arrayOf(
-        CompleteWeatherParser(timestampParser),
-        PositionlessWeatherParser(timestampParser),
-        PositionParser(timestampParser)
+    fun defaultParsers(
+        timezoneOffsetMilliseconds: Double? = null
+    ): Array<PacketInformationParser> = arrayOf(
+        *defaultTimestampParsers(timezoneOffsetMilliseconds),
+        PositionParser(arrayOf(
+            PlainPositionParser(),
+            CompressedPositionParser()
+        )),
+        DataExtensionParser(),
+        WeatherParser()
     )
 
     fun parser(
-        infoParser: PacketInformationParser
-    ): AprsParser = KarpsParser(infoParser)
+        infoParsers: Array<PacketInformationParser>
+    ): AprsParser = KarpsParser(infoParsers)
 
     /**
      * Create a standard packet parser with the default parsing modules.
      */
-    fun defaultParser(): AprsParser = defaultTimestampParsers()
-        .let { CompositeTimestampParser(*it) }
-        .let { defaultParsers(it) }
-        .let { CompositeInformationParser(*it) }
-        .let { parser(it) }
+    fun defaultParser(): AprsParser = parser(defaultParsers())
 }

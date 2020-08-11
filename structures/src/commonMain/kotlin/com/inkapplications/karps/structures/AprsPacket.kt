@@ -21,9 +21,7 @@ sealed class AprsPacket {
         val coordinates: Coordinates,
         val symbol: Symbol,
         val comment: String,
-        val altitude: Distance? = null,
-        val trajectory: Trajectory? = null,
-        val range: Distance? = null,
+        val extension: DataExtension? = null,
         val timestamp: Timestamp? = null
     ): AprsPacket() {
         val supportsMessaging = when (dataTypeIdentifier) {
@@ -40,14 +38,13 @@ sealed class AprsPacket {
         override val digipeaters: List<Digipeater>,
         val windData: WindData,
         val precipitation: Precipitation,
-        val coordinates: Coordinates? = null,
+        val timestamp: Timestamp? = null,
+        val position: Coordinates? = null,
+        val symbol: Symbol? = null,
         val temperature: Temperature? = null,
         val humidity: Percentage? = null,
         val pressure: Pressure? = null,
-        val irradiance: Irradiance? = null,
-        val timestamp: Timestamp? = null,
-        val position: Coordinates? = null,
-        val symbol: Symbol? = null
+        val irradiance: Irradiance? = null
     ): AprsPacket() {
         @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"))
         val luminosity = irradiance
