@@ -18,6 +18,7 @@ const val esc: Char = 27.toChar()
 const val blue = "${esc}[1;34m"
 const val yellow = "${esc}[1;33m"
 const val red = "${esc}[0;31m"
+const val lightRed = "${esc}[1;31m"
 const val normal = "${esc}[0m"
 
 class ListenCommand: CliktCommand() {
@@ -53,26 +54,33 @@ class ListenCommand: CliktCommand() {
                 filters = filter
             ) { read, write ->
                 read.consumeEach { data ->
-                    if (!data.startsWith('#')) parser.fromString(data).also {
-                        when (it) {
-                            is AprsPacket.Position -> {
-                                echo("\n${blue}# Position from: ${it.source}${normal}")
-                                echo(" - Coordinates: ${it.coordinates}")
-                                echo(" - ${it.comment}")
-                            }
-                            is AprsPacket.Weather -> {
-                                echo("\n${yellow}# Weather from: ${it.source}${normal}")
-                                echo(" - Temperature: ${it.temperature}")
-                            }
-                            is AprsPacket.Unknown -> {
-                                echo("\n${red}# Unknown Packet from: ${it.source}${normal}")
-                                echo(" - ${it.body}")
-                            }
+                    if (data.startsWith('#')) return@consumeEach
+                    runCatching { parser.fromString(data) }
+                        .onSuccess { printPacket (it) }
+                        .onFailure {
+                            echo("\n${red}Parse failed for packet:${normal}")
+                            echo(" - $data")
+                            echo(" - ${it.message}")
+                            it.printStackTrace()
                         }
-
-                    }
                 }
             }
+        }
+    }
+
+    private fun printPacket(packet: AprsPacket) = when (packet) {
+        is AprsPacket.Position -> {
+            echo("\n${blue}# Position from: ${packet.source}${normal}")
+            echo(" - Coordinates: ${packet.coordinates}")
+            echo(" - ${packet.comment}")
+        }
+        is AprsPacket.Weather -> {
+            echo("\n${yellow}# Weather from: ${packet.source}${normal}")
+            echo(" - Temperature: ${packet.temperature}")
+        }
+        is AprsPacket.Unknown -> {
+            echo("\n${lightRed}# Unknown Packet from: ${packet.source}${normal}")
+            echo(" - ${packet.body}")
         }
     }
 }
