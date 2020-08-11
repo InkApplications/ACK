@@ -12,6 +12,7 @@ kotlin {
                 api(Coroutines.common)
                 api(project(":structures"))
                 implementation(Klock.core)
+                api(Kimchi.logger)
             }
         }
 

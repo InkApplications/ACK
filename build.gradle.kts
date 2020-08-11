@@ -13,6 +13,7 @@ buildscript {
 subprojects {
     repositories {
         jcenter()
+        maven(url = "https://jitpack.io")
     }
 
     tasks.withType(Test::class) {

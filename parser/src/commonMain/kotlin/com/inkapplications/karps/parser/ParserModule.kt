@@ -6,6 +6,8 @@ import com.inkapplications.karps.parser.position.PositionParser
 import com.inkapplications.karps.parser.timestamp.*
 import com.inkapplications.karps.parser.weather.WeatherParser
 import com.soywiz.klock.TimezoneOffset
+import kimchi.logger.EmptyLogger
+import kimchi.logger.KimchiLogger
 
 /**
  * Creates Parser instances.
@@ -36,11 +38,14 @@ class ParserModule {
     )
 
     fun parser(
-        infoParsers: Array<PacketInformationParser>
-    ): AprsParser = KarpsParser(infoParsers)
+        infoParsers: Array<PacketInformationParser>,
+        logger: KimchiLogger = EmptyLogger
+    ): AprsParser = KarpsParser(infoParsers, logger = logger)
 
     /**
      * Create a standard packet parser with the default parsing modules.
      */
-    fun defaultParser(): AprsParser = parser(defaultParsers())
+    fun defaultParser(
+        logger: KimchiLogger = EmptyLogger
+    ): AprsParser = parser(defaultParsers(), logger)
 }

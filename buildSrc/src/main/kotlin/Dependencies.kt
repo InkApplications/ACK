@@ -12,3 +12,10 @@ object Coroutines {
     const val core = "$group:kotlinx-coroutines-core:$version"
     const val common = "$group:kotlinx-coroutines-core-common:$version"
 }
+
+object Kimchi {
+    const val group = "com.github.inkapplications.kimchi"
+    const val version = "991aa06d88"
+
+    const val logger = "$group:logger:$version"
+}

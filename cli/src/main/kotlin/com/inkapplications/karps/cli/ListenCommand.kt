@@ -3,6 +3,7 @@ package com.inkapplications.karps.cli
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
@@ -13,6 +14,9 @@ import com.inkapplications.karps.client.Credentials
 import com.inkapplications.karps.parser.ParserModule
 import com.inkapplications.karps.parser.AprsParser
 import com.inkapplications.karps.structures.AprsPacket
+import kimchi.logger.ConsolidatedLogger
+import kimchi.logger.EmptyWriter
+import kimchi.logger.defaultWriter
 
 const val esc: Char = 27.toChar()
 const val blue = "${esc}[1;34m"
@@ -42,9 +46,14 @@ class ListenCommand: CliktCommand() {
         help = "Raw filter to specify as a server command."
     ).multiple()
 
-    private val parser = ParserModule().defaultParser()
+    private val verbose by option(
+        names = *arrayOf("--verbose")
+    ).flag(default = false)
 
     override fun run() {
+        val writer = if (verbose) defaultWriter else EmptyWriter
+        val logger = ConsolidatedLogger(writer)
+        val parser = ParserModule().defaultParser(logger)
         runBlocking {
             val client = AprsClientModule.createDataClient()
             client.connect(

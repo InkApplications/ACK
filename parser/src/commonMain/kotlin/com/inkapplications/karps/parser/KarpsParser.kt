@@ -3,12 +3,16 @@ package com.inkapplications.karps.parser
 import com.inkapplications.karps.structures.Address
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
+import kimchi.logger.EmptyLogger
+import kimchi.logger.KimchiLogger
 
 internal class KarpsParser(
     private val infoParsers: Array<PacketInformationParser>,
+    private val logger: KimchiLogger = EmptyLogger,
     private val clock: Clock = SystemClock
 ): AprsParser {
     override fun fromString(packet: String): AprsPacket {
+        logger.trace("Parsing packet: $packet")
         val source = packet.substringBefore('>').parseAddress()
         val route = packet.substringAfter('>')
             .substringBefore(':')
@@ -23,10 +27,18 @@ internal class KarpsParser(
         val dataType = packet.charAfter(':')
 
         val startingInfo = PacketInformation(dataType, body)
+        logger.trace("Parsing Information with ${infoParsers.size} parsers starting with: $startingInfo")
         val packetInformation = infoParsers.fold(startingInfo) { info, parser ->
-            if (parser.dataTypeFilter?.contains(info.dataType) == false) info
-            else parser.parse(info)
+            if (parser.dataTypeFilter?.contains(info.dataType) == false) {
+                logger.trace { "Skipping ${parser::class.simpleName}" }
+                info
+            } else {
+                logger.trace { "Running ${parser::class.simpleName}" }
+                parser.parse(info)
+            }
         }
+
+        logger.debug("Parsed Information: $packetInformation")
 
         return when {
             packetInformation.dataType in charArrayOf('_', '!', '/', '@', '=')
