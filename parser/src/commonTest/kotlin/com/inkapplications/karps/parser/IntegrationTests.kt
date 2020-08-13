@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class IntegrationTests {
     private val module = ParserModule()
     private val parser = module.defaultParsers(0.0)
-        .let { KarpsParser(it, FixedClock(now)) }
+        .let { KarpsParser(it, clock = FixedClock(now)) }
 
 
     @Test

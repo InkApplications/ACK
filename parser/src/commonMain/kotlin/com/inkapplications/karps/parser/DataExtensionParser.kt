@@ -1,28 +1,24 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.structures.DataExtension
-import com.inkapplications.karps.structures.Trajectory
-import com.inkapplications.karps.structures.TransmitterInfo
-import com.inkapplications.karps.structures.at
+import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
 import kotlin.math.pow
 
 class DataExtensionParser: PacketInformationParser {
     private val extension = Regex("""^(\d{3}|\s{3}|\.{3})/(\d{3}|\s{3}|\.{3})|PHG(\d{4})|RNG(\d{4})|DFS(\d{4})|T(\d{2})/C(\d{2})""")
 
-    override fun parse(data: PacketInformation): PacketInformation {
-        val result = extension.find(data.body) ?: return data
+    override fun parse(packet: AprsPacket): AprsPacket {
+        val result = extension.find(packet.body) ?: return packet
 
         val extension = when {
             result.groupValues[1].isNotEmpty() && result.groupValues[2].isNotEmpty() -> DataExtension.TrajectoryExtra(result.extraAsTrajectory)
             result.groupValues[3].isNotEmpty() -> DataExtension.TransmitterInfoExtra(result.extraAsTransmitterInfo)
             else -> null
-        } ?: return data
+        } ?: return packet
 
-        return data.copy(
-            body = data.body.substring(result.groupValues[0].length),
-            extension = extension
-        )
+        val body = packet.body.substring(result.groupValues[0].length)
+
+        return packet.withBody(body).withExtension(extension)
     }
 
     /**

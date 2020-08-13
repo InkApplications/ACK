@@ -1,10 +1,12 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.parser.PacketInformation
+import com.inkapplications.karps.parser.TestData
+import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.unit.asTimestamp
 import com.soywiz.klock.DateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DhmzParserTest {
     @Test
@@ -19,9 +21,14 @@ class DhmzParserTest {
             )
             .unixMillisLong
             .asTimestamp
+        val packet = TestData.Position.expected.copy(
+            body = "092245z",
+            timestamp = null
+        )
 
-        val result = DhmzParser().parse(PacketInformation('/', "092245z"))
+        val result = DhmzParser().parse(packet)
 
+        assertTrue(result is AprsPacket.Position, "Packet type should not change.")
         assertEquals(expected, result.timestamp)
     }
 }

@@ -26,64 +26,20 @@ internal class KarpsParser(
         }
         val dataType = packet.charAfter(':')
 
-        val startingInfo = PacketInformation(dataType, body)
-        logger.trace("Parsing Information with ${infoParsers.size} parsers starting with: $startingInfo")
-        val packetInformation = infoParsers.fold(startingInfo) { info, parser ->
-            if (parser.dataTypeFilter?.contains(info.dataType) == false) {
-                logger.trace { "Skipping ${parser::class.simpleName}" }
-                info
-            } else {
-                logger.trace { "Running ${parser::class.simpleName}" }
-                parser.parse(info)
-            }
-        }
+        val prototype: AprsPacket = AprsPacket.Unknown(
+            received = clock.current,
+            dataTypeIdentifier = dataType,
+            source = source,
+            destination = destination,
+            digipeaters = digipeaters,
+            body = body
+        )
 
-        logger.debug("Parsed Information: $packetInformation")
-
-        return when {
-            packetInformation.dataType in charArrayOf('_', '!', '/', '@', '=')
-                && (packetInformation.symbol?.id == '_' || packetInformation.dataType == '_')
-                && packetInformation.windData != null
-                && packetInformation.precipitation != null ->
-                AprsPacket.Weather(
-                    received = clock.current,
-                    dataTypeIdentifier = packetInformation.dataType,
-                    source = source,
-                    destination = destination,
-                    digipeaters = digipeaters,
-                    symbol = packetInformation.symbol,
-                    timestamp = packetInformation.timestamp,
-                    position = packetInformation.position,
-                    windData = packetInformation.windData,
-                    precipitation = packetInformation.precipitation,
-                    temperature = packetInformation.temperature,
-                    humidity = packetInformation.humidity,
-                    pressure = packetInformation.pressure,
-                    irradiance = packetInformation.irradiance
-                )
-            packetInformation.dataType in charArrayOf('!', '/', '@', '=')
-            && packetInformation.position != null
-            && packetInformation.symbol != null ->
-                AprsPacket.Position(
-                    received = clock.current,
-                    dataTypeIdentifier = packetInformation.dataType,
-                    source = source,
-                    destination = destination,
-                    digipeaters = digipeaters,
-                    coordinates = packetInformation.position,
-                    symbol = packetInformation.symbol,
-                    comment = packetInformation.body,
-                    extension = packetInformation.extension,
-                    timestamp = null
-                )
-            else -> AprsPacket.Unknown(
-                received = clock.current,
-                dataTypeIdentifier = packetInformation.dataType,
-                source = source,
-                destination = destination,
-                digipeaters = digipeaters,
-                body = packetInformation.toString()
-            )
+        return infoParsers.fold(prototype) { newPrototype, parser ->
+            if (parser.dataTypeFilter == null || newPrototype.dataTypeIdentifier in parser.dataTypeFilter!!)
+                parser.parse(newPrototype)
+            else
+                newPrototype
         }
     }
 

@@ -1,8 +1,8 @@
 package com.inkapplications.karps.parser
 
+import com.inkapplications.karps.parser.position.CompositePositionParser
 import com.inkapplications.karps.parser.position.CompressedPositionParser
 import com.inkapplications.karps.parser.position.PlainPositionParser
-import com.inkapplications.karps.parser.position.PositionParser
 import com.inkapplications.karps.parser.timestamp.*
 import com.inkapplications.karps.parser.weather.WeatherParser
 import com.soywiz.klock.TimezoneOffset
@@ -29,10 +29,12 @@ class ParserModule {
         timezoneOffsetMilliseconds: Double? = null
     ): Array<PacketInformationParser> = arrayOf(
         *defaultTimestampParsers(timezoneOffsetMilliseconds),
-        PositionParser(arrayOf(
-            PlainPositionParser(),
-            CompressedPositionParser()
-        )),
+        CompositePositionParser(
+            arrayOf(
+                PlainPositionParser(),
+                CompressedPositionParser()
+            )
+        ),
         DataExtensionParser(),
         WeatherParser()
     )

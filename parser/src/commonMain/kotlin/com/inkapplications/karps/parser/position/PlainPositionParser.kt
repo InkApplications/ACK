@@ -1,8 +1,8 @@
 package com.inkapplications.karps.parser.position
 
-import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.parser.PacketInformationParser
 import com.inkapplications.karps.parser.ambiguousValue
+import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.Coordinates
 import com.inkapplications.karps.structures.unit.Latitude
@@ -13,8 +13,8 @@ class PlainPositionParser: PacketInformationParser {
     override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
     private val plain = Regex("""^([0-9\s]{2})([0-9\s]{2})\.([0-9\s]{2})([NnSs])([!-~])([0-9\s]{3})([0-9\s]{2})\.([0-9\s]{2})([EeWw])([!-~])""")
 
-    override fun parse(data: PacketInformation): PacketInformation {
-        val result = plain.find(data.body) ?: return data
+    override fun parse(packet: AprsPacket): AprsPacket {
+        val result = plain.find(packet.body) ?: return packet
 
         val latDegrees = result.groupValues[1].ambiguousValue
         val latMinutes = result.groupValues[2].ambiguousValue
@@ -41,9 +41,15 @@ class PlainPositionParser: PacketInformationParser {
 
         val coordinates = Coordinates(latitude, longitude)
 
-        return data.copy(
-            body = data.body.substring(19),
-            position = coordinates,
+        return AprsPacket.Position(
+            received = packet.received,
+            dataTypeIdentifier = packet.dataTypeIdentifier,
+            source = packet.source,
+            destination = packet.destination,
+            digipeaters = packet.digipeaters,
+            timestamp = packet.timestamp,
+            body = packet.body.substring(19),
+            coordinates = coordinates,
             symbol = symbolOf(
                 tableIdentifier = result.groupValues[5].single(),
                 codeIdentifier = result.groupValues[10].single()

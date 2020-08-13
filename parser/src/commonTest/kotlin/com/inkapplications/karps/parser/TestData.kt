@@ -34,7 +34,7 @@ object TestData {
                 Digipeater(Address("T2HUN"))
             ),
             symbol = Symbol.Primary('$'),
-            comment = "/A=000761 https://aprsdroid.org/",
+            body = "/A=000761 https://aprsdroid.org/",
             extension = DataExtension.TrajectoryExtra(112.degreesBearing at 2.mph),
             timestamp = null
         )
@@ -58,7 +58,7 @@ object TestData {
                 Digipeater(Address("K7YI", "4"))
             ),
             symbol = Symbol.Alternate('#', overlay = 'S'),
-            comment = "130F N7YSE Red Knoll",
+            body = "130F N7YSE Red Knoll",
             timestamp = null
         )
     }
@@ -80,7 +80,7 @@ object TestData {
                 Digipeater(Address("SEVENTH"))
             ),
             symbol = Symbol.Primary('-'),
-            comment = "https://megasounds.nl/externalradio",
+            body = "https://megasounds.nl/externalradio",
             extension = DataExtension.RangeExtra(5280.feet),
             timestamp = null
         )
@@ -104,7 +104,7 @@ object TestData {
                 Digipeater(Address("YO8SDE", "10"))
             ),
             symbol = Symbol.Primary('#'),
-            comment = "Suceava DIGI",
+            body = "Suceava DIGI",
             extension = DataExtension.AltitudeExtra(1189.feet),
             timestamp = null
         )
@@ -127,7 +127,7 @@ object TestData {
                 Digipeater(Address("HS2PQV", "1"))
             ),
             symbol = Symbol.Primary('k'),
-            comment = "/A=000106VIN:13.9V",
+            body = "/A=000106VIN:13.9V",
             extension = DataExtension.TrajectoryExtra(164.degreesBearing at 30.mph),
             timestamp = null
         )
@@ -162,7 +162,8 @@ object TestData {
             timestamp = DateTime.now()
                 .copyDayOfMonth(month = Month.October, dayOfMonth = 9, hours = 5, minutes = 56, seconds = 0, milliseconds = 0)
                 .unixMillisLong
-                .asTimestamp
+                .asTimestamp,
+            body = ""
         )
     }
 
@@ -200,7 +201,8 @@ object TestData {
                 .copyDayOfMonth(dayOfMonth = 9, hours = 23, minutes = 45, seconds = 0, milliseconds = 0)
                 .unixMillisLong
                 .asTimestamp,
-            symbol = Symbol.Primary('_')
+            symbol = Symbol.Primary('_'),
+            body = ""
         )
     }
 
@@ -238,7 +240,8 @@ object TestData {
                 .copyDayOfMonth(dayOfMonth = 9, hours = 23, minutes = 45, seconds = 0, milliseconds = 0)
                 .unixMillisLong
                 .asTimestamp,
-            symbol = Symbol.Primary('_')
+            symbol = Symbol.Primary('_'),
+            body = ""
         )
     }
 }

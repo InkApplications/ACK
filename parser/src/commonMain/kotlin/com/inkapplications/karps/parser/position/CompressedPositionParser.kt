@@ -1,12 +1,8 @@
 package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.parser.Base91
-import com.inkapplications.karps.parser.PacketInformation
 import com.inkapplications.karps.parser.PacketInformationParser
-import com.inkapplications.karps.structures.DataExtension
-import com.inkapplications.karps.structures.Trajectory
-import com.inkapplications.karps.structures.at
-import com.inkapplications.karps.structures.symbolOf
+import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
 import kotlin.math.pow
 
@@ -14,19 +10,26 @@ import kotlin.math.pow
  * Parse a compressed position.
  */
 class CompressedPositionParser: PacketInformationParser {
+    override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
     private val compressed = Regex("""^([!-~])([!-|]{4})([!-|]{4})([!-~])([!-{\s]{2})(.)""")
 
-    override fun parse(data: PacketInformation): PacketInformation {
-        val result = compressed.find(data.body) ?: return data
+    override fun parse(packet: AprsPacket): AprsPacket {
+        val result = compressed.find(packet.body) ?: return packet
 
         val coordinates = Coordinates(
             latitude = Latitude(90 - (Base91.decode(result.groupValues[2]) / 380926.0)),
             longitude = Longitude(-180 + (Base91.decode(result.groupValues[3]) / 190463.0))
         )
 
-        return data.copy(
-            body = data.body.substring(13),
-            position = coordinates,
+        return AprsPacket.Position(
+            received = packet.received,
+            dataTypeIdentifier = packet.dataTypeIdentifier,
+            source = packet.source,
+            destination = packet.destination,
+            timestamp = packet.timestamp,
+            digipeaters = packet.digipeaters,
+            body = packet.body.substring(13),
+            coordinates = coordinates,
             symbol = symbolOf(
                 tableIdentifier = result.groupValues[1].single(),
                 codeIdentifier = result.groupValues[4].single()

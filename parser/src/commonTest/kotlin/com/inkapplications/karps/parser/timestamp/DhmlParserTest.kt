@@ -1,12 +1,14 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.parser.PacketInformation
-import com.inkapplications.karps.structures.unit.asTimestamp
+import com.inkapplications.karps.parser.TestData
+import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.unit.*
 import com.soywiz.klock.DateTime
 import com.soywiz.klock.TimezoneOffset
 import com.soywiz.klock.minutes
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DhmlParserTest {
     @Test
@@ -21,8 +23,13 @@ class DhmlParserTest {
             )
             .unixMillisLong
             .asTimestamp
-        val result = DhmlParser(TimezoneOffset(60.minutes)).parse(PacketInformation('/', "092245/"))
+        val packet = TestData.Position.expected.copy(
+            body = "092245/",
+            timestamp = null
+        )
+        val result = DhmlParser(TimezoneOffset(60.minutes)).parse(packet)
 
+        assertTrue(result is AprsPacket.Position, "Packet type should not change.")
         assertEquals(expected, result.timestamp)
     }
 }
