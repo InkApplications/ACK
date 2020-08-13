@@ -17,6 +17,15 @@ object TestData {
         .filter { Parsable::class in it.supertypes.map { it.classifier } }
         .map { it.objectInstance as Parsable }
 
+    val prototype = AprsPacket.Unknown(
+        received = now,
+        dataTypeIdentifier = '=',
+        source = Address("KE0YOG"),
+        destination = Address("KE0YOG"),
+        digipeaters = emptyList(),
+        body = ""
+    )
+
     object Position: Parsable {
         override val packet = "KV4JW>APDR15,TCPIP*,qAC,T2HUN:=3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/"
         override val expected = AprsPacket.Position(
