@@ -18,4 +18,8 @@ sealed class DataExtension {
     data class TransmitterInfoExtra(
         val value: TransmitterInfo
     ): DataExtension()
+
+    data class OmniDfSignal(
+        val value: SignalInfo
+    ): DataExtension()
 }

@@ -49,4 +49,20 @@ class DataExtensionParserTest {
         assertEquals(180.degreesBearing, resultExtension.value.direction)
         assertEquals("Hello World", result.body)
     }
+
+    @Test
+    fun parseSignalInfo() {
+        val input = TestData.prototype.copy(
+            body = "DFS2361Hello World"
+        )
+        val result = DataExtensionParser().parse(input)
+        val resultExtension = result.extension
+
+        assertTrue(resultExtension is DataExtension.OmniDfSignal)
+        assertEquals(2.strength, resultExtension.value.strength)
+        assertEquals(80.feet, resultExtension.value.height)
+        assertEquals(6.decibels, resultExtension.value.gain)
+        assertEquals(45.degreesBearing, resultExtension.value.direction)
+        assertEquals("Hello World", result.body)
+    }
 }
