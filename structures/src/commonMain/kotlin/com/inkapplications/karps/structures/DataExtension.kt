@@ -1,5 +1,6 @@
 package com.inkapplications.karps.structures
 
+import com.inkapplications.karps.structures.unit.Bearing
 import com.inkapplications.karps.structures.unit.Distance
 
 sealed class DataExtension {
@@ -21,5 +22,11 @@ sealed class DataExtension {
 
     data class OmniDfSignal(
         val value: SignalInfo
+    ): DataExtension()
+
+    data class DirectionReportExtra(
+        val trajectory: Trajectory?,
+        val bearing: Bearing?,
+        val quality: QualityReport?
     ): DataExtension()
 }

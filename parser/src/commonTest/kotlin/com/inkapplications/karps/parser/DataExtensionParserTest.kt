@@ -1,6 +1,7 @@
 package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.structures.DataExtension
+import com.inkapplications.karps.structures.QualityReport
 import com.inkapplications.karps.structures.Trajectory
 import com.inkapplications.karps.structures.unit.*
 import kotlin.test.Test
@@ -63,6 +64,19 @@ class DataExtensionParserTest {
         assertEquals(80.feet, resultExtension.value.height)
         assertEquals(6.decibels, resultExtension.value.gain)
         assertEquals(45.degreesBearing, resultExtension.value.direction)
+        assertEquals("Hello World", result.body)
+    }
+    @Test
+    fun parseDfReport() {
+        val input = TestData.prototype.copy(
+            body = "123/456/270/726Hello World"
+        )
+        val result = DataExtensionParser().parse(input)
+        val resultExtension = result.extension
+
+        assertTrue(resultExtension is DataExtension.DirectionReportExtra)
+        assertEquals(Trajectory(123.degreesBearing, 456.mph), resultExtension.trajectory)
+        assertEquals(QualityReport(7, 4.miles, 8.degreesBearing), resultExtension.quality)
         assertEquals("Hello World", result.body)
     }
 }
