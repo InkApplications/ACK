@@ -11,6 +11,9 @@ buildscript {
 }
 
 subprojects {
+    group = "com.github.inkapplications.karps"
+    version = if (version != "unspecified") version else "1.0-SNAPSHOT"
+
     repositories {
         jcenter()
         maven(url = "https://jitpack.io")
