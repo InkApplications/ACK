@@ -10,4 +10,9 @@ interface AprsParser {
      * Parse a packet from an IS string representation.
      */
     fun fromString(packet: String): AprsPacket
+
+    /**
+     * Parse a packet from an AX.25 byte packet.
+     */
+    fun fromAx25(packet: ByteArray): AprsPacket
 }
