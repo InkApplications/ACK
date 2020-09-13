@@ -29,7 +29,8 @@ sealed class AprsPacket {
         val coordinates: Coordinates,
         val symbol: Symbol,
         override val extension: DataExtension? = null,
-        override val timestamp: Timestamp? = null
+        override val timestamp: Timestamp? = null,
+        val altitude: Distance? = null
     ): AprsPacket() {
         val supportsMessaging = when (dataTypeIdentifier) {
             '=', '@' -> true
@@ -58,7 +59,8 @@ sealed class AprsPacket {
         val humidity: Percentage? = null,
         val pressure: Pressure? = null,
         val irradiance: Irradiance? = null,
-        override val extension: DataExtension? = null
+        override val extension: DataExtension? = null,
+        val altitude: Distance? = null
     ): AprsPacket() {
         @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"))
         val luminosity = irradiance
