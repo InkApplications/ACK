@@ -79,17 +79,15 @@ class ListenCommand: CliktCommand() {
 
     private fun printPacket(packet: AprsPacket) = when (packet) {
         is AprsPacket.Position -> {
-            echo("\n${blue}# Position from: ${packet.source}${normal}")
-            echo(" - Coordinates: ${packet.coordinates}")
-            echo(" - ${packet.comment}")
+            echo("${blue.span("[${packet.source}]")}: ${packet.coordinates} ${packet.comment}")
         }
         is AprsPacket.Weather -> {
-            echo("\n${yellow}# Weather from: ${packet.source}${normal}")
-            echo(" - Temperature: ${packet.temperature}")
+            echo("${yellow.span("[${packet.source}]")}: ${packet.temperature} ${packet.body}")
         }
         is AprsPacket.Unknown -> {
-            echo("\n${lightRed}# Unknown Packet from: ${packet.source}${normal}")
-            echo(" - ${packet.body}")
+            echo("${lightRed.span("[${packet.source}]")}: ${packet.body}")
         }
     }
+
+    private fun String.span(comment: String): String = "${this}${comment}${normal}"
 }
