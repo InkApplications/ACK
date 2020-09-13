@@ -43,9 +43,10 @@ object TestData {
                 Digipeater(Address("T2HUN"))
             ),
             symbol = Symbol.Primary('$'),
-            body = "/A=000761 https://aprsdroid.org/",
+            body = " https://aprsdroid.org/",
             extension = DataExtension.TrajectoryExtra(112.degreesBearing at 2.mph),
-            timestamp = null
+            timestamp = null,
+            altitude = 761.feet
         )
     }
 
@@ -136,9 +137,10 @@ object TestData {
                 Digipeater(Address("HS2PQV", "1"))
             ),
             symbol = Symbol.Primary('k'),
-            body = "/A=000106VIN:13.9V",
+            body = "VIN:13.9V",
             extension = DataExtension.TrajectoryExtra(164.degreesBearing at 30.mph),
-            timestamp = null
+            timestamp = null,
+            altitude = 106.feet
         )
     }
 

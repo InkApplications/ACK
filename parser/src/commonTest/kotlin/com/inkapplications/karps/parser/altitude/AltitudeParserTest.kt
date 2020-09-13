@@ -12,7 +12,8 @@ class AltitudeParserTest {
     @Test
     fun startOfMessage() {
         val given = TestData.Position.expected.copy(
-            body = "/A=001234Hello World!"
+            body = "/A=001234Hello World!",
+            altitude = null
         )
 
         val result = AltitudeCommentParser().parse(given)
@@ -25,7 +26,8 @@ class AltitudeParserTest {
     @Test
     fun middleOfMessage() {
         val given = TestData.Position.expected.copy(
-            body = "Hello I'm at/A=001234!"
+            body = "Hello I'm at/A=001234!",
+            altitude = null
         )
 
         val result = AltitudeCommentParser().parse(given)
@@ -38,7 +40,8 @@ class AltitudeParserTest {
     @Test
     fun notPresent() {
         val given = TestData.Position.expected.copy(
-            body = "Hello Wald!"
+            body = "Hello Wald!",
+            altitude = null
         )
 
         val result = AltitudeCommentParser().parse(given)
