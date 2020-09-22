@@ -6,7 +6,10 @@ import kotlin.system.exitProcess
 
 class Main: NoOpCliktCommand() {
     init {
-        subcommands(ListenCommand())
+        subcommands(
+            ListenCommand(),
+            ParseFileCommand()
+        )
     }
 }
 
