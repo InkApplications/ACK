@@ -1,6 +1,7 @@
 package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.parser.altitude.AltitudeCommentParser
+import com.inkapplications.karps.parser.item.ObjectParser
 import com.inkapplications.karps.parser.position.CompositePositionParser
 import com.inkapplications.karps.parser.position.CompressedPositionParser
 import com.inkapplications.karps.parser.position.PlainPositionParser
@@ -38,6 +39,7 @@ class ParserModule {
         ),
         DataExtensionParser(),
         WeatherParser(),
+        ObjectParser(),
         AltitudeCommentParser()
     )
 

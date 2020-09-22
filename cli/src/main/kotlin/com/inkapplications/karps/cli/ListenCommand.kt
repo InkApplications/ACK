@@ -17,10 +17,12 @@ import com.inkapplications.karps.structures.AprsPacket
 import kimchi.logger.ConsolidatedLogger
 import kimchi.logger.EmptyWriter
 import kimchi.logger.defaultWriter
+import kotlinx.coroutines.flow.*
 
 const val esc: Char = 27.toChar()
 const val blue = "${esc}[1;34m"
 const val yellow = "${esc}[1;33m"
+const val magenta = "${esc}[1;35m"
 const val red = "${esc}[0;31m"
 const val lightRed = "${esc}[1;31m"
 const val normal = "${esc}[0m"
@@ -50,6 +52,10 @@ class ListenCommand: CliktCommand() {
         names = *arrayOf("--verbose")
     ).flag(default = false)
 
+    private val debug by option(
+        names = *arrayOf("--debug")
+    ).flag(default = false)
+
     override fun run() {
         val writer = if (verbose) defaultWriter else EmptyWriter
         val logger = ConsolidatedLogger(writer)
@@ -62,30 +68,40 @@ class ListenCommand: CliktCommand() {
                 port = port,
                 filters = filter
             ) { read, write ->
-                read.consumeEach { data ->
-                    if (data.startsWith('#')) return@consumeEach
-                    runCatching { parser.fromString(data) }
-                        .onSuccess { printPacket (it) }
-                        .onFailure {
-                            echo("\n${red}Parse failed for packet:${normal}")
-                            echo(" - $data")
-                            echo(" - ${it.message}")
-                            it.printStackTrace()
-                        }
+                read.consumeAsFlow()
+                    .filterNot { it.startsWith('#') }
+                    .collect { data ->
+                        runCatching { parser.fromString(data) }
+                            .onSuccess { printPacket(it, data) }
+                            .onFailure {
+                                if (debug || verbose) {
+                                    echo("\n${red}Parse failed for packet:${normal}")
+                                    echo(" - $data")
+                                    echo(" - ${it.message}")
+                                    it.printStackTrace()
+                                }
+                            }
                 }
             }
         }
     }
 
-    private fun printPacket(packet: AprsPacket) = when (packet) {
+    private fun printPacket(packet: AprsPacket, data: String) = when (packet) {
         is AprsPacket.Position -> {
             echo("${blue.span("[${packet.source}]")}: ${packet.coordinates} ${packet.comment}")
         }
         is AprsPacket.Weather -> {
             echo("${yellow.span("[${packet.source}]")}: ${packet.temperature} ${packet.body}")
         }
+        is AprsPacket.ObjectReport -> {
+            echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")
+        }
         is AprsPacket.Unknown -> {
-            echo("${lightRed.span("[${packet.source}]")}: ${packet.body}")
+            if (debug) {
+                echo("${lightRed.span("[${packet.source}]")}: $data")
+            } else {
+                echo("${lightRed.span("[${packet.source}]")}: ${packet.body}")
+            }
         }
     }
 
