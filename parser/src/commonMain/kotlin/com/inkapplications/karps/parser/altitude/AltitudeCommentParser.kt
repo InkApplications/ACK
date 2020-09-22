@@ -33,6 +33,7 @@ class AltitudeCommentParser: PacketInformationParser {
                 body = newBody
             )
             is AprsPacket.ObjectReport,
+            is AprsPacket.ItemReport,
             is AprsPacket.Unknown -> packet
         }
     }

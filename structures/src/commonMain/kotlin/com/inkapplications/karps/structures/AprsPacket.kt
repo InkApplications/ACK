@@ -87,6 +87,23 @@ sealed class AprsPacket {
         override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
     }
 
+    data class ItemReport(
+        override val received: Timestamp,
+        override val dataTypeIdentifier: Char,
+        override val source: Address,
+        override val destination: Address,
+        override val digipeaters: List<Digipeater>,
+        override val body: String,
+        val name: String,
+        val state: ReportState,
+        override val timestamp: Timestamp? = null,
+        override val extension: DataExtension? = null
+    ): AprsPacket() {
+        override fun withBody(body: String): AprsPacket = copy(body = body)
+        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
+        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
+    }
+
     data class Unknown(
         override val received: Timestamp,
         override val dataTypeIdentifier: Char,

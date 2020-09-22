@@ -96,6 +96,9 @@ class ListenCommand: CliktCommand() {
         is AprsPacket.ObjectReport -> {
             echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")
         }
+        is AprsPacket.ItemReport -> {
+            echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")
+        }
         is AprsPacket.Unknown -> {
             if (debug) {
                 echo("${lightRed.span("[${packet.source}]")}: $data")

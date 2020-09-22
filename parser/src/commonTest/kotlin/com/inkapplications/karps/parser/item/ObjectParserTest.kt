@@ -5,6 +5,7 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.ReportState
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ObjectParserTest {
@@ -38,7 +39,7 @@ class ObjectParserTest {
 
         val result = ObjectParser().parse(TestData.prototype.copy(body = given))
 
-        assertTrue(result !is AprsPacket.ObjectReport)
+        assertFalse(result is AprsPacket.ObjectReport)
         assertEquals(given, result.body)
     }
 }
