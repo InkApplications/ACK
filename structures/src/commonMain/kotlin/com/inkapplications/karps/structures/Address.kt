@@ -28,5 +28,5 @@ data class Address(
         else -> Unknown
     }
 
-    override fun toString() = "$callsign-$ssid"
+    override fun toString() = if (type == Primary) callsign else "$callsign-$ssid"
 }
