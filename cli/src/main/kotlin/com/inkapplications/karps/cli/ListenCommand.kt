@@ -20,11 +20,12 @@ import kimchi.logger.defaultWriter
 import kotlinx.coroutines.flow.*
 
 const val esc: Char = 27.toChar()
-const val blue = "${esc}[1;34m"
-const val yellow = "${esc}[1;33m"
-const val magenta = "${esc}[1;35m"
-const val red = "${esc}[0;31m"
 const val lightRed = "${esc}[1;31m"
+const val red = "${esc}[0;31m"
+const val yellow = "${esc}[1;33m"
+const val green = "${esc}[1;32m"
+const val blue = "${esc}[1;34m"
+const val magenta = "${esc}[1;35m"
 const val normal = "${esc}[0m"
 
 class ListenCommand: CliktCommand() {
@@ -98,6 +99,9 @@ class ListenCommand: CliktCommand() {
         }
         is AprsPacket.ItemReport -> {
             echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")
+        }
+        is AprsPacket.Message -> {
+            echo("${green.span("[${packet.source}]")} -> ${green.span("[${packet.addressee}]")}: ${packet.message}")
         }
         is AprsPacket.Unknown -> {
             if (debug) {

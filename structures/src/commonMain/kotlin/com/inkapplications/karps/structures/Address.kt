@@ -30,3 +30,10 @@ data class Address(
 
     override fun toString() = if (type == Primary) callsign else "$callsign-$ssid"
 }
+
+fun String.toAddress(): Address {
+    return Address(
+        callsign = substringBefore('-'),
+        ssid = substringAfter('-', "").takeIf { it.isNotEmpty() } ?: "0"
+    )
+}
