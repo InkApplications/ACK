@@ -39,11 +39,11 @@ class ParserModule {
                 CompressedPositionParser()
             )
         ),
-        DataExtensionParser(),
-        WeatherParser(),
         ObjectParser(),
         ItemParser(),
         MessageParser(),
+        DataExtensionParser(),
+        WeatherParser(),
         AltitudeCommentParser()
     )
 
