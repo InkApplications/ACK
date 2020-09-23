@@ -36,6 +36,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("reflect"))
                 implementation(kotlin("test-junit"))
+                implementation("com.squareup.moshi:moshi-kotlin:1.9.3")
             }
         }
     }
