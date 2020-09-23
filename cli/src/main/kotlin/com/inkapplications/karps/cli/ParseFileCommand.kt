@@ -38,7 +38,10 @@ class ParseFileCommand: CliktCommand() {
         val identified = results.filter { it.getOrNull() !is AprsPacket.Unknown }
         echo("Identified: ${identified.size} (${identified.size percentOf results.size})")
         echo("Top Unknown Identifiers:")
-        identified.groupBy { it.getOrNull()?.dataTypeIdentifier }
+        successful
+            .map { it.getOrNull() }
+            .filter { it is AprsPacket.Unknown }
+            .groupBy { it?.dataTypeIdentifier }
             .map { it.key to it.value.size }
             .sortedByDescending { it.second }
             .forEach { (key, values) ->
