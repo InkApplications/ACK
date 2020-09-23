@@ -37,6 +37,14 @@ class ParseFileCommand: CliktCommand() {
         echo("Successful: ${successful.size} (${successful.size percentOf results.size})")
         val identified = results.filter { it.getOrNull() !is AprsPacket.Unknown }
         echo("Identified: ${identified.size} (${identified.size percentOf results.size})")
+        echo("Top Unknown Identifiers:")
+        identified.groupBy { it.getOrNull()?.dataTypeIdentifier }
+            .map { it.key to it.value.size }
+            .sortedByDescending { it.second }
+            .forEach { (key, values) ->
+                echo(" - '$key': ${values}")
+            }
+
 
         if (output != null) {
             echo("Writing object notation to: ${output!!.name}")
