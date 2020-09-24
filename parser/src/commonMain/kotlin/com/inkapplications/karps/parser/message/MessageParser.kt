@@ -8,7 +8,7 @@ class MessageParser: PacketInformationParser {
     override val dataTypeFilter: CharArray? = charArrayOf(':')
 
     override fun parse(packet: AprsPacket): AprsPacket {
-        if (packet.body[9] == ':') return packet
+        if (packet.body[9] != ':') return packet
         val addressee = packet.body.substring(0, 8)
 
         return AprsPacket.Message(
