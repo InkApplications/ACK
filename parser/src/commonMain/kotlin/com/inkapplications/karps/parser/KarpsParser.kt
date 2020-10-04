@@ -7,7 +7,7 @@ import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
 internal class KarpsParser(
-    private val infoParsers: Array<PacketInformationParser>,
+    private val infoParsers: Array<PacketTypeParser>,
     private val logger: KimchiLogger = EmptyLogger,
     private val clock: Clock = SystemClock
 ): AprsParser {
@@ -26,7 +26,7 @@ internal class KarpsParser(
         }
         val dataType = packet.charAfter(':')
 
-        val prototype: AprsPacket = AprsPacket.Unknown(
+        val prototype = AprsPacket.Unknown(
             received = clock.current,
             dataTypeIdentifier = dataType,
             source = source,
@@ -35,12 +35,19 @@ internal class KarpsParser(
             body = body
         )
 
-        return infoParsers.fold(prototype) { newPrototype, parser ->
-            if (parser.dataTypeFilter == null || newPrototype.dataTypeIdentifier in parser.dataTypeFilter!!)
-                parser.parse(newPrototype)
-            else
-                newPrototype
-        }
+        infoParsers
+            .filter { parser ->
+                parser.dataTypeFilter?.let { dataType in it } ?: true
+            }
+            .forEach { parser ->
+                try {
+                    return parser.parse(prototype)
+                } catch (error: Throwable) {
+                    logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
+                }
+            }
+        logger.warn("No parser was able to parse packet.")
+        return prototype
     }
 
     override fun fromAx25(packet: ByteArray): AprsPacket {
@@ -66,7 +73,7 @@ internal class KarpsParser(
         val dataType = packet[17 + lastDigipeater].toChar()
         val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().let { String(it) }
 
-        val prototype: AprsPacket = AprsPacket.Unknown(
+        val prototype = AprsPacket.Unknown(
             received = clock.current,
             dataTypeIdentifier = dataType,
             source = source,
@@ -75,12 +82,19 @@ internal class KarpsParser(
             body = body
         )
 
-        return infoParsers.fold(prototype) { newPrototype, parser ->
-            if (parser.dataTypeFilter == null || newPrototype.dataTypeIdentifier in parser.dataTypeFilter!!)
-                parser.parse(newPrototype)
-            else
-                newPrototype
-        }
+        infoParsers
+            .filter { parser ->
+                parser.dataTypeFilter?.let { dataType in it } ?: true
+            }
+            .forEach { parser ->
+                try {
+                    return parser.parse(prototype)
+                } catch (error: Throwable) {
+                    logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
+                }
+            }
+        logger.warn("No parser was able to parse packet.")
+        return prototype
     }
 
     private fun List<UByte>.toCallsign(): String {

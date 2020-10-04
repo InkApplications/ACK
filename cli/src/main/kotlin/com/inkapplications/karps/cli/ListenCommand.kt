@@ -14,10 +14,9 @@ import com.inkapplications.karps.client.Credentials
 import com.inkapplications.karps.parser.ParserModule
 import com.inkapplications.karps.parser.AprsParser
 import com.inkapplications.karps.structures.AprsPacket
-import kimchi.logger.ConsolidatedLogger
-import kimchi.logger.EmptyWriter
-import kimchi.logger.defaultWriter
+import kimchi.logger.*
 import kotlinx.coroutines.flow.*
+import kotlin.coroutines.CoroutineContext
 
 const val esc: Char = 27.toChar()
 const val lightRed = "${esc}[1;31m"
@@ -58,7 +57,13 @@ class ListenCommand: CliktCommand() {
     ).flag(default = false)
 
     override fun run() {
-        val writer = if (verbose) defaultWriter else EmptyWriter
+        val test: CoroutineContext = Dispatchers.Main
+        val writer = if (verbose) object: LogWriter by defaultWriter {
+            override fun log(level: LogLevel, message: String, cause: Throwable?) {
+                defaultWriter.log(level, message, cause)
+                cause?.printStackTrace()
+            }
+        } else EmptyWriter
         val logger = ConsolidatedLogger(writer)
         val parser = ParserModule().defaultParser(logger)
         runBlocking {
@@ -92,7 +97,7 @@ class ListenCommand: CliktCommand() {
             echo("${blue.span("[${packet.source}]")}: ${packet.coordinates} ${packet.comment}")
         }
         is AprsPacket.Weather -> {
-            echo("${yellow.span("[${packet.source}]")}: ${packet.temperature} ${packet.body}")
+            echo("${yellow.span("[${packet.source}]")}: ${packet.temperature}")
         }
         is AprsPacket.ObjectReport -> {
             echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")

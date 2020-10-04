@@ -11,13 +11,6 @@ sealed class AprsPacket {
     abstract val source: Address
     abstract val destination: Address
     abstract val digipeaters: List<Digipeater>
-    abstract val body: String
-    abstract val extension: DataExtension?
-    abstract val timestamp: Timestamp?
-
-    abstract fun withBody(body: String): AprsPacket
-    abstract fun withExtension(extension: DataExtension?): AprsPacket
-    abstract fun withTimestamp(timestamp: Timestamp?): AprsPacket
 
     data class Position(
         override val received: Timestamp,
@@ -25,22 +18,21 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val body: String,
+        val timestamp: Timestamp?,
         val coordinates: Coordinates,
         val symbol: Symbol,
-        override val extension: DataExtension? = null,
-        override val timestamp: Timestamp? = null,
-        val altitude: Distance? = null
+        val comment: String,
+        val altitude: Distance?,
+        val trajectory: Trajectory?,
+        val range: Distance?,
+        val transmitterInfo: TransmitterInfo?,
+        val signalInfo: SignalInfo?,
+        val directionReportExtra: DirectionReport?
     ): AprsPacket() {
         val supportsMessaging = when (dataTypeIdentifier) {
             '=', '@' -> true
             else -> false
         }
-        val comment = body
-
-        override fun withBody(body: String): AprsPacket = copy(body = body)
-        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
-        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
     }
 
     data class Weather(
@@ -49,25 +41,18 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val body: String,
+        val timestamp: Timestamp?,
         val windData: WindData,
         val precipitation: Precipitation,
-        override val timestamp: Timestamp? = null,
-        val position: Coordinates? = null,
-        val symbol: Symbol? = null,
-        val temperature: Temperature? = null,
-        val humidity: Percentage? = null,
-        val pressure: Pressure? = null,
-        val irradiance: Irradiance? = null,
-        override val extension: DataExtension? = null,
-        val altitude: Distance? = null
+        val position: Coordinates?,
+        val symbol: Symbol?,
+        val temperature: Temperature?,
+        val humidity: Percentage?,
+        val pressure: Pressure?,
+        val irradiance: Irradiance?
     ): AprsPacket() {
         @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"))
         val luminosity = irradiance
-
-        override fun withBody(body: String): AprsPacket = copy(body = body)
-        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
-        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
     }
 
     data class ObjectReport(
@@ -76,16 +61,19 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val body: String,
         val name: String,
         val state: ReportState,
-        override val timestamp: Timestamp? = null,
-        override val extension: DataExtension? = null
-    ): AprsPacket() {
-        override fun withBody(body: String): AprsPacket = copy(body = body)
-        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
-        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
-    }
+        val timestamp: Timestamp?,
+        val coordinates: Coordinates,
+        val symbol: Symbol,
+        val comment: String,
+        val altitude: Distance?,
+        val trajectory: Trajectory?,
+        val range: Distance?,
+        val transmitterInfo: TransmitterInfo?,
+        val signalInfo: SignalInfo?,
+        val directionReportExtra: DirectionReport?
+    ): AprsPacket()
 
     data class ItemReport(
         override val received: Timestamp,
@@ -93,16 +81,18 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val body: String,
         val name: String,
         val state: ReportState,
-        override val timestamp: Timestamp? = null,
-        override val extension: DataExtension? = null
-    ): AprsPacket() {
-        override fun withBody(body: String): AprsPacket = copy(body = body)
-        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
-        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
-    }
+        val coordinates: Coordinates,
+        val symbol: Symbol,
+        val comment: String,
+        val altitude: Distance?,
+        val trajectory: Trajectory?,
+        val range: Distance?,
+        val transmitterInfo: TransmitterInfo?,
+        val signalInfo: SignalInfo?,
+        val directionReportExtra: DirectionReport?
+    ): AprsPacket()
 
     data class Message(
         override val received: Timestamp,
@@ -110,16 +100,10 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val body: String,
         val addressee: Address,
         val message: String,
-        override val timestamp: Timestamp? = null,
-        override val extension: DataExtension? = null
-    ): AprsPacket() {
-        override fun withBody(body: String): AprsPacket = copy(body = body)
-        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
-        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
-    }
+        val messageNumber: Int?
+    ): AprsPacket()
 
     data class Unknown(
         override val received: Timestamp,
@@ -127,12 +111,6 @@ sealed class AprsPacket {
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val body: String,
-        override val extension: DataExtension? = null,
-        override val timestamp: Timestamp? = null
-    ): AprsPacket() {
-        override fun withBody(body: String): AprsPacket = copy(body = body)
-        override fun withExtension(extension: DataExtension?): AprsPacket = copy(extension = extension)
-        override fun withTimestamp(timestamp: Timestamp?): AprsPacket = copy(timestamp = timestamp)
-    }
+        val body: String
+    ): AprsPacket()
 }

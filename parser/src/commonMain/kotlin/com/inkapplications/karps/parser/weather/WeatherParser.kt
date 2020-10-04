@@ -1,51 +1,68 @@
 package com.inkapplications.karps.parser.weather
 
-import com.inkapplications.karps.parser.PacketInformationParser
-import com.inkapplications.karps.parser.weather.WeatherChunkParser.DATA
-import com.inkapplications.karps.parser.weather.WeatherChunkParser.ID
+import com.inkapplications.karps.parser.PacketFormatException
+import com.inkapplications.karps.parser.PacketTypeParser
+import com.inkapplications.karps.parser.chunk.common.CompositeChunker
+import com.inkapplications.karps.parser.chunk.parseAfter
+import com.inkapplications.karps.parser.chunk.parseOptional
+import com.inkapplications.karps.parser.extension.TrajectoryExtensionChunker
+import com.inkapplications.karps.parser.position.CompressedPositionExtensions
+import com.inkapplications.karps.parser.position.MixedPositionChunker
+import com.inkapplications.karps.parser.position.PositionReport
+import com.inkapplications.karps.parser.position.compressedExtension
+import com.inkapplications.karps.parser.timestamp.*
+import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
+import com.soywiz.klock.DateTime
+import com.soywiz.klock.TimezoneOffset
 
-class WeatherParser: PacketInformationParser {
-    override val dataTypeFilter = charArrayOf('_', '!', '/', '@', '=')
-    val format = Regex("""^((?:${ID}${DATA})+)(.)?(.{2,4})?""")
+class WeatherParser(
+    timezone: TimezoneOffset = TimezoneOffset.local(DateTime.now())
+): PacketTypeParser {
+    override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
+    private val timestampParser = CompositeChunker(
+        DhmlChunker(timezone),
+        DhmzChunker(),
+        HmsChunker()
+    )
 
-    override fun parse(packet: AprsPacket): AprsPacket {
-        val result = format.find(packet.body) ?: return packet
-        val weatherData = WeatherChunkParser.getChunks(result.groupValues[1])
+    override fun parse(packet: AprsPacket.Unknown): AprsPacket.Weather {
+        val timestamp = timestampParser.parseOptional(packet)
+        val position = MixedPositionChunker.parseAfter(timestamp)
+        val compressedWind = position.parsed.compressedExtension
+        val plainWindExtension = if (position.parsed is PositionReport.Plain) TrajectoryExtensionChunker.parseAfter(position) else null
+        val windData = when {
+            plainWindExtension != null -> plainWindExtension.parsed.value
+            compressedWind != null -> compressedWind.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)!!
+            else -> null
+        }
+        val weatherData = WeatherChunker.parseAfter(plainWindExtension ?: position)
 
-        val weatherPacket = AprsPacket.Weather(
+        return AprsPacket.Weather(
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            timestamp = packet.timestamp,
-            extension = null,
-            body = packet.body.substring(result.groupValues[0].length),
+            timestamp = timestamp.parsed,
+            position = position.parsed.coordinates,
+            symbol = position.parsed.symbol,
             windData = WindData(
-                direction = (packet.extension as? DataExtension.TrajectoryExtra)?.value?.direction ?: weatherData['c']?.degreesBearing,
-                speed = (packet.extension as? DataExtension.TrajectoryExtra)?.value?.speed ?: weatherData['s']?.mph,
-                gust = weatherData['g']?.mph
+                direction = windData?.direction,
+                speed = windData?.speed,
+                gust = weatherData.parsed['g']?.mph
             ),
             precipitation = Precipitation(
-                rainLastHour = weatherData['r']?.hundredthsOfInch,
-                rainLast24Hours = weatherData['p']?.hundredthsOfInch,
-                rainToday = weatherData['P']?.hundredthsOfInch,
-                rawRain = weatherData['#']
+                rainLastHour = weatherData.parsed['r']?.hundredthsOfInch,
+                rainLast24Hours = weatherData.parsed['p']?.hundredthsOfInch,
+                rainToday = weatherData.parsed['P']?.hundredthsOfInch,
+                rawRain = weatherData.parsed['#']
             ),
-            temperature = weatherData['t']?.degreesFahrenheit,
-            humidity = weatherData['h']?.percent,
-            pressure = weatherData['b']?.decapascals,
-            irradiance = weatherData['L']?.wattsPerSquareMeter ?: weatherData['l']?.plus(1000)?.wattsPerSquareMeter
+            temperature = weatherData.parsed['t']?.degreesFahrenheit,
+            humidity = weatherData.parsed['h']?.percent,
+            pressure = weatherData.parsed['b']?.decapascals,
+            irradiance = weatherData.parsed['L']?.wattsPerSquareMeter ?: weatherData.parsed['l']?.plus(1000)?.wattsPerSquareMeter
         )
-
-        return when (packet) {
-            is AprsPacket.Position -> weatherPacket.copy(
-                position = packet.coordinates,
-                symbol = packet.symbol
-            )
-            else -> weatherPacket
-        }
     }
 }

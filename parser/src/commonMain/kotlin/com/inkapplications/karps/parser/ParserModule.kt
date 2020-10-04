@@ -1,14 +1,12 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.parser.altitude.AltitudeCommentParser
 import com.inkapplications.karps.parser.item.ItemParser
 import com.inkapplications.karps.parser.item.ObjectParser
 import com.inkapplications.karps.parser.message.MessageParser
-import com.inkapplications.karps.parser.position.CompositePositionParser
-import com.inkapplications.karps.parser.position.CompressedPositionParser
-import com.inkapplications.karps.parser.position.PlainPositionParser
-import com.inkapplications.karps.parser.timestamp.*
+import com.inkapplications.karps.parser.position.PositionParser
+import com.inkapplications.karps.parser.weather.PositionlessWeatherParser
 import com.inkapplications.karps.parser.weather.WeatherParser
+import com.soywiz.klock.DateTime
 import com.soywiz.klock.TimezoneOffset
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
@@ -17,38 +15,22 @@ import kimchi.logger.KimchiLogger
  * Creates Parser instances.
  */
 class ParserModule {
-    fun defaultTimestampParsers(
-        timezoneOffsetMilliseconds: Double? = null
-    ): Array<PacketInformationParser> = arrayOf(
-        DhmzParser(),
-        HmsParser(),
-        MdhmParser(),
-        if (timezoneOffsetMilliseconds != null)
-            DhmlParser(TimezoneOffset(timezoneOffsetMilliseconds))
-        else
-            DhmlParser()
-    )
-
     fun defaultParsers(
         timezoneOffsetMilliseconds: Double? = null
-    ): Array<PacketInformationParser> = arrayOf(
-        *defaultTimestampParsers(timezoneOffsetMilliseconds),
-        CompositePositionParser(
-            arrayOf(
-                PlainPositionParser(),
-                CompressedPositionParser()
-            )
-        ),
-        ObjectParser(),
-        ItemParser(),
-        MessageParser(),
-        DataExtensionParser(),
-        WeatherParser(),
-        AltitudeCommentParser()
-    )
+    ): Array<PacketTypeParser> {
+        val timezone = timezoneOffsetMilliseconds?.let(::TimezoneOffset) ?: TimezoneOffset.local(DateTime.now())
+        return arrayOf(
+            WeatherParser(timezone),
+            PositionlessWeatherParser(),
+            ObjectParser(timezone),
+            ItemParser(),
+            PositionParser(timezone),
+            MessageParser()
+        )
+    }
 
     fun parser(
-        infoParsers: Array<PacketInformationParser>,
+        infoParsers: Array<PacketTypeParser>,
         logger: KimchiLogger = EmptyLogger
     ): AprsParser = KarpsParser(infoParsers, logger = logger)
 

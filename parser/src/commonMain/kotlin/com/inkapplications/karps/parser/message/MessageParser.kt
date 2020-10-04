@@ -1,15 +1,32 @@
 package com.inkapplications.karps.parser.message
 
-import com.inkapplications.karps.parser.PacketInformationParser
+import com.inkapplications.karps.parser.PacketTypeParser
+import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
+import com.inkapplications.karps.parser.chunk.common.SpanChunker
+import com.inkapplications.karps.parser.chunk.common.SpanUntilChunker
+import com.inkapplications.karps.parser.chunk.mapParsed
+import com.inkapplications.karps.parser.chunk.parse
+import com.inkapplications.karps.parser.chunk.parseAfter
+import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.toAddress
 
-class MessageParser: PacketInformationParser {
+class MessageParser: PacketTypeParser {
     override val dataTypeFilter: CharArray? = charArrayOf(':')
+    private val addresseeParser = SpanChunker(9)
+        .mapParsed { it.trim().toAddress() }
+    private val startControl = ControlCharacterChunker(':')
+    private val endControl = ControlCharacterChunker('{')
+    private val messageParser = SpanUntilChunker(
+        stopChars = charArrayOf('{'),
+        maxLength = 67
+    )
 
-    override fun parse(packet: AprsPacket): AprsPacket {
-        if (packet.body[9] != ':') return packet
-        val addressee = packet.body.substring(0, 8)
+    override fun parse(packet: AprsPacket.Unknown): AprsPacket.Message {
+        val addressee = addresseeParser.parse(packet)
+        val startControl = startControl.parseAfter(addressee)
+        val message = messageParser.parseAfter(startControl)
+        val endControl = endControl.parseOptionalAfter(message)
 
         return AprsPacket.Message(
             received = packet.received,
@@ -17,10 +34,9 @@ class MessageParser: PacketInformationParser {
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            timestamp = packet.timestamp,
-            addressee = addressee.trim().toAddress(),
-            message = packet.body.substring(10).substringBefore('{'),
-            body = ""
+            addressee = addressee.parsed,
+            message = message.parsed,
+            messageNumber = runCatching { endControl.remainingData.toInt() }.getOrNull()
         )
     }
 }

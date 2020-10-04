@@ -1,43 +1,40 @@
 package com.inkapplications.karps.parser.item
 
 import com.inkapplications.karps.parser.TestData
-import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.ReportState
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import com.inkapplications.karps.parser.assertEquals
+import com.inkapplications.karps.structures.symbolOf
+import kotlin.test.*
 
 class ItemParserTest {
     @Test
-    fun liveObject() {
+    fun liveItem() {
         val given = "AID #2!4903.50N/07201.75WA"
 
         val result = ItemParser().parse(TestData.prototype.copy(body = given))
 
-        assertTrue(result is AprsPacket.ItemReport)
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Live, result.state)
-        assertEquals("4903.50N/07201.75WA", result.body)
+        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
+        assertEquals(-72.0292, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(symbolOf('/', 'A'), result.symbol)
     }
 
     @Test
-    fun killedObject() {
+    fun killedItem() {
         val given = "AID #2_4903.50N/07201.75WA"
 
         val result = ItemParser().parse(TestData.prototype.copy(body = given))
 
-        assertTrue(result is AprsPacket.ItemReport)
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Kill, result.state)
-        assertEquals("4903.50N/07201.75WA", result.body)
+        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
+        assertEquals(-72.0292, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(symbolOf('/', 'A'), result.symbol)
     }
 
     @Test
     fun nontItem() {
-        val result = ItemParser().parse(TestData.Position.expected)
-
-        assertFalse(result is AprsPacket.ItemReport)
-        assertEquals(TestData.Position.expected.body, result.body)
+        assertFails { ItemParser().parse(TestData.prototype.copy(body = "3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/")) }
     }
 }

@@ -39,7 +39,7 @@ internal enum class FixType {
 /**
  * Parses information out of the "compression type" field from a byte.
  */
-internal object CompressionInfoParser {
+internal object CompressionInfoDeserializer {
     fun fromByte(data: Byte) = CompressionInfo(
         gpsFix = when ((data and 0b00_1_00_000).toInt() ushr 5) {
             1 -> FixType.Current
