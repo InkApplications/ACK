@@ -13,10 +13,10 @@ class SignalExtensionChunkerTest {
 
         val result = SignalExtensionChunker.popChunk(given)
 
-        assertEquals(2.strength, result.parsed.value.strength)
-        assertEquals(Cardinal.South.degreesBearing, result.parsed.value.direction)
-        assertEquals(6.decibels, result.parsed.value.gain)
-        assertEquals(80.feet, result.parsed.value.height)
+        assertEquals(2.strength, result.result.value.strength)
+        assertEquals(Cardinal.South.degreesBearing, result.result.value.direction)
+        assertEquals(6.decibels, result.result.value.gain)
+        assertEquals(80.feet, result.result.value.height)
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 
@@ -26,10 +26,10 @@ class SignalExtensionChunkerTest {
 
         val result = SignalExtensionChunker.popChunk(given)
 
-        assertEquals(2.strength, result.parsed.value.strength)
-        assertNull(result.parsed.value.direction)
-        assertEquals(6.decibels, result.parsed.value.gain)
-        assertEquals(80.feet, result.parsed.value.height)
+        assertEquals(2.strength, result.result.value.strength)
+        assertNull(result.result.value.direction)
+        assertEquals(6.decibels, result.result.value.gain)
+        assertEquals(80.feet, result.result.value.height)
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 

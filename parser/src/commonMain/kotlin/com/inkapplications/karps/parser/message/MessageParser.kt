@@ -34,8 +34,8 @@ class MessageParser: PacketTypeParser {
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            addressee = addressee.parsed,
-            message = message.parsed,
+            addressee = addressee.result,
+            message = message.result,
             messageNumber = runCatching { endControl.remainingData.toInt() }.getOrNull()
         )
     }

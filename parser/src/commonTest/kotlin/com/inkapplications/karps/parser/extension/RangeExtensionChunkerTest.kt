@@ -12,7 +12,7 @@ class RangeExtensionChunkerTest {
 
         val result = RangeExtensionChunker.popChunk(given)
 
-        assertEquals(50.miles, result.parsed.value, "Range is parsed as miles.")
+        assertEquals(50.miles, result.result.value, "Range is parsed as miles.")
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 

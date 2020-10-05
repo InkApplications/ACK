@@ -10,7 +10,7 @@ class CharChunkerTest {
 
         val result = CharChunker.popChunk(given)
 
-        assertEquals('1', result.parsed)
+        assertEquals('1', result.result)
         assertEquals("2345", result.remainingData)
     }
 }

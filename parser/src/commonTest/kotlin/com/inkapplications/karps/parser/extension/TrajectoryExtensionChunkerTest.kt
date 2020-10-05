@@ -11,8 +11,8 @@ class TrajectoryExtensionChunkerTest {
 
         val result = TrajectoryExtensionChunker.popChunk(given)
 
-        assertEquals(88.degreesBearing, result.parsed.value.direction)
-        assertEquals(36.knots, result.parsed.value.speed)
+        assertEquals(88.degreesBearing, result.result.value.direction)
+        assertEquals(36.knots, result.result.value.speed)
         assertEquals("Hello World", result.remainingData)
     }
 
@@ -22,8 +22,8 @@ class TrajectoryExtensionChunkerTest {
 
         val result = TrajectoryExtensionChunker.popChunk(given)
 
-        assertNull(result.parsed.value.direction, "Direction null when unspecified.")
-        assertNull(result.parsed.value.speed, "Speed null when unspecified.")
+        assertNull(result.result.value.direction, "Direction null when unspecified.")
+        assertNull(result.result.value.speed, "Speed null when unspecified.")
         assertEquals("Hello World", result.remainingData)
     }
 

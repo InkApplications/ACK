@@ -10,7 +10,7 @@ class AltitudeChunkerTest {
 
         val result = AltitudeChunker.popChunk(given)
 
-        assertEquals(123456.feet, result.parsed, "Altitude is parsed from body.")
+        assertEquals(123456.feet, result.result, "Altitude is parsed from body.")
         assertEquals("Hello World", result.remainingData, "Parsed data is removed from body.")
     }
 
@@ -20,7 +20,7 @@ class AltitudeChunkerTest {
 
         val result = AltitudeChunker.popChunk(given)
 
-        assertEquals(1234.feet, result.parsed, "Altitude is parsed from body.")
+        assertEquals(1234.feet, result.result, "Altitude is parsed from body.")
         assertEquals("Hello I'm at!", result.remainingData, "Parsed data is removed from body.")
     }
 

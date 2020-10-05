@@ -16,10 +16,10 @@ class CompressedPositionChunkerTest {
         val result = CompressedPositionChunker.popChunk(given)
 
         assertEquals("Test", result.remainingData)
-        assertEquals(49.5, result.parsed.coordinates.latitude.decimal, 0.01)
-        assertEquals(-72.75, result.parsed.coordinates.longitude.decimal, 0.01)
-        assertEquals(36.2.knots, result.parsed.extension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.speed)
-        assertEquals(88.degreesBearing, result.parsed.extension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.direction)
+        assertEquals(49.5, result.result.coordinates.latitude.decimal, 0.01)
+        assertEquals(-72.75, result.result.coordinates.longitude.decimal, 0.01)
+        assertEquals(36.2.knots, result.result.extension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.speed)
+        assertEquals(88.degreesBearing, result.result.extension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.direction)
     }
 
     @Test

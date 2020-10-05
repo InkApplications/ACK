@@ -59,7 +59,7 @@ object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
         }
 
         return Chunk(
-            parsed = PositionReport.Compressed(
+            result = PositionReport.Compressed(
                 coordinates = Coordinates(latitude, longitude),
                 symbol = symbolOf(tableIdentifier, codeIdentifier),
                 extension = extension

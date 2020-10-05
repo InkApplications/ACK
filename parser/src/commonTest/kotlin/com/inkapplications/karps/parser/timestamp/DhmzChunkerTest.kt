@@ -23,7 +23,7 @@ class DhmzChunkerTest {
 
         val result = DhmzChunker().popChunk(given)
 
-        assertEquals(expected, result.parsed)
+        assertEquals(expected, result.result)
         assertEquals("Test", result.remainingData)
     }
 

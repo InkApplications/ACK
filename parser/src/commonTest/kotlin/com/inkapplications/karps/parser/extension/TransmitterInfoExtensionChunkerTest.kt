@@ -12,10 +12,10 @@ class TransmitterInfoExtensionChunkerTest {
 
         val result = TransmitterInfoExtensionChunker.popChunk(given)
 
-        assertEquals(25.watts, result.parsed.value.power)
-        assertEquals(20.feet, result.parsed.value.height)
-        assertEquals(3.decibels, result.parsed.value.gain)
-        assertEquals(Cardinal.East.degreesBearing, result.parsed.value.direction)
+        assertEquals(25.watts, result.result.value.power)
+        assertEquals(20.feet, result.result.value.height)
+        assertEquals(3.decibels, result.result.value.gain)
+        assertEquals(Cardinal.East.degreesBearing, result.result.value.direction)
         assertEquals("Test", result.remainingData)
     }
 

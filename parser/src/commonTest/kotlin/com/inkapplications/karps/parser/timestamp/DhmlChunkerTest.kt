@@ -25,7 +25,7 @@ class DhmlChunkerTest {
 
         val result = DhmlChunker(TimezoneOffset(60.minutes)).popChunk(given)
 
-        assertEquals(expected, result.parsed)
+        assertEquals(expected, result.result)
         assertEquals("Test", result.remainingData)
     }
 

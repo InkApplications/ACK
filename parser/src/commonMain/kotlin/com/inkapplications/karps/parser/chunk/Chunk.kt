@@ -3,10 +3,10 @@ package com.inkapplications.karps.parser.chunk
 /**
  * Data from a successful parse.
  *
- * @param parsed Data that was parsed from the string.
- * @param remainingData Data leftover after parsing, less [parsed].
+ * @param result Data that was parsed from the string.
+ * @param remainingData Data leftover after parsing, less [result].
  */
-data class Chunk<T>(val parsed: T, val remainingData: String)
+data class Chunk<T>(val result: T, val remainingData: String)
 
 /**
  * Map The result of a chunk from one type to another.
@@ -14,7 +14,7 @@ data class Chunk<T>(val parsed: T, val remainingData: String)
  * @param mapper Operation for transforming the mapped result data.
  */
 inline fun <T, R> Chunk<T>.mapParsed(mapper: (T) -> R): Chunk<R> {
-    return Chunk(mapper(parsed), remainingData)
+    return Chunk(mapper(result), remainingData)
 }
 
 /**

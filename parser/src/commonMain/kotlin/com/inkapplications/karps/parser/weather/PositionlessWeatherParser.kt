@@ -35,24 +35,24 @@ class PositionlessWeatherParser: PacketTypeParser {
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            timestamp = timestamp.parsed,
-            position = null,
+            timestamp = timestamp.result,
+            coordinates = null,
             symbol = null,
             windData = WindData(
-                direction = windDirection.parsed,
-                speed = windSpeed.parsed,
-                gust = windGust.parsed
+                direction = windDirection.result,
+                speed = windSpeed.result,
+                gust = windGust.result
             ),
             precipitation = Precipitation(
-                rainLastHour = weatherData.parsed?.get('r')?.hundredthsOfInch,
-                rainLast24Hours = weatherData.parsed?.get('p')?.hundredthsOfInch,
-                rainToday = weatherData.parsed?.get('P')?.hundredthsOfInch,
-                rawRain = weatherData.parsed?.get('#')
+                rainLastHour = weatherData.result?.get('r')?.hundredthsOfInch,
+                rainLast24Hours = weatherData.result?.get('p')?.hundredthsOfInch,
+                rainToday = weatherData.result?.get('P')?.hundredthsOfInch,
+                rawRain = weatherData.result?.get('#')
             ),
-            temperature = temperature.parsed,
-            humidity = weatherData.parsed?.get('h')?.percent,
-            pressure = weatherData.parsed?.get('b')?.decapascals,
-            irradiance = weatherData.parsed?.get('L')?.wattsPerSquareMeter ?: weatherData.parsed?.get('l')?.plus(1000)?.wattsPerSquareMeter
+            temperature = temperature.result,
+            humidity = weatherData.result?.get('h')?.percent,
+            pressure = weatherData.result?.get('b')?.decapascals,
+            irradiance = weatherData.result?.get('L')?.wattsPerSquareMeter ?: weatherData.result?.get('l')?.plus(1000)?.wattsPerSquareMeter
         )
     }
 }

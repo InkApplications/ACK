@@ -30,7 +30,7 @@ class CompositeChunkerTest {
         val result = composite.popChunk("hello world")
 
         assertTrue(first.called, "Parsers are called in-order")
-        assertEquals("Test", result.parsed, "Result from second parser returned")
+        assertEquals("Test", result.result, "Result from second parser returned")
         assertFalse(third.called, "Remaining parsers are not called")
     }
 

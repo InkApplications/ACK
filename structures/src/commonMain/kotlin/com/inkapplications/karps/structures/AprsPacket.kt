@@ -44,7 +44,7 @@ sealed class AprsPacket {
         val timestamp: Timestamp?,
         val windData: WindData,
         val precipitation: Precipitation,
-        val position: Coordinates?,
+        val coordinates: Coordinates?,
         val symbol: Symbol?,
         val temperature: Temperature?,
         val humidity: Percentage?,

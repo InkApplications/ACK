@@ -18,7 +18,7 @@ class PlainPositionChunkerTest {
             minutes = 3,
             seconds = 30f,
             cardinal = Cardinal.North
-        ), result.parsed.coordinates.latitude)
+        ), result.result.coordinates.latitude)
     }
 
     @Test

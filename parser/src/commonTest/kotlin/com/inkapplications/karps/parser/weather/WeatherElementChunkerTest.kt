@@ -11,7 +11,7 @@ class WeatherElementChunkerTest {
 
         val result = WeatherElementChunker('c', 3).popChunk(given)
 
-        assertEquals(220, result.parsed)
+        assertEquals(220, result.result)
         assertEquals("Test", result.remainingData)
     }
 

@@ -11,7 +11,7 @@ class ChunkTest {
 
         val result = given.mapParsed { it + 1 }
 
-        assertEquals(3, result.parsed)
+        assertEquals(3, result.result)
         assertEquals("Remaining", result.remainingData)
     }
 

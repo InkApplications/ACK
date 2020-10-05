@@ -11,7 +11,7 @@ class SpanChunkerTest {
 
         val result = parser.popChunk(given)
 
-        assertEquals("12345", result.parsed)
+        assertEquals("12345", result.result)
         assertEquals("6789", result.remainingData)
     }
 
@@ -22,7 +22,7 @@ class SpanChunkerTest {
 
         val result = parser.popChunk(given)
 
-        assertEquals("23456", result.parsed)
+        assertEquals("23456", result.result)
         assertEquals("1789", result.remainingData)
     }
 }

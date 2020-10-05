@@ -22,7 +22,7 @@ class PositionParser(
     override fun parse(packet: AprsPacket.Unknown): AprsPacket.Position {
         val timestamp = timestampParser.parseOptional(packet)
         val position = MixedPositionChunker.parseAfter(timestamp)
-        val compressedExtension = position.parsed.compressedExtension
+        val compressedExtension = position.result.compressedExtension
         val plainExtension = if (compressedExtension == null) {
             DataExtensionChunker.parseOptionalAfter(position)
         } else null
@@ -34,18 +34,18 @@ class PositionParser(
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            timestamp = timestamp.parsed,
-            coordinates = position.parsed.coordinates,
-            symbol = position.parsed.symbol,
+            timestamp = timestamp.result,
+            coordinates = position.result.coordinates,
+            symbol = position.result.symbol,
             comment = altitudeComment.remainingData,
-            altitude = altitudeComment.parsed ?: compressedExtension?.valueFor(CompressedPositionExtensions.AltitudeExtra::class),
+            altitude = altitudeComment.result ?: compressedExtension?.valueFor(CompressedPositionExtensions.AltitudeExtra::class),
             trajectory = compressedExtension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)
-                ?: plainExtension?.parsed?.valueFor(DataExtensions.TrajectoryExtra::class),
+                ?: plainExtension?.result?.valueFor(DataExtensions.TrajectoryExtra::class),
             range = compressedExtension?.valueFor(CompressedPositionExtensions.RangeExtra::class)
-                ?: plainExtension?.parsed?.valueFor(DataExtensions.RangeExtra::class),
-            transmitterInfo = plainExtension?.parsed?.valueFor(DataExtensions.TransmitterInfoExtra::class),
-            signalInfo = plainExtension?.parsed?.valueFor(DataExtensions.OmniDfSignalExtra::class),
-            directionReportExtra = plainExtension?.parsed?.valueFor(DataExtensions.DirectionReportExtra::class)
+                ?: plainExtension?.result?.valueFor(DataExtensions.RangeExtra::class),
+            transmitterInfo = plainExtension?.result?.valueFor(DataExtensions.TransmitterInfoExtra::class),
+            signalInfo = plainExtension?.result?.valueFor(DataExtensions.OmniDfSignalExtra::class),
+            directionReportExtra = plainExtension?.result?.valueFor(DataExtensions.DirectionReportExtra::class)
         )
     }
 }

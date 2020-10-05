@@ -38,7 +38,7 @@ class PositionlessWeatherParserTest {
         assertEquals(9900.decapascals, result.pressure)
         assertNull(result.irradiance)
         assertNull(result.symbol)
-        assertNull(result.position)
+        assertNull(result.coordinates)
     }
 
     @Test
@@ -69,7 +69,7 @@ class PositionlessWeatherParserTest {
         assertNull(result.pressure)
         assertNull(result.irradiance)
         assertNull(result.symbol)
-        assertNull(result.position)
+        assertNull(result.coordinates)
     }
 
     @Test

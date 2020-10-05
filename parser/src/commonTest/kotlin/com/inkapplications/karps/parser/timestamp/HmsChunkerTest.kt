@@ -23,7 +23,7 @@ class HmsChunkerTest {
 
         val result = HmsChunker().popChunk(given)
 
-        assertEquals(expected, result.parsed)
+        assertEquals(expected, result.result)
         assertEquals("Test", result.remainingData)
     }
 

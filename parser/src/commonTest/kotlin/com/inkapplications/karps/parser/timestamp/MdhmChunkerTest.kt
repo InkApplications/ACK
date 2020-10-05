@@ -26,7 +26,7 @@ class MdhmChunkerTest {
 
         val result = MdhmChunker().popChunk(given)
 
-        assertEquals(expected, result.parsed)
+        assertEquals(expected, result.result)
         assertEquals("Test", result.remainingData)
     }
 

@@ -13,7 +13,7 @@ class ChunkerTest {
 
         val result = given.popChunk("")
 
-        assertEquals("Parsed|Mapped", result.parsed)
+        assertEquals("Parsed|Mapped", result.result)
         assertEquals("Remaining", result.remainingData)
     }
 
@@ -21,7 +21,7 @@ class ChunkerTest {
     fun parseOptionalValid() {
         val result = StubChunker.parseOptional(TestData.prototype)
 
-        assertEquals("Parsed", result.parsed)
+        assertEquals("Parsed", result.result)
         assertEquals("Remaining", result.remainingData)
     }
 
@@ -32,7 +32,7 @@ class ChunkerTest {
         }
         val result = given.parseOptional(TestData.prototype)
 
-        assertNull(result.parsed)
+        assertNull(result.result)
         assertEquals(TestData.prototype.body, result.remainingData)
     }
 
@@ -40,7 +40,7 @@ class ChunkerTest {
     fun parseOptionalAfterValid() {
         val result = StubChunker.parseOptionalAfter(Chunk("", ""))
 
-        assertEquals("Parsed", result.parsed)
+        assertEquals("Parsed", result.result)
         assertEquals("Remaining", result.remainingData)
     }
 
@@ -51,7 +51,7 @@ class ChunkerTest {
         }
         val result = given.parseOptionalAfter(Chunk("", ""))
 
-        assertNull(result.parsed)
+        assertNull(result.result)
         assertEquals(TestData.prototype.body, result.remainingData)
     }
 

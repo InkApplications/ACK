@@ -12,12 +12,12 @@ class DirectionReportExtensionChunkerTest {
 
         val result = DirectionReportExtensionChunker.popChunk(given)
 
-        assertEquals(88.degreesBearing, result.parsed.value.trajectory.direction)
-        assertEquals(36.knots, result.parsed.value.trajectory.speed)
-        assertEquals(270.degreesBearing, result.parsed.value.bearing)
-        assertEquals(7.toShort(), result.parsed.value.quality?.number)
-        assertEquals(4.miles, result.parsed.value.quality?.range)
-        assertEquals(1.degreesBearing, result.parsed.value.quality?.accuracy)
+        assertEquals(88.degreesBearing, result.result.value.trajectory.direction)
+        assertEquals(36.knots, result.result.value.trajectory.speed)
+        assertEquals(270.degreesBearing, result.result.value.bearing)
+        assertEquals(7.toShort(), result.result.value.quality?.number)
+        assertEquals(4.miles, result.result.value.quality?.range)
+        assertEquals(1.degreesBearing, result.result.value.quality?.accuracy)
         assertEquals("Hello World", result.remainingData)
     }
 
@@ -27,12 +27,12 @@ class DirectionReportExtensionChunkerTest {
 
         val result = DirectionReportExtensionChunker.popChunk(given)
 
-        assertNull(result.parsed.value.trajectory.direction)
-        assertNull(result.parsed.value.trajectory.speed)
-        assertEquals(270.degreesBearing, result.parsed.value.bearing)
-        assertEquals(7.toShort(), result.parsed.value.quality?.number)
-        assertEquals(4.miles, result.parsed.value.quality?.range)
-        assertEquals(1.degreesBearing, result.parsed.value.quality?.accuracy)
+        assertNull(result.result.value.trajectory.direction)
+        assertNull(result.result.value.trajectory.speed)
+        assertEquals(270.degreesBearing, result.result.value.bearing)
+        assertEquals(7.toShort(), result.result.value.quality?.number)
+        assertEquals(4.miles, result.result.value.quality?.range)
+        assertEquals(1.degreesBearing, result.result.value.quality?.accuracy)
         assertEquals("Hello World", result.remainingData)
     }
 

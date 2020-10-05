@@ -16,7 +16,7 @@ class SpanUntilChunkerTest {
 
         val result = parser.popChunk(given)
 
-        assertEquals("12345", result.parsed)
+        assertEquals("12345", result.result)
         assertEquals(",6789", result.remainingData)
     }
 

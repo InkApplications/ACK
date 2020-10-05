@@ -8,7 +8,7 @@ class WeatherChunkerTest {
     @Test
     fun getChunks() {
         val data = "a123b4567c89012d00"
-        val result = WeatherChunker.popChunk(data).parsed
+        val result = WeatherChunker.popChunk(data).result
         val expected = mapOf(
             'a' to 123,
             'b' to 4567,
@@ -35,7 +35,7 @@ class WeatherChunkerTest {
     @Test
     fun missing() {
         val data = "a123b....c12345"
-        val result = WeatherChunker.popChunk(data).parsed
+        val result = WeatherChunker.popChunk(data).result
         val expected = mapOf(
             'a' to 123,
             'c' to 12345
@@ -47,7 +47,7 @@ class WeatherChunkerTest {
     @Test
     fun negative() {
         val data = "a-12"
-        val result = WeatherChunker.popChunk(data).parsed
+        val result = WeatherChunker.popChunk(data).result
         val expected = mapOf(
             'a' to -12
         )

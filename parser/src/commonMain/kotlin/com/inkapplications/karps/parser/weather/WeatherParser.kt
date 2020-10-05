@@ -1,6 +1,5 @@
 package com.inkapplications.karps.parser.weather
 
-import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketTypeParser
 import com.inkapplications.karps.parser.chunk.common.CompositeChunker
 import com.inkapplications.karps.parser.chunk.parseAfter
@@ -30,10 +29,10 @@ class WeatherParser(
     override fun parse(packet: AprsPacket.Unknown): AprsPacket.Weather {
         val timestamp = timestampParser.parseOptional(packet)
         val position = MixedPositionChunker.parseAfter(timestamp)
-        val compressedWind = position.parsed.compressedExtension
-        val plainWindExtension = if (position.parsed is PositionReport.Plain) TrajectoryExtensionChunker.parseAfter(position) else null
+        val compressedWind = position.result.compressedExtension
+        val plainWindExtension = if (position.result is PositionReport.Plain) TrajectoryExtensionChunker.parseAfter(position) else null
         val windData = when {
-            plainWindExtension != null -> plainWindExtension.parsed.value
+            plainWindExtension != null -> plainWindExtension.result.value
             compressedWind != null -> compressedWind.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)!!
             else -> null
         }
@@ -45,24 +44,24 @@ class WeatherParser(
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            timestamp = timestamp.parsed,
-            position = position.parsed.coordinates,
-            symbol = position.parsed.symbol,
+            timestamp = timestamp.result,
+            coordinates = position.result.coordinates,
+            symbol = position.result.symbol,
             windData = WindData(
                 direction = windData?.direction,
                 speed = windData?.speed,
-                gust = weatherData.parsed['g']?.mph
+                gust = weatherData.result['g']?.mph
             ),
             precipitation = Precipitation(
-                rainLastHour = weatherData.parsed['r']?.hundredthsOfInch,
-                rainLast24Hours = weatherData.parsed['p']?.hundredthsOfInch,
-                rainToday = weatherData.parsed['P']?.hundredthsOfInch,
-                rawRain = weatherData.parsed['#']
+                rainLastHour = weatherData.result['r']?.hundredthsOfInch,
+                rainLast24Hours = weatherData.result['p']?.hundredthsOfInch,
+                rainToday = weatherData.result['P']?.hundredthsOfInch,
+                rawRain = weatherData.result['#']
             ),
-            temperature = weatherData.parsed['t']?.degreesFahrenheit,
-            humidity = weatherData.parsed['h']?.percent,
-            pressure = weatherData.parsed['b']?.decapascals,
-            irradiance = weatherData.parsed['L']?.wattsPerSquareMeter ?: weatherData.parsed['l']?.plus(1000)?.wattsPerSquareMeter
+            temperature = weatherData.result['t']?.degreesFahrenheit,
+            humidity = weatherData.result['h']?.percent,
+            pressure = weatherData.result['b']?.decapascals,
+            irradiance = weatherData.result['L']?.wattsPerSquareMeter ?: weatherData.result['l']?.plus(1000)?.wattsPerSquareMeter
         )
     }
 }
