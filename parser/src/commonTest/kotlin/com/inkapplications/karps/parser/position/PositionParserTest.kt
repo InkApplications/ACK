@@ -2,9 +2,10 @@ package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
+import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
-import com.soywiz.klock.DateTime
+import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -77,16 +78,14 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        val expected = DateTime.now()
-            .copyDayOfMonth(
+        val expected = Clock.System.now()
+            .withUtcValues(
                 dayOfMonth = 9,
-                hours = 23,
-                minutes = 45,
-                seconds = 0,
-                milliseconds = 0
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
         assertEquals(-72.0291, result.coordinates.longitude.decimal, 0.0001)
@@ -146,16 +145,14 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        val expected = DateTime.now()
-            .copyDayOfMonth(
+        val expected = Clock.System.now()
+            .withUtcValues(
                 dayOfMonth = 9,
-                hours = 23,
-                minutes = 45,
-                seconds = 0,
-                milliseconds = 0
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         assertEquals(49.5, result.coordinates.latitude.decimal, 0.1)
         assertEquals(-72.75, result.coordinates.longitude.decimal, 0.1)

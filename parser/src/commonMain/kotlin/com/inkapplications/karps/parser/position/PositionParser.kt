@@ -10,14 +10,15 @@ import com.inkapplications.karps.parser.extension.DataExtensions
 import com.inkapplications.karps.parser.timestamp.TimestampChunker
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.*
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.TimezoneOffset
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 
 class PositionParser(
-    timezone: TimezoneOffset = TimezoneOffset.local(DateTime.now())
+    clock: Clock = Clock.System,
+    timezone: TimeZone = TimeZone.UTC
 ): PacketTypeParser {
     override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
-    private val timestampParser = TimestampChunker(timezone)
+    private val timestampParser = TimestampChunker(clock, timezone)
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket.Position {
         val timestamp = timestampParser.parseOptional(packet)

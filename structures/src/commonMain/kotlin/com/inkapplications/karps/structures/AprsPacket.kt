@@ -1,24 +1,25 @@
 package com.inkapplications.karps.structures
 
 import com.inkapplications.karps.structures.unit.*
+import kotlinx.datetime.Instant
 
 /**
  * A Single APRS record.
  */
 sealed class AprsPacket {
-    abstract val received: Timestamp
+    abstract val received: Instant
     abstract val dataTypeIdentifier: Char
     abstract val source: Address
     abstract val destination: Address
     abstract val digipeaters: List<Digipeater>
 
     data class Position(
-        override val received: Timestamp,
+        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        val timestamp: Timestamp?,
+        val timestamp: Instant?,
         val coordinates: Coordinates,
         val symbol: Symbol,
         val comment: String,
@@ -36,12 +37,12 @@ sealed class AprsPacket {
     }
 
     data class Weather(
-        override val received: Timestamp,
+        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        val timestamp: Timestamp?,
+        val timestamp: Instant?,
         val windData: WindData,
         val precipitation: Precipitation,
         val coordinates: Coordinates?,
@@ -56,14 +57,14 @@ sealed class AprsPacket {
     }
 
     data class ObjectReport(
-        override val received: Timestamp,
+        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         val name: String,
         val state: ReportState,
-        val timestamp: Timestamp?,
+        val timestamp: Instant?,
         val coordinates: Coordinates,
         val symbol: Symbol,
         val comment: String,
@@ -76,7 +77,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class ItemReport(
-        override val received: Timestamp,
+        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
@@ -95,7 +96,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class Message(
-        override val received: Timestamp,
+        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
@@ -106,7 +107,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class Unknown(
-        override val received: Timestamp,
+        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,

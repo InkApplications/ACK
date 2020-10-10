@@ -1,10 +1,11 @@
 package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.structures.*
+import kotlinx.datetime.Clock
 
 @Suppress("unused")
 object TestData {
-    val now = SystemClock.current
+    val now = Clock.System.now()
 
     val prototype = AprsPacket.Unknown(
         received = now,

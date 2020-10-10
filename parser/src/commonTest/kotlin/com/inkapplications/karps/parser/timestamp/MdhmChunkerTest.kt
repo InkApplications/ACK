@@ -1,8 +1,7 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.structures.unit.asTimestamp
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.Month
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Month
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -10,17 +9,15 @@ import kotlin.test.assertFails
 class MdhmChunkerTest {
     @Test
     fun parse() {
-        val expected = DateTime.now()
-            .copyDayOfMonth(
-                month = Month.October,
+        val expected = Clock.System.now()
+            .withUtcValues(
+                month = Month.OCTOBER,
                 dayOfMonth = 9,
-                hours = 23,
-                minutes = 45,
-                seconds = 0,
-                milliseconds = 0
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         val given = "10092345Test"
 

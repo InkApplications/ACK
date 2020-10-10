@@ -6,7 +6,8 @@ import com.inkapplications.karps.structures.ReportState
 import com.inkapplications.karps.structures.at
 import com.inkapplications.karps.structures.unit.degreesBearing
 import com.inkapplications.karps.structures.unit.knots
-import com.soywiz.klock.DateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.test.*
 
 class ObjectParserTest {
@@ -15,13 +16,13 @@ class ObjectParserTest {
         val given = "LEADER   *092345z4903.50N/07201.75W>088/036"
 
         val result = ObjectParser().parse(TestData.prototype.copy(body = given))
-        val resultDateTime = result.timestamp?.epochMilliseconds?.let { DateTime.fromUnix(it) }
+        val resultDateTime = result.timestamp?.toLocalDateTime(TimeZone.UTC)
 
         assertEquals("LEADER", result.name)
         assertEquals(ReportState.Live, result.state)
         assertEquals(9, resultDateTime?.dayOfMonth)
-        assertEquals(23, resultDateTime?.hours)
-        assertEquals(45, resultDateTime?.minutes)
+        assertEquals(23, resultDateTime?.hour)
+        assertEquals(45, resultDateTime?.minute)
         assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.decimal, 0.0001)
         assertEquals(88.degreesBearing at 36.knots, result.trajectory)
@@ -32,13 +33,13 @@ class ObjectParserTest {
         val given = "LEADER   _092345z4903.50N/07201.75W>088/036"
 
         val result = ObjectParser().parse(TestData.prototype.copy(body = given))
-        val resultDateTime = result.timestamp?.epochMilliseconds?.let { DateTime.fromUnix(it) }
+        val resultDateTime = result.timestamp?.toLocalDateTime(TimeZone.UTC)
 
         assertEquals("LEADER", result.name)
         assertEquals(ReportState.Kill, result.state)
         assertEquals(9, resultDateTime?.dayOfMonth)
-        assertEquals(23, resultDateTime?.hours)
-        assertEquals(45, resultDateTime?.minutes)
+        assertEquals(23, resultDateTime?.hour)
+        assertEquals(45, resultDateTime?.minute)
         assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.decimal, 0.0001)
         assertEquals(88.degreesBearing at 36.knots, result.trajectory)

@@ -6,25 +6,23 @@ import com.inkapplications.karps.parser.message.MessageParser
 import com.inkapplications.karps.parser.position.PositionParser
 import com.inkapplications.karps.parser.weather.PositionlessWeatherParser
 import com.inkapplications.karps.parser.weather.WeatherParser
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.TimezoneOffset
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
+import kotlinx.datetime.TimeZone
 
 /**
  * Creates Parser instances.
  */
 class ParserModule {
     fun defaultParsers(
-        timezoneOffsetMilliseconds: Double? = null
+        timezone: TimeZone
     ): Array<PacketTypeParser> {
-        val timezone = timezoneOffsetMilliseconds?.let(::TimezoneOffset) ?: TimezoneOffset.local(DateTime.now())
         return arrayOf(
-            WeatherParser(timezone),
+            WeatherParser(timezone = timezone),
             PositionlessWeatherParser(),
-            ObjectParser(timezone),
+            ObjectParser(timezone = timezone),
             ItemParser(),
-            PositionParser(timezone),
+            PositionParser(timezone = timezone),
             MessageParser()
         )
     }
@@ -38,6 +36,7 @@ class ParserModule {
      * Create a standard packet parser with the default parsing modules.
      */
     fun defaultParser(
-        logger: KimchiLogger = EmptyLogger
-    ): AprsParser = parser(defaultParsers(), logger)
+        logger: KimchiLogger = EmptyLogger,
+        timezone: TimeZone = TimeZone.currentSystemDefault()
+    ): AprsParser = parser(defaultParsers(timezone), logger)
 }

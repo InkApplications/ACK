@@ -2,9 +2,10 @@ package com.inkapplications.karps.parser.weather
 
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
+import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
-import com.soywiz.klock.DateTime
+import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -15,16 +16,14 @@ class WeatherParserTest {
     fun plainComplete() {
         val given = "092345z4903.50N/07201.75W_220/004g005t-07r001p002P003h50b09900wRSW"
 
-        val expectedTime = DateTime.now()
-            .copyDayOfMonth(
+        val expectedTime = Clock.System.now()
+            .withUtcValues(
                 dayOfMonth = 9,
-                hours = 23,
-                minutes = 45,
-                seconds = 0,
-                milliseconds = 0
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         val result = WeatherParser().parse(TestData.prototype.copy(body = given))
 
@@ -77,16 +76,14 @@ class WeatherParserTest {
     fun compressedComplete() {
         val given = "092345z/5L!!<*e7_7P[g005t077r001p002P003h50b09900wRSW"
 
-        val expectedTime = DateTime.now()
-            .copyDayOfMonth(
+        val expectedTime = Clock.System.now()
+            .withUtcValues(
                 dayOfMonth = 9,
-                hours = 23,
-                minutes = 45,
-                seconds = 0,
-                milliseconds = 0
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         val result = WeatherParser().parse(TestData.prototype.copy(body = given))
 

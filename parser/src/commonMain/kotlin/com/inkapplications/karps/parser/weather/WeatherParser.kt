@@ -13,15 +13,16 @@ import com.inkapplications.karps.parser.timestamp.*
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.TimezoneOffset
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 
 class WeatherParser(
-    timezone: TimezoneOffset = TimezoneOffset.local(DateTime.now())
+    clock: Clock = Clock.System,
+    timezone: TimeZone = TimeZone.UTC
 ): PacketTypeParser {
     override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
     private val timestampParser = CompositeChunker(
-        DhmlChunker(timezone),
+        DhmlChunker(clock, timezone),
         DhmzChunker(),
         HmsChunker()
     )

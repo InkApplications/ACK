@@ -1,9 +1,10 @@
 package com.inkapplications.karps.parser.weather
 
 import com.inkapplications.karps.parser.TestData
+import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.unit.*
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.Month
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Month
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -15,17 +16,15 @@ class PositionlessWeatherParserTest {
         val given = "10090556c220s004g005t077r001p002P003h50b09900wRSW"
 
         val result = PositionlessWeatherParser().parse(TestData.prototype.copy(body = given))
-        val expectedTime = DateTime.now()
-            .copyDayOfMonth(
-                month = Month.October,
+        val expectedTime = Clock.System.now()
+            .withUtcValues(
+                month = Month.OCTOBER,
                 dayOfMonth = 9,
-                hours = 5,
-                minutes = 56,
-                seconds = 0,
-                milliseconds = 0
+                hour = 5,
+                minute = 56,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         assertEquals(expectedTime, result.timestamp)
         assertEquals(220.degreesBearing, result.windData.direction)
@@ -46,17 +45,15 @@ class PositionlessWeatherParserTest {
         val given = "10090556c...s   g...t...P012Jim"
 
         val result = PositionlessWeatherParser().parse(TestData.prototype.copy(body = given))
-        val expectedTime = DateTime.now()
-            .copyDayOfMonth(
-                month = Month.October,
+        val expectedTime = Clock.System.now()
+            .withUtcValues(
+                month = Month.OCTOBER,
                 dayOfMonth = 9,
-                hours = 5,
-                minutes = 56,
-                seconds = 0,
-                milliseconds = 0
+                hour = 5,
+                minute = 56,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         assertEquals(expectedTime, result.timestamp)
         assertNull(result.windData.direction)

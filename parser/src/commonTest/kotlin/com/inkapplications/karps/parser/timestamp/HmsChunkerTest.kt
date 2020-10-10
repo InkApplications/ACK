@@ -1,7 +1,6 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.structures.unit.asTimestamp
-import com.soywiz.klock.DateTime
+import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -9,15 +8,13 @@ import kotlin.test.assertFails
 class HmsChunkerTest {
     @Test
     fun parse() {
-        val expected = DateTime.now()
-            .copyDayOfMonth(
-                hours = 23,
-                minutes = 45,
-                seconds = 17,
-                milliseconds = 0
+        val expected = Clock.System.now()
+            .withUtcValues(
+                hour = 23,
+                minute = 45,
+                second = 17,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
 
         val given = "234517hTest"
 

@@ -15,11 +15,12 @@ import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.timestamp.TimestampChunker
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.ReportState
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.TimezoneOffset
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 
 class ObjectParser(
-    timezone: TimezoneOffset = TimezoneOffset.local(DateTime.now())
+    clock: Clock = Clock.System,
+    timezone: TimeZone = TimeZone.UTC
 ): PacketTypeParser {
     override val dataTypeFilter: CharArray? = charArrayOf(';')
 
@@ -35,7 +36,7 @@ class ObjectParser(
         }
     }
 
-    private val timestampParser = TimestampChunker(timezone)
+    private val timestampParser = TimestampChunker(clock, timezone)
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket.ObjectReport {
         val name = nameParser.parse(packet)

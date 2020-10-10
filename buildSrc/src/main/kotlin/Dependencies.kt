@@ -1,8 +1,10 @@
-object Klock {
-    val group = "com.soywiz.korlibs.klock"
-    val version = "1.12.1"
+object KotlinX {
+    object DateTime {
+        const val group = "org.jetbrains.kotlinx"
+        const val version = "0.1.0"
 
-    val core = "$group:klock:$version"
+        const val core = "$group:kotlinx-datetime:$version"
+    }
 }
 
 object Coroutines {

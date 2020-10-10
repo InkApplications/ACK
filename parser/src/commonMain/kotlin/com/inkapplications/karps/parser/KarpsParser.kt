@@ -5,11 +5,12 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
+import kotlinx.datetime.Clock
 
 internal class KarpsParser(
     private val infoParsers: Array<PacketTypeParser>,
     private val logger: KimchiLogger = EmptyLogger,
-    private val clock: Clock = SystemClock
+    private val clock: Clock = Clock.System
 ): AprsParser {
     override fun fromString(packet: String): AprsPacket {
         logger.trace("Parsing packet: $packet")
@@ -27,7 +28,7 @@ internal class KarpsParser(
         val dataType = packet.charAfter(':')
 
         val prototype = AprsPacket.Unknown(
-            received = clock.current,
+            received = clock.now(),
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
@@ -74,7 +75,7 @@ internal class KarpsParser(
         val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().let { String(it) }
 
         val prototype = AprsPacket.Unknown(
-            received = clock.current,
+            received = clock.now(),
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,

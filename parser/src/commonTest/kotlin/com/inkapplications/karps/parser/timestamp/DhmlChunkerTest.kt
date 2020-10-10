@@ -1,9 +1,7 @@
 package com.inkapplications.karps.parser.timestamp
 
-import com.inkapplications.karps.structures.unit.*
-import com.soywiz.klock.DateTime
-import com.soywiz.klock.TimezoneOffset
-import com.soywiz.klock.minutes
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -11,19 +9,17 @@ import kotlin.test.assertFails
 class DhmlChunkerTest {
     @Test
     fun parse() {
-        val expected = DateTime.now()
-            .copyDayOfMonth(
+        val expected = Clock.System.now()
+            .withUtcValues(
                 dayOfMonth = 9,
-                hours = 21,
-                minutes = 45,
-                seconds = 0,
-                milliseconds = 0
+                hour = 21,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
             )
-            .unixMillisLong
-            .asTimestamp
         val given = "092245/Test"
 
-        val result = DhmlChunker(TimezoneOffset(60.minutes)).popChunk(given)
+        val result = DhmlChunker(timezone = TimeZone.of("+1")).popChunk(given)
 
         assertEquals(expected, result.result)
         assertEquals("Test", result.remainingData)
@@ -33,6 +29,6 @@ class DhmlChunkerTest {
     fun invalid() {
         val given = "092245zTest"
 
-        assertFails { DhmlChunker(TimezoneOffset(60.minutes)).popChunk(given) }
+        assertFails { DhmlChunker(timezone = TimeZone.of("+1")).popChunk(given) }
     }
 }
