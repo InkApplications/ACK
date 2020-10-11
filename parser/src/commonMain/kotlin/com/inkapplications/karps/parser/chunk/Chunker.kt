@@ -5,7 +5,7 @@ import com.inkapplications.karps.structures.AprsPacket
 /**
  * Pops "chunks" of data off of a given string.
  */
-interface Chunker<out T> {
+internal interface Chunker<out T> {
     /**
      * Get an expected piece of data from a string.
      *
@@ -20,7 +20,7 @@ interface Chunker<out T> {
  *
  * @param mapper Operation for transforming the mapped result data.
  */
-inline fun <T, R> Chunker<T>.mapParsed(crossinline mapper: (T) -> R) = object: Chunker<R> {
+internal inline fun <T, R> Chunker<T>.mapParsed(crossinline mapper: (T) -> R) = object: Chunker<R> {
     override fun popChunk(data: String): Chunk<R> {
         return this@mapParsed.popChunk(data).mapParsed { mapper(it) }
     }
@@ -29,14 +29,14 @@ inline fun <T, R> Chunker<T>.mapParsed(crossinline mapper: (T) -> R) = object: C
 /**
  * Start parsing using an unknown APRS Packet Body.
  */
-fun <T> Chunker<T>.parse(packet: AprsPacket.Unknown): Chunk<out T> {
+internal fun <T> Chunker<T>.parse(packet: AprsPacket.Unknown): Chunk<out T> {
     return popChunk(packet.body)
 }
 
 /**
  * Start parsing using an unknown APRS Packet Body, catching any errors.
  */
-fun <T> Chunker<T>.parseOptional(packet: AprsPacket.Unknown): Chunk<out T?> {
+internal fun <T> Chunker<T>.parseOptional(packet: AprsPacket.Unknown): Chunk<out T?> {
     return runCatching { popChunk(packet.body) }.getOrNull() ?: Chunk(null, packet.body)
 }
 
@@ -45,7 +45,7 @@ fun <T> Chunker<T>.parseOptional(packet: AprsPacket.Unknown): Chunk<out T?> {
  *
  * @param result The chunk to start parsing after.
  */
-fun <T> Chunker<T>.parseAfter(result: Chunk<out Any?>): Chunk<out T> {
+internal fun <T> Chunker<T>.parseAfter(result: Chunk<out Any?>): Chunk<out T> {
     return popChunk(result.remainingData)
 }
 
@@ -54,21 +54,21 @@ fun <T> Chunker<T>.parseAfter(result: Chunk<out Any?>): Chunk<out T> {
  *
  * @param result The chunk to start parsing after.
  */
-fun <T> Chunker<T>.parseOptionalAfter(result: Chunk<out Any?>): Chunk<out T?> {
+internal fun <T> Chunker<T>.parseOptionalAfter(result: Chunk<out Any?>): Chunk<out T?> {
     return runCatching { popChunk(result.remainingData) }.getOrNull() ?: Chunk(null, result.remainingData)
 }
 
 /**
  * Assert that a character matches one of the specified values.
  */
-fun Char.requireControl(vararg allowed: Char) {
+internal fun Char.requireControl(vararg allowed: Char) {
     if (this !in allowed) throw IllegalArgumentException("Illegal Control Character. Found <$this> but expected one of: <${allowed.joinToString()}>")
 }
 
 /**
  * Require that data starts with a specific sequence of values.
  */
-fun String.requireStartsWith(allowed: String) {
+internal fun String.requireStartsWith(allowed: String) {
     if (!startsWith(allowed)) throw IllegalArgumentException("Illegal Control String. Required to start with <$allowed> but got: <$this>")
 }
 

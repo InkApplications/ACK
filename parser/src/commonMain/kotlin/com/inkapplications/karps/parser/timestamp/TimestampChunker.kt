@@ -6,7 +6,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 
-class TimestampChunker(
+internal class TimestampChunker(
     private val clock: Clock = Clock.System,
     private val timeZone: TimeZone = TimeZone.UTC
 ): Chunker<Instant> by CompositeChunker(

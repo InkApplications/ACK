@@ -7,7 +7,7 @@ import com.inkapplications.karps.structures.Trajectory
 import com.inkapplications.karps.structures.TransmitterInfo
 import com.inkapplications.karps.structures.unit.Distance
 
-sealed class DataExtensions<T: Any>: UnionContainer<T> {
+internal sealed class DataExtensions<T: Any>: UnionContainer<T> {
     data class TrajectoryExtra(
         override val value: Trajectory
     ): DataExtensions<Trajectory>()

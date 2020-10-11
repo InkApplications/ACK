@@ -17,7 +17,7 @@ import kotlin.math.pow
  *
  * This follows the format `DFSphgd` and does not allow omitted values.
  */
-object SignalExtensionChunker: Chunker<OmniDfSignalExtra> {
+internal object SignalExtensionChunker: Chunker<OmniDfSignalExtra> {
     override fun popChunk(data: String): Chunk<OmniDfSignalExtra> {
         data.requireStartsWith("DFS")
 

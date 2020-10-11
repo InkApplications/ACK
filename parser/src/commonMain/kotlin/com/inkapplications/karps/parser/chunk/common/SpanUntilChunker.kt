@@ -15,7 +15,7 @@ import kotlin.math.min
  * @param minLength The minimum number of characters before the control character.
  * @param maxLength The maximum number of characters before the control character.
  */
-class SpanUntilChunker(
+internal class SpanUntilChunker(
     private val stopChars: CharArray,
     private val minLength: Int = 0,
     private val maxLength: Int = Int.MAX_VALUE,

@@ -8,7 +8,7 @@ import kotlinx.datetime.*
 /**
  * Parse Days/Hours/Minutes for local times.
  */
-class DhmlChunker(
+internal class DhmlChunker(
     private val clock: Clock = Clock.System,
     private val timezone: TimeZone = TimeZone.currentSystemDefault()
 ): Chunker<Instant> {

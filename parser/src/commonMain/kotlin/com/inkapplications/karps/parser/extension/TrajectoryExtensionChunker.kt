@@ -18,7 +18,7 @@ import com.inkapplications.karps.structures.unit.knots
  * These follow the format: `DIR/SPD` and allow unspecified values
  * with spaces or dots. ex: `   /...` is unspecified.
  */
-object TrajectoryExtensionChunker: Chunker<TrajectoryExtra> {
+internal object TrajectoryExtensionChunker: Chunker<TrajectoryExtra> {
     override fun popChunk(data: String): Chunk<TrajectoryExtra> {
         data[3].requireControl('/')
         val bearing = data.substring(0, 3).optionalValue?.degreesBearing

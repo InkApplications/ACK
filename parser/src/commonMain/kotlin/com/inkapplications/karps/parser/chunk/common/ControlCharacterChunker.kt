@@ -9,7 +9,7 @@ import com.inkapplications.karps.parser.chunk.Chunk
  *
  * @param expected The sequence of expected characters to match.
  */
-class ControlCharacterChunker(
+internal class ControlCharacterChunker(
     private val expected: String
 ): Chunker<Nothing?> {
     constructor(expected: Char): this(expected.toString())

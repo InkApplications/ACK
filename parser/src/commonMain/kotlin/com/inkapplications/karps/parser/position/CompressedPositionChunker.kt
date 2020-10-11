@@ -10,7 +10,7 @@ import kotlin.math.pow
 /**
  * Parse a compressed position.
  */
-object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
+internal object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
     override fun popChunk(data: String): Chunk<out PositionReport.Compressed> {
         val tableIdentifier = data[0]
         val latitude = data.substring(1, 5)

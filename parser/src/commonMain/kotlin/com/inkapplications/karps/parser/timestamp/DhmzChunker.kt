@@ -9,7 +9,7 @@ import kotlinx.datetime.Instant
 /**
  * Parse Days/Hours/Minutes for UTC times.
  */
-class DhmzChunker(
+internal class DhmzChunker(
     private val clock: Clock = Clock.System,
 ): Chunker<Instant> {
     override fun popChunk(data: String): Chunk<out Instant> {

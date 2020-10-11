@@ -9,7 +9,7 @@ import kotlinx.datetime.Instant
 /**
  * Parse Hours/Minutes/Seconds.
  */
-class HmsChunker(
+internal class HmsChunker(
     private val clock: Clock = Clock.System,
 ): Chunker<Instant> {
     override fun popChunk(data: String): Chunk<out Instant> {

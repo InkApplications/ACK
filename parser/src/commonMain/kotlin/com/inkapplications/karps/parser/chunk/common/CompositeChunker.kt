@@ -7,7 +7,7 @@ import com.inkapplications.karps.parser.chunk.Chunk
 /**
  * Parse using the first of a set of parsers to match a result.
  */
-class CompositeChunker<out T>(
+internal class CompositeChunker<out T>(
     private vararg val delegates: Chunker<T>
 ): Chunker<T> {
     override fun popChunk(data: String): Chunk<out T> {

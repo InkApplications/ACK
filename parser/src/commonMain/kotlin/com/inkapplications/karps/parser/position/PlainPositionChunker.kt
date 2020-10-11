@@ -11,7 +11,7 @@ import com.inkapplications.karps.structures.unit.Longitude
 import com.inkapplications.karps.structures.unit.toCardinal
 
 
-object PlainPositionChunker: Chunker<PositionReport.Plain> {
+internal object PlainPositionChunker: Chunker<PositionReport.Plain> {
     override fun popChunk(data: String): Chunk<PositionReport.Plain> {
         val latDegrees = data.substring(0, 2).ambiguousValue
         val latMinutes = data.substring(2, 4).ambiguousValue

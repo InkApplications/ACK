@@ -11,7 +11,7 @@ import com.inkapplications.karps.structures.unit.miles
  *
  * This follows the format `RNGphgd` and does not allow omitted values.
  */
-object RangeExtensionChunker: Chunker<RangeExtra> {
+internal object RangeExtensionChunker: Chunker<RangeExtra> {
     override fun popChunk(data: String): Chunk<RangeExtra> {
         data.requireStartsWith("RNG")
 

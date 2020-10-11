@@ -5,7 +5,7 @@ import com.inkapplications.karps.parser.chunk.Chunk
 import com.inkapplications.karps.parser.chunk.requireControl
 import com.inkapplications.karps.parser.optionalValue
 
-class WeatherElementChunker(
+internal class WeatherElementChunker(
     private val identifier: Char,
     private val length: Int
 ): Chunker<Int?> {

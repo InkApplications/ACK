@@ -13,7 +13,7 @@ import com.inkapplications.karps.structures.unit.feet
  * matching the pattern: `/A=[\d]{6}`.
  * This should therefore be run as late in the parsing process as possible.
  */
-object AltitudeChunker: Chunker<Distance> {
+internal object AltitudeChunker: Chunker<Distance> {
     override fun popChunk(data: String): Chunk<out Distance> {
         val startIndex = data.indexOf("/A=")
         val value = data.substring(startIndex + 3, startIndex + 9)

@@ -18,7 +18,7 @@ import kotlin.math.pow
  *
  * This follows the format `PHGphgd` and does not allow omitted values.
  */
-object TransmitterInfoExtensionChunker: Chunker<TransmitterInfoExtra> {
+internal object TransmitterInfoExtensionChunker: Chunker<TransmitterInfoExtra> {
     override fun popChunk(data: String): Chunk<TransmitterInfoExtra> {
         data.requireStartsWith("PHG")
 

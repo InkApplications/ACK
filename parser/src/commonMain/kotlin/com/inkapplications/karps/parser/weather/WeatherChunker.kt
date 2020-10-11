@@ -12,7 +12,7 @@ import com.inkapplications.karps.parser.chunk.Chunk
  * Per the APRS specification, values can be between 2-5 characters, and the
  * identifier is a single character.
  */
-object WeatherChunker: Chunker<Map<Char, Int>> {
+internal object WeatherChunker: Chunker<Map<Char, Int>> {
     private const val ID = """[a-zA-Z#]"""
     private const val DATA = """(?:[\-\d]{1}\d{1,4}|[\.\s]{2,5})"""
     private val weatherDataFormat = Regex("""^((?:${ID}${DATA})+)""")

@@ -17,9 +17,9 @@ internal val String.optionalValue: Int? get() = takeIf { !all { it in charArrayO
 /**
  * Get the value of a char starting at Ascii digit of '0'
  */
-val Char.digit get() = minus(48).toShort().takeIf { it in 0..9 } ?: throw NumberFormatException("Expected a digit char but got <$this>")
+internal val Char.digit get() = minus(48).toShort().takeIf { it in 0..9 } ?: throw NumberFormatException("Expected a digit char but got <$this>")
 
 /**
  * Get the value of a char starting at Ascii digit of '0'
  */
-val Char.digitBasedValue get() = minus(48).toShort()
+internal val Char.digitBasedValue get() = minus(48).toShort()

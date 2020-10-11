@@ -20,7 +20,7 @@ import kotlin.math.pow
  * This follows the format `CSE/SPD/BRG/NRQ` and allows for omitted values
  * only in course/speed fields.
  */
-object DirectionReportExtensionChunker: Chunker<DirectionReportExtra> {
+internal object DirectionReportExtensionChunker: Chunker<DirectionReportExtra> {
     override fun popChunk(data: String): Chunk<DirectionReportExtra> {
         data[3].requireControl('/')
         data[7].requireControl('/')

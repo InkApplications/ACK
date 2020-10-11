@@ -9,7 +9,7 @@ import com.inkapplications.karps.parser.chunk.Chunk
  * @param length The length of the string to get from data.
  * @param offset Fixed number of characters to be discarded at the start of the string.
  */
-class SpanChunker(
+internal class SpanChunker(
     private val length: Int,
     private val offset: Int = 0
 ): Chunker<String> {

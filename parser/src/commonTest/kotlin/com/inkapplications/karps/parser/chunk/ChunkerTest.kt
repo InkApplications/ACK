@@ -84,7 +84,7 @@ class ChunkerTest {
     }
 }
 
-object StubChunker: Chunker<String> {
+internal object StubChunker: Chunker<String> {
     override fun popChunk(data: String): Chunk<out String> {
         return Chunk("Parsed", "Remaining")
     }

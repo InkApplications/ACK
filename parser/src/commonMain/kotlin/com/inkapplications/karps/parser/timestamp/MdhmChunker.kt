@@ -9,7 +9,7 @@ import kotlinx.datetime.Month
 /**
  * Parse Month/Day/Hours/Minutes format.
  */
-class MdhmChunker(
+internal class MdhmChunker(
     private val clock: Clock = Clock.System,
 ): Chunker<Instant> {
     override fun popChunk(data: String): Chunk<out Instant> {

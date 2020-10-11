@@ -4,7 +4,7 @@ import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
 
-object MixedPositionChunker: Chunker<PositionReport> {
+internal object MixedPositionChunker: Chunker<PositionReport> {
     override fun popChunk(data: String): Chunk<out PositionReport> {
         runCatching {
             return PlainPositionChunker.popChunk(data)
