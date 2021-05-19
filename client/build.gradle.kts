@@ -1,24 +1,18 @@
 plugins {
-    kotlin("multiplatform")
-    id("maven-publish")
+    id("library.multiplatform")
 }
 
 kotlin {
-    jvm()
-
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(kotlin("stdlib-common"))
-                api(Coroutines.common)
+                api(libraries.coroutines.core)
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                api(kotlin("stdlib"))
-                api(Coroutines.core)
-                implementation("io.ktor:ktor-client-cio:1.3.2")
+                implementation("io.ktor:ktor-client-cio:1.3.1")
             }
         }
     }

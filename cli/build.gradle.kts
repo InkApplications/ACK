@@ -8,9 +8,8 @@ application {
 }
 
 dependencies {
-    implementation(project(":client"))
-    implementation(project(":parser"))
-    implementation(kotlin("stdlib"))
-    implementation(Coroutines.core)
+    implementation(projects.client)
+    implementation(projects.parser)
+    implementation(libraries.coroutines.core)
     implementation("com.github.ajalt:clikt:2.8.0")
 }

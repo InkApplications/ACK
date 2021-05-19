@@ -1,35 +1,25 @@
 plugins {
-    kotlin("multiplatform")
-    id("maven-publish")
+    id("library.multiplatform")
 }
 
 kotlin {
-    jvm()
-
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(kotlin("stdlib-common"))
-                api(KotlinX.DateTime.core)
+                api(libraries.kotlinx.datetime.core)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
-                api(kotlin("stdlib"))
+                implementation(libraries.kotlin.test.core)
+                implementation(libraries.kotlin.test.annotations)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test-junit"))
+                implementation(libraries.kotlin.test.junit)
             }
         }
     }

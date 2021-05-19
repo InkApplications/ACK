@@ -1,40 +1,35 @@
 plugins {
-    kotlin("multiplatform")
-    id("maven-publish")
+    id("library.multiplatform")
 }
 
 kotlin {
-    jvm()
-
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(kotlin("stdlib-common"))
-                api(Coroutines.common)
-                api(project(":structures"))
-                api(Kimchi.logger)
+                api(libraries.coroutines.core)
+                api(projects.structures)
+                api(libraries.kimchi.logger)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("reflect"))
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation(libraries.kotlin.reflect)
+                implementation(libraries.kotlin.test.core)
+                implementation(libraries.kotlin.test.annotations)
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                api(kotlin("stdlib"))
-                api(Coroutines.core)
+                api(libraries.coroutines.core)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("reflect"))
-                implementation(kotlin("test-junit"))
+                implementation(libraries.kotlin.reflect)
+                implementation(libraries.kotlin.test.junit)
                 implementation("com.squareup.moshi:moshi-kotlin:1.9.3")
             }
         }

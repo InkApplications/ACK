@@ -1,0 +1,39 @@
+[versions]
+kotlin = "1.4.10"
+coroutines = "1.4.3"
+
+[libraries.kotlin-gradle]
+version.ref = "kotlin"
+module = "org.jetbrains.kotlin:kotlin-gradle-plugin"
+
+[libraries.kotlin-test-junit]
+version.ref = "kotlin"
+module = "org.jetbrains.kotlin:kotlin-test-junit"
+
+[libraries.kotlin-test-core]
+version.ref = "kotlin"
+module = "org.jetbrains.kotlin:kotlin-test"
+
+[libraries.kotlin-test-annotations]
+version.ref = "kotlin"
+module = "org.jetbrains.kotlin:kotlin-test-annotations-common"
+
+[libraries.kotlin-reflect]
+version.ref = "kotlin"
+module = "org.jetbrains.kotlin:kotlin-reflect"
+
+[libraries.coroutines-core]
+version.ref = "coroutines"
+module = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+
+[libraries.coroutines-test]
+version.ref = "coroutines"
+module = "org.jetbrains.kotlinx:kotlinx-coroutines-test"
+
+[libraries.kotlinx-datetime-core]
+version = "0.1.0"
+module = "org.jetbrains.kotlinx:kotlinx-datetime"
+
+[libraries.kimchi-logger]
+version = "991aa06d88"
+module = "com.github.inkapplications.kimchi:logger"
