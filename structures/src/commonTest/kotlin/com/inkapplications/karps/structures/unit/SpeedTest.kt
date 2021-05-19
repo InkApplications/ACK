@@ -1,6 +1,5 @@
 package com.inkapplications.karps.structures.unit
 
-import com.inkapplications.karps.structures.assertEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

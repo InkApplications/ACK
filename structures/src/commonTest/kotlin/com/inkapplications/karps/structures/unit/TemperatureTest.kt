@@ -18,7 +18,7 @@ class TemperatureTest {
         assertEquals(0f, 32.degreesFahrenheit.celsius)
 
         assertEquals(68, 20.degreesCelsius.fahrenheit)
-        com.inkapplications.karps.structures.assertEquals(22.22f, 72.degreesFahrenheit.celsius, .01f)
+        assertEquals(22.22f, 72.degreesFahrenheit.celsius, .01f)
 
         assertEquals(-40, (-40).degreesCelsius.fahrenheit)
         assertEquals((-40f), (-40).degreesFahrenheit.celsius)

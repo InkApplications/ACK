@@ -72,7 +72,7 @@ internal class KarpsParser(
             .map { Digipeater(it) }
 
         val dataType = packet[17 + lastDigipeater].toChar()
-        val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().let { String(it) }
+        val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
 
         val prototype = AprsPacket.Unknown(
             received = clock.now(),
@@ -102,7 +102,7 @@ internal class KarpsParser(
         return map { it.toInt() shr 1 }
             .map { it.toChar() }
             .toCharArray()
-            .let { String(it) }
+            .concatToString()
             .trim()
     }
 

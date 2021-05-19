@@ -9,7 +9,7 @@ private const val KNOTS_RATIO = 1.15078
  * Unit of speed, stored in miles per hour.
  */
 inline class Speed(val milesPerHour: Short) {
-    val kilometersPerHour: Short get() = (milesPerHour / KM_RATIO).toShort()
+    val kilometersPerHour: Short get() = (milesPerHour / KM_RATIO).toInt().toShort()
     val knots: Float get() = (milesPerHour / KNOTS_RATIO).toFloat()
 
     override fun toString() = "$milesPerHour mph"
