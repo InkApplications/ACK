@@ -7,25 +7,14 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
 import com.inkapplications.karps.client.AprsClientModule
 import com.inkapplications.karps.client.Credentials
 import com.inkapplications.karps.parser.ParserModule
-import com.inkapplications.karps.parser.AprsParser
-import com.inkapplications.karps.structures.AprsPacket
 import kimchi.logger.*
-import kotlinx.coroutines.flow.*
-import kotlin.coroutines.CoroutineContext
-
-const val esc: Char = 27.toChar()
-const val lightRed = "${esc}[1;31m"
-const val red = "${esc}[0;31m"
-const val yellow = "${esc}[1;33m"
-const val green = "${esc}[1;32m"
-const val blue = "${esc}[1;34m"
-const val magenta = "${esc}[1;35m"
-const val normal = "${esc}[0m"
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.runBlocking
 
 class ListenCommand: CliktCommand() {
     private val callsign by argument(
@@ -34,30 +23,29 @@ class ListenCommand: CliktCommand() {
     )
 
     private val server: String by option(
-        names = *arrayOf("--server"),
+        names = arrayOf("--server"),
         help = "APRS server to connect to."
     ).default("first.aprs.net")
 
     private val port: Int by option(
-        names = *arrayOf("--port"),
+        names = arrayOf("--port"),
         help = "APRS server to connect to."
     ).int().default(10152)
 
     private val filter by option(
-        names = *arrayOf("--filter"),
+        names = arrayOf("--filter"),
         help = "Raw filter to specify as a server command."
     ).multiple()
 
     private val verbose by option(
-        names = *arrayOf("--verbose")
+        names = arrayOf("--verbose")
     ).flag(default = false)
 
     private val debug by option(
-        names = *arrayOf("--debug")
+        names = arrayOf("--debug")
     ).flag(default = false)
 
     override fun run() {
-        val test: CoroutineContext = Dispatchers.Main
         val writer = if (verbose) object: LogWriter by defaultWriter {
             override fun log(level: LogLevel, message: String, cause: Throwable?) {
                 defaultWriter.log(level, message, cause)
@@ -78,12 +66,13 @@ class ListenCommand: CliktCommand() {
                     .filterNot { it.startsWith('#') }
                     .collect { data ->
                         runCatching { parser.fromString(data) }
-                            .onSuccess { printPacket(it, data) }
+                            .map { PacketViewModel(it, data) }
+                            .onSuccess { echo(it.toString()) }
                             .onFailure {
                                 if (debug || verbose) {
-                                    echo("\n${red}Parse failed for packet:${normal}")
-                                    echo(" - $data")
-                                    echo(" - ${it.message}")
+                                    echo(Control.Color.red.span("\nParse failed for packet:"))
+                                    echo(Control.Color.red.span(" - $data"))
+                                    echo(Control.Color.red.span(" - ${it.message}"))
                                     it.printStackTrace()
                                 }
                             }
@@ -91,31 +80,4 @@ class ListenCommand: CliktCommand() {
             }
         }
     }
-
-    private fun printPacket(packet: AprsPacket, data: String) = when (packet) {
-        is AprsPacket.Position -> {
-            echo("${blue.span("[${packet.source}]")}: ${packet.coordinates} ${packet.comment}")
-        }
-        is AprsPacket.Weather -> {
-            echo("${yellow.span("[${packet.source}]")}: ${packet.temperature}")
-        }
-        is AprsPacket.ObjectReport -> {
-            echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")
-        }
-        is AprsPacket.ItemReport -> {
-            echo("${magenta.span("[${packet.source}]")}: ${packet.state.name} ${packet.name}")
-        }
-        is AprsPacket.Message -> {
-            echo("${green.span("[${packet.source}]")} -> ${green.span("[${packet.addressee}]")}: ${packet.message}")
-        }
-        is AprsPacket.Unknown -> {
-            if (debug) {
-                echo("${lightRed.span("[${packet.source}]")}: $data")
-            } else {
-                echo("${lightRed.span("[${packet.source}]")}: ${packet.body}")
-            }
-        }
-    }
-
-    private fun String.span(comment: String): String = "${this}${comment}${normal}"
 }

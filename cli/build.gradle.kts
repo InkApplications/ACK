@@ -11,5 +11,5 @@ dependencies {
     implementation(projects.client)
     implementation(projects.parser)
     implementation(libraries.coroutines.core)
-    implementation("com.github.ajalt:clikt:2.8.0")
+    implementation("com.github.ajalt.clikt:clikt:3.2.0")
 }
