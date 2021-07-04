@@ -1,8 +1,8 @@
 package com.inkapplications.karps.parser.extension
 
-import com.inkapplications.karps.structures.unit.degreesBearing
 import com.inkapplications.karps.structures.unit.knots
 import com.inkapplications.karps.structures.unit.miles
+import inkapplications.spondee.spatial.Degrees
 import kotlin.test.*
 
 class DirectionReportExtensionChunkerTest {
@@ -12,12 +12,12 @@ class DirectionReportExtensionChunkerTest {
 
         val result = DirectionReportExtensionChunker.popChunk(given)
 
-        assertEquals(88.degreesBearing, result.result.value.trajectory.direction)
+        assertEquals(Degrees.of(88), result.result.value.trajectory.direction)
         assertEquals(36.knots, result.result.value.trajectory.speed)
-        assertEquals(270.degreesBearing, result.result.value.bearing)
+        assertEquals(Degrees.of(270), result.result.value.bearing)
         assertEquals(7.toShort(), result.result.value.quality?.number)
         assertEquals(4.miles, result.result.value.quality?.range)
-        assertEquals(1.degreesBearing, result.result.value.quality?.accuracy)
+        assertEquals(Degrees.of(1), result.result.value.quality?.accuracy)
         assertEquals("Hello World", result.remainingData)
     }
 
@@ -29,10 +29,10 @@ class DirectionReportExtensionChunkerTest {
 
         assertNull(result.result.value.trajectory.direction)
         assertNull(result.result.value.trajectory.speed)
-        assertEquals(270.degreesBearing, result.result.value.bearing)
+        assertEquals(Degrees.of(270), result.result.value.bearing)
         assertEquals(7.toShort(), result.result.value.quality?.number)
         assertEquals(4.miles, result.result.value.quality?.range)
-        assertEquals(1.degreesBearing, result.result.value.quality?.accuracy)
+        assertEquals(Degrees.of(1), result.result.value.quality?.accuracy)
         assertEquals("Hello World", result.remainingData)
     }
 

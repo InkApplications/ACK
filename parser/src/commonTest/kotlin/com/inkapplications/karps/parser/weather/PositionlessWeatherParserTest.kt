@@ -3,6 +3,7 @@ package com.inkapplications.karps.parser.weather
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.spatial.Degrees
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
 import kotlin.test.Test
@@ -27,7 +28,7 @@ class PositionlessWeatherParserTest {
             )
 
         assertEquals(expectedTime, result.timestamp)
-        assertEquals(220.degreesBearing, result.windData.direction)
+        assertEquals(Degrees.of(220), result.windData.direction)
         assertEquals(4.mph, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
         assertEquals(1.hundredthsOfInch, result.precipitation.rainLastHour)

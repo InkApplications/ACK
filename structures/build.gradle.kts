@@ -7,6 +7,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(libraries.kotlinx.datetime.core)
+                api("com.inkapplications.spondee:measures:0.2.0")
             }
         }
 

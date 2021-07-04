@@ -5,10 +5,7 @@ import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
 import com.inkapplications.karps.parser.chunk.requireControl
 import com.inkapplications.karps.structures.symbolOf
-import com.inkapplications.karps.structures.unit.Coordinates
-import com.inkapplications.karps.structures.unit.Latitude
-import com.inkapplications.karps.structures.unit.Longitude
-import com.inkapplications.karps.structures.unit.toCardinal
+import inkapplications.spondee.spatial.*
 
 
 internal object PlainPositionChunker: Chunker<PositionReport.Plain> {
@@ -29,20 +26,20 @@ internal object PlainPositionChunker: Chunker<PositionReport.Plain> {
 
         val codeIdentifier = data[18]
 
-        val latitude = Latitude(
-            degrees = latDegrees,
-            minutes = latMinutes,
-            seconds = latSeconds,
+        val latitude = latitudeOf(
+            degreesComponent = latDegrees,
+            minutesComponent = latMinutes,
+            secondsComponent = latSeconds,
             cardinal = latCardinal
         )
-        val longitude = Longitude(
-            degrees = longDegrees,
-            minutes = longMinutes,
-            seconds = longSeconds,
+        val longitude = longitudeOf(
+            degreesComponent = longDegrees,
+            minutesComponent = longMinutes,
+            secondsComponent = longSeconds,
             cardinal = longCardinal
         )
 
-        val coordinates = Coordinates(latitude, longitude)
+        val coordinates = GeoCoordinates(latitude, longitude)
         val symbol = symbolOf(
             tableIdentifier = tableIdentifier,
             codeIdentifier = codeIdentifier

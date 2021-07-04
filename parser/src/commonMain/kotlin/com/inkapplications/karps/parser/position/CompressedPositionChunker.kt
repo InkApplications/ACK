@@ -5,6 +5,10 @@ import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
 import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.spatial.GeoCoordinates
+import inkapplications.spondee.spatial.latitude
+import inkapplications.spondee.spatial.longitude
 import kotlin.math.pow
 
 /**
@@ -17,12 +21,12 @@ internal object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
             .let(Base91::decode)
             .let { it / 380926.0 }
             .let { 90 - it }
-            .let(::Latitude)
+            .latitude
         val longitude = data.substring(5, 9)
             .let(Base91::decode)
             .let { it / 190463.0 }
             .let { -180 + it }
-            .let(::Longitude)
+            .longitude
         val codeIdentifier = data[9]
         val compressionInfo = data[12]
             .toByte()
@@ -47,7 +51,7 @@ internal object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
                 val bearing = data[10]
                     .let(Base91::decode)
                     .times(4)
-                    .degreesBearing
+                    .let(Degrees::of)
                 val speed = data[11]
                     .let(Base91::decode)
                     .let { 1.08.pow(it) }
@@ -60,7 +64,7 @@ internal object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
 
         return Chunk(
             result = PositionReport.Compressed(
-                coordinates = Coordinates(latitude, longitude),
+                coordinates = GeoCoordinates(latitude, longitude),
                 symbol = symbolOf(tableIdentifier, codeIdentifier),
                 extension = extension
             ),

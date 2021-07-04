@@ -7,13 +7,14 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.spatial.Degrees
 
 class PositionlessWeatherParser: PacketTypeParser {
     override val dataTypeFilter: CharArray? = charArrayOf('_')
     private val timestampParser = MdhmChunker()
 
     private val windDirectionParser = WeatherElementChunker('c', 3)
-        .mapParsed { it?.degreesBearing }
+        .mapParsed { it?.let(Degrees::of) }
     private val windSpeedParser = WeatherElementChunker('s', 3)
         .mapParsed { it?.mph }
     private val windGustParser = WeatherElementChunker('g', 3)

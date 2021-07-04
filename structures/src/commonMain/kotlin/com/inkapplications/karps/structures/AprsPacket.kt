@@ -1,6 +1,8 @@
 package com.inkapplications.karps.structures
 
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.Length
+import inkapplications.spondee.spatial.GeoCoordinates
 import kotlinx.datetime.Instant
 
 /**
@@ -20,7 +22,7 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         val timestamp: Instant?,
-        val coordinates: Coordinates,
+        val coordinates: GeoCoordinates,
         val symbol: Symbol,
         val comment: String,
         val altitude: Distance?,
@@ -45,7 +47,7 @@ sealed class AprsPacket {
         val timestamp: Instant?,
         val windData: WindData,
         val precipitation: Precipitation,
-        val coordinates: Coordinates?,
+        val coordinates: GeoCoordinates?,
         val symbol: Symbol?,
         val temperature: Temperature?,
         val humidity: Percentage?,
@@ -65,7 +67,7 @@ sealed class AprsPacket {
         val name: String,
         val state: ReportState,
         val timestamp: Instant?,
-        val coordinates: Coordinates,
+        val coordinates: GeoCoordinates,
         val symbol: Symbol,
         val comment: String,
         val altitude: Distance?,
@@ -84,7 +86,7 @@ sealed class AprsPacket {
         override val digipeaters: List<Digipeater>,
         val name: String,
         val state: ReportState,
-        val coordinates: Coordinates,
+        val coordinates: GeoCoordinates,
         val symbol: Symbol,
         val comment: String,
         val altitude: Distance?,

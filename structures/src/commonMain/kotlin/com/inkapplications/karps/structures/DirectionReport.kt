@@ -1,9 +1,9 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Bearing
+import inkapplications.spondee.spatial.Angle
 
 data class DirectionReport(
     val trajectory: Trajectory,
-    val bearing: Bearing?,
+    val bearing: Angle?,
     val quality: QualityReport?
 )

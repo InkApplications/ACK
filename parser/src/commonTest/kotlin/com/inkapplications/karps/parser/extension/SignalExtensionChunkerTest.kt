@@ -1,6 +1,8 @@
 package com.inkapplications.karps.parser.extension
 
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.spatial.Cardinal
+import inkapplications.spondee.spatial.toAngle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -14,7 +16,7 @@ class SignalExtensionChunkerTest {
         val result = SignalExtensionChunker.popChunk(given)
 
         assertEquals(2.strength, result.result.value.strength)
-        assertEquals(Cardinal.South.degreesBearing, result.result.value.direction)
+        assertEquals(Cardinal.South.toAngle(), result.result.value.direction)
         assertEquals(6.decibels, result.result.value.gain)
         assertEquals(80.feet, result.result.value.height)
         assertEquals("Test", result.remainingData, "Parsed data is removed")

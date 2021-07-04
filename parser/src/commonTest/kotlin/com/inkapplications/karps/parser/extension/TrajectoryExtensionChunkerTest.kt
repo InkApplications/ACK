@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.extension
 
-import com.inkapplications.karps.structures.unit.degreesBearing
 import com.inkapplications.karps.structures.unit.knots
+import inkapplications.spondee.spatial.Degrees
 import kotlin.test.*
 
 class TrajectoryExtensionChunkerTest {
@@ -11,7 +11,7 @@ class TrajectoryExtensionChunkerTest {
 
         val result = TrajectoryExtensionChunker.popChunk(given)
 
-        assertEquals(88.degreesBearing, result.result.value.direction)
+        assertEquals(Degrees.of(88), result.result.value.direction)
         assertEquals(36.knots, result.result.value.speed)
         assertEquals("Hello World", result.remainingData)
     }

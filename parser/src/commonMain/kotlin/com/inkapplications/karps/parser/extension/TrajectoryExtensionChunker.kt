@@ -6,8 +6,8 @@ import com.inkapplications.karps.parser.chunk.requireControl
 import com.inkapplications.karps.parser.extension.DataExtensions.TrajectoryExtra
 import com.inkapplications.karps.parser.optionalValue
 import com.inkapplications.karps.structures.at
-import com.inkapplications.karps.structures.unit.degreesBearing
 import com.inkapplications.karps.structures.unit.knots
+import inkapplications.spondee.spatial.Degrees
 
 /**
  * Parse a bearing/speed extension.
@@ -21,7 +21,7 @@ import com.inkapplications.karps.structures.unit.knots
 internal object TrajectoryExtensionChunker: Chunker<TrajectoryExtra> {
     override fun popChunk(data: String): Chunk<TrajectoryExtra> {
         data[3].requireControl('/')
-        val bearing = data.substring(0, 3).optionalValue?.degreesBearing
+        val bearing = data.substring(0, 3).optionalValue?.let(Degrees::of)
         val speed = data.substring(4, 7).optionalValue?.knots
 
         return TrajectoryExtra(bearing at speed)

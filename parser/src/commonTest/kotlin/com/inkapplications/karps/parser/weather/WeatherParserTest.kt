@@ -5,6 +5,7 @@ import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.spatial.Degrees
 import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,9 +29,9 @@ class WeatherParserTest {
         val result = WeatherParser().parse(TestData.prototype.copy(body = given))
 
         assertEquals(expectedTime, result.timestamp)
-        assertEquals(49.0583, result.coordinates?.latitude?.decimal, 0.0001)
-        assertEquals(-72.0291, result.coordinates?.longitude?.decimal, 0.0001)
-        assertEquals(220.degreesBearing, result.windData.direction)
+        assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
+        assertEquals(-72.0291, result.coordinates?.longitude?.asDecimal, 0.0001)
+        assertEquals(Degrees.of(220), result.windData.direction)
         assertEquals(4.knots, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
         assertEquals((-7).degreesFahrenheit, result.temperature)
@@ -50,9 +51,9 @@ class WeatherParserTest {
         val result = WeatherParser().parse(TestData.prototype.copy(body = given))
 
         assertNull(result.timestamp)
-        assertEquals(49.0583, result.coordinates?.latitude?.decimal, 0.0001)
-        assertEquals(-72.0291, result.coordinates?.longitude?.decimal, 0.0001)
-        assertEquals(220.degreesBearing, result.windData.direction)
+        assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
+        assertEquals(-72.0291, result.coordinates?.longitude?.asDecimal, 0.0001)
+        assertEquals(Degrees.of(220), result.windData.direction)
         assertEquals(4.knots, result.windData.speed)
         assertNull(result.windData.gust)
         assertNull(result.temperature)
@@ -88,9 +89,9 @@ class WeatherParserTest {
         val result = WeatherParser().parse(TestData.prototype.copy(body = given))
 
         assertEquals(expectedTime, result.timestamp)
-        assertEquals(49.5, result.coordinates?.latitude?.decimal, 0.1)
-        assertEquals(-72.75, result.coordinates?.longitude?.decimal, 0.1)
-        assertEquals(88.degreesBearing, result.windData.direction)
+        assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
+        assertEquals(-72.75, result.coordinates?.longitude?.asDecimal, 0.1)
+        assertEquals(Degrees.of(88), result.windData.direction)
         assertEquals(36.2.knots, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
         assertEquals((77).degreesFahrenheit, result.temperature)
@@ -110,8 +111,8 @@ class WeatherParserTest {
         val result = WeatherParser().parse(TestData.prototype.copy(body = given))
 
         assertNull(result.timestamp)
-        assertEquals(49.5, result.coordinates?.latitude?.decimal, 0.1)
-        assertEquals(-72.75, result.coordinates?.longitude?.decimal, 0.1)
+        assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
+        assertEquals(-72.75, result.coordinates?.longitude?.asDecimal, 0.1)
         assertNull(result.windData.direction)
         assertNull(result.windData.speed)
         assertNull(result.windData.gust)

@@ -1,7 +1,7 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Bearing
 import com.inkapplications.karps.structures.unit.Distance
+import inkapplications.spondee.spatial.Angle
 
 /**
  * DF-Report Quality
@@ -9,5 +9,5 @@ import com.inkapplications.karps.structures.unit.Distance
 data class QualityReport(
     val number: Short,
     val range: Distance,
-    val accuracy: Bearing
+    val accuracy: Angle,
 )

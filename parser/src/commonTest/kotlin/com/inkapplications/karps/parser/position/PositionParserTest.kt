@@ -5,6 +5,8 @@ import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.spatial.Cardinal
+import inkapplications.spondee.spatial.toAngle
 import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,8 +20,8 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
-        assertEquals(-72.0291, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
+        assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 0.0001)
         assertEquals("Test 001234", result.comment)
         assertEquals(symbolOf('/', '-'), result.symbol)
         assertNull(result.timestamp)
@@ -37,15 +39,15 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
-        assertEquals(-72.0291, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
+        assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 0.0001)
         assertEquals("Test 001234", result.comment)
         assertEquals(symbolOf('/', '#'), result.symbol)
         assertEquals(25.watts, result.transmitterInfo?.power)
         assertEquals(20.feet, result.transmitterInfo?.height)
         assertEquals(3.decibels, result.transmitterInfo?.gain)
         assertNull(result.timestamp)
-        assertEquals(Cardinal.East.degreesBearing, result.transmitterInfo?.direction)
+        assertEquals(Cardinal.East.toAngle(), result.transmitterInfo?.direction)
         assertNull(result.altitude)
         assertNull(result.trajectory)
         assertNull(result.range)
@@ -59,8 +61,8 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
-        assertEquals(-72.0291, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
+        assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 0.0001)
         assertEquals("Test", result.comment)
         assertEquals(symbolOf('/', '-'), result.symbol)
         assertNull(result.timestamp)
@@ -87,8 +89,8 @@ class PositionParserTest {
                 nanosecond = 0
             )
 
-        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
-        assertEquals(-72.0291, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
+        assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 0.0001)
         assertEquals("Test1234", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
         assertEquals(expected, result.timestamp)
@@ -107,8 +109,8 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        assertEquals(49.5, result.coordinates.latitude.decimal, 0.1)
-        assertEquals(-72.75, result.coordinates.longitude.decimal, 0.1)
+        assertEquals(49.5, result.coordinates.latitude.asDecimal, 0.1)
+        assertEquals(-72.75, result.coordinates.longitude.asDecimal, 0.1)
         assertEquals("Comment", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
         assertNull(result.timestamp)
@@ -126,8 +128,8 @@ class PositionParserTest {
 
         val result = PositionParser().parse(TestData.prototype.copy(body = given))
 
-        assertEquals(49.5, result.coordinates.latitude.decimal, 0.1)
-        assertEquals(-72.75, result.coordinates.longitude.decimal, 0.1)
+        assertEquals(49.5, result.coordinates.latitude.asDecimal, 0.1)
+        assertEquals(-72.75, result.coordinates.longitude.asDecimal, 0.1)
         assertEquals("Comment", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
         assertNull(result.timestamp)
@@ -154,8 +156,8 @@ class PositionParserTest {
                 nanosecond = 0
             )
 
-        assertEquals(49.5, result.coordinates.latitude.decimal, 0.1)
-        assertEquals(-72.75, result.coordinates.longitude.decimal, 0.1)
+        assertEquals(49.5, result.coordinates.latitude.asDecimal, 0.1)
+        assertEquals(-72.75, result.coordinates.longitude.asDecimal, 0.1)
         assertEquals("Comment", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
         assertEquals(expected, result.timestamp)

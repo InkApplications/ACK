@@ -15,8 +15,8 @@ class ItemParserTest {
 
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Live, result.state)
-        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
-        assertEquals(-72.0292, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
+        assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
         assertEquals(symbolOf('/', 'A'), result.symbol)
     }
 
@@ -28,8 +28,8 @@ class ItemParserTest {
 
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Kill, result.state)
-        assertEquals(49.0583, result.coordinates.latitude.decimal, 0.0001)
-        assertEquals(-72.0292, result.coordinates.longitude.decimal, 0.0001)
+        assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
+        assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
         assertEquals(symbolOf('/', 'A'), result.symbol)
     }
 
