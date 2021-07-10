@@ -2,8 +2,8 @@ package com.inkapplications.karps.parser.altitude
 
 import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
-import com.inkapplications.karps.structures.unit.Distance
-import com.inkapplications.karps.structures.unit.feet
+import inkapplications.spondee.measure.Feet
+import inkapplications.spondee.measure.Length
 
 /**
  * Parse Altitude from a packet's comment field.
@@ -13,11 +13,11 @@ import com.inkapplications.karps.structures.unit.feet
  * matching the pattern: `/A=[\d]{6}`.
  * This should therefore be run as late in the parsing process as possible.
  */
-internal object AltitudeChunker: Chunker<Distance> {
-    override fun popChunk(data: String): Chunk<out Distance> {
+internal object AltitudeChunker: Chunker<Length> {
+    override fun popChunk(data: String): Chunk<out Length> {
         val startIndex = data.indexOf("/A=")
         val value = data.substring(startIndex + 3, startIndex + 9)
-        val altitude = value.toInt().feet
+        val altitude = Feet.of(value.toInt())
 
         return Chunk(altitude, data.removeRange(startIndex, startIndex + 9))
     }

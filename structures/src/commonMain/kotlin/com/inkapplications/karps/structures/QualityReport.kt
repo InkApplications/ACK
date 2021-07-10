@@ -1,6 +1,6 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Distance
+import inkapplications.spondee.measure.Length
 import inkapplications.spondee.spatial.Angle
 
 /**
@@ -8,6 +8,6 @@ import inkapplications.spondee.spatial.Angle
  */
 data class QualityReport(
     val number: Short,
-    val range: Distance,
+    val range: Length,
     val accuracy: Angle,
 )

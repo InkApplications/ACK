@@ -10,7 +10,7 @@ import com.inkapplications.karps.structures.DirectionReport
 import com.inkapplications.karps.structures.QualityReport
 import com.inkapplications.karps.structures.at
 import com.inkapplications.karps.structures.unit.knots
-import com.inkapplications.karps.structures.unit.miles
+import inkapplications.spondee.measure.Miles
 import inkapplications.spondee.spatial.Degrees
 import kotlin.math.pow
 
@@ -32,7 +32,7 @@ internal object DirectionReportExtensionChunker: Chunker<DirectionReportExtra> {
         val quality = data.substring(12, 15).let {
             QualityReport(
                 it[0].digit,
-                2.0.pow(it[1].digit.toInt()).miles,
+                Miles.of(2.0.pow(it[1].digit.toInt())),
                 Degrees.of(2.0.pow(9 - it[2].digit))
             )
         }

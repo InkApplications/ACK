@@ -5,7 +5,7 @@ import com.inkapplications.karps.structures.DirectionReport
 import com.inkapplications.karps.structures.SignalInfo
 import com.inkapplications.karps.structures.Trajectory
 import com.inkapplications.karps.structures.TransmitterInfo
-import com.inkapplications.karps.structures.unit.Distance
+import inkapplications.spondee.measure.Length
 
 internal sealed class DataExtensions<T: Any>: UnionContainer<T> {
     data class TrajectoryExtra(
@@ -13,8 +13,8 @@ internal sealed class DataExtensions<T: Any>: UnionContainer<T> {
     ): DataExtensions<Trajectory>()
 
     class RangeExtra(
-        override val value: Distance
-    ): DataExtensions<Distance>()
+        override val value: Length
+    ): DataExtensions<Length>()
 
     class TransmitterInfoExtra(
         override val value: TransmitterInfo

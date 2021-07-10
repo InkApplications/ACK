@@ -1,6 +1,7 @@
 package com.inkapplications.karps.parser.extension
 
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.toAngle
 import kotlin.test.Test
@@ -18,7 +19,7 @@ class SignalExtensionChunkerTest {
         assertEquals(2.strength, result.result.value.strength)
         assertEquals(Cardinal.South.toAngle(), result.result.value.direction)
         assertEquals(6.decibels, result.result.value.gain)
-        assertEquals(80.feet, result.result.value.height)
+        assertEquals(Feet.of(80), result.result.value.height)
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 
@@ -31,7 +32,7 @@ class SignalExtensionChunkerTest {
         assertEquals(2.strength, result.result.value.strength)
         assertNull(result.result.value.direction)
         assertEquals(6.decibels, result.result.value.gain)
-        assertEquals(80.feet, result.result.value.height)
+        assertEquals(Feet.of(80), result.result.value.height)
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 

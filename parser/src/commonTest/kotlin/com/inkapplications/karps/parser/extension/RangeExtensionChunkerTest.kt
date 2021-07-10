@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.extension
 
-import com.inkapplications.karps.structures.unit.miles
+import inkapplications.spondee.measure.Miles
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -12,7 +12,7 @@ class RangeExtensionChunkerTest {
 
         val result = RangeExtensionChunker.popChunk(given)
 
-        assertEquals(50.miles, result.result.value, "Range is parsed as miles.")
+        assertEquals(Miles.of(50), result.result.value, "Range is parsed as miles.")
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 

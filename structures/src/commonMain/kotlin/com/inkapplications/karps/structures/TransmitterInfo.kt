@@ -1,8 +1,8 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Distance
 import com.inkapplications.karps.structures.unit.Power
 import com.inkapplications.karps.structures.unit.Ratio
+import inkapplications.spondee.measure.Length
 import inkapplications.spondee.spatial.Angle
 
 /**
@@ -10,7 +10,7 @@ import inkapplications.spondee.spatial.Angle
  */
 data class TransmitterInfo(
     val power: Power?,
-    val height: Distance?,
+    val height: Length?,
     val gain: Ratio?,
     val direction: Angle?
 )

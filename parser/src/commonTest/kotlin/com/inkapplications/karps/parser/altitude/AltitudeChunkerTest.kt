@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.altitude
 
-import com.inkapplications.karps.structures.unit.feet
+import inkapplications.spondee.measure.Feet
 import kotlin.test.*
 
 class AltitudeChunkerTest {
@@ -10,7 +10,7 @@ class AltitudeChunkerTest {
 
         val result = AltitudeChunker.popChunk(given)
 
-        assertEquals(123456.feet, result.result, "Altitude is parsed from body.")
+        assertEquals(Feet.of(123456), result.result, "Altitude is parsed from body.")
         assertEquals("Hello World", result.remainingData, "Parsed data is removed from body.")
     }
 
@@ -20,7 +20,7 @@ class AltitudeChunkerTest {
 
         val result = AltitudeChunker.popChunk(given)
 
-        assertEquals(1234.feet, result.result, "Altitude is parsed from body.")
+        assertEquals(Feet.of(1234), result.result, "Altitude is parsed from body.")
         assertEquals("Hello I'm at!", result.remainingData, "Parsed data is removed from body.")
     }
 

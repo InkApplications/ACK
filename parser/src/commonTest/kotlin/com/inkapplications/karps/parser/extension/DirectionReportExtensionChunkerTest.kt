@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.extension
 
 import com.inkapplications.karps.structures.unit.knots
-import com.inkapplications.karps.structures.unit.miles
+import inkapplications.spondee.measure.Miles
 import inkapplications.spondee.spatial.Degrees
 import kotlin.test.*
 
@@ -16,7 +16,7 @@ class DirectionReportExtensionChunkerTest {
         assertEquals(36.knots, result.result.value.trajectory.speed)
         assertEquals(Degrees.of(270), result.result.value.bearing)
         assertEquals(7.toShort(), result.result.value.quality?.number)
-        assertEquals(4.miles, result.result.value.quality?.range)
+        assertEquals(Miles.of(4), result.result.value.quality?.range)
         assertEquals(Degrees.of(1), result.result.value.quality?.accuracy)
         assertEquals("Hello World", result.remainingData)
     }
@@ -31,7 +31,7 @@ class DirectionReportExtensionChunkerTest {
         assertNull(result.result.value.trajectory.speed)
         assertEquals(Degrees.of(270), result.result.value.bearing)
         assertEquals(7.toShort(), result.result.value.quality?.number)
-        assertEquals(4.miles, result.result.value.quality?.range)
+        assertEquals(Miles.of(4), result.result.value.quality?.range)
         assertEquals(Degrees.of(1), result.result.value.quality?.accuracy)
         assertEquals("Hello World", result.remainingData)
     }
