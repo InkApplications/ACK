@@ -1,6 +1,6 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Length
+import inkapplications.spondee.measure.Length
 
 /**
  * Information about recent precipitation.

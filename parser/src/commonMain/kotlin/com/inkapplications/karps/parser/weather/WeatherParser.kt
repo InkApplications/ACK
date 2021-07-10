@@ -13,6 +13,7 @@ import com.inkapplications.karps.parser.timestamp.*
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.HundredthInches
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 
@@ -54,9 +55,9 @@ class WeatherParser(
                 gust = weatherData.result['g']?.mph
             ),
             precipitation = Precipitation(
-                rainLastHour = weatherData.result['r']?.hundredthsOfInch,
-                rainLast24Hours = weatherData.result['p']?.hundredthsOfInch,
-                rainToday = weatherData.result['P']?.hundredthsOfInch,
+                rainLastHour = weatherData.result['r']?.let { HundredthInches.of(it) },
+                rainLast24Hours = weatherData.result['p']?.let { HundredthInches.of(it) },
+                rainToday = weatherData.result['P']?.let { HundredthInches.of(it) },
                 rawRain = weatherData.result['#']
             ),
             temperature = weatherData.result['t']?.degreesFahrenheit,

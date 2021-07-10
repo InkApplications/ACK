@@ -5,6 +5,7 @@ import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.HundredthInches
 import inkapplications.spondee.spatial.Degrees
 import kotlinx.datetime.Clock
 import kotlin.test.Test
@@ -35,9 +36,9 @@ class WeatherParserTest {
         assertEquals(4.knots, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
         assertEquals((-7).degreesFahrenheit, result.temperature)
-        assertEquals(3.hundredthsOfInch, result.precipitation.rainToday)
-        assertEquals(2.hundredthsOfInch, result.precipitation.rainLast24Hours)
-        assertEquals(1.hundredthsOfInch, result.precipitation.rainLastHour)
+        assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
+        assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
+        assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
         assertEquals(50.percent, result.humidity)
         assertEquals(9900.decapascals, result.pressure)
         assertEquals(symbolOf('/', '_'), result.symbol)
@@ -95,9 +96,9 @@ class WeatherParserTest {
         assertEquals(36.2.knots, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
         assertEquals((77).degreesFahrenheit, result.temperature)
-        assertEquals(3.hundredthsOfInch, result.precipitation.rainToday)
-        assertEquals(2.hundredthsOfInch, result.precipitation.rainLast24Hours)
-        assertEquals(1.hundredthsOfInch, result.precipitation.rainLastHour)
+        assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
+        assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
+        assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
         assertEquals(50.percent, result.humidity)
         assertEquals(9900.decapascals, result.pressure)
         assertEquals(symbolOf('/', '_'), result.symbol)

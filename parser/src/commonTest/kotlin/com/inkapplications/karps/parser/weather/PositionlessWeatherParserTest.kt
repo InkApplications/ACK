@@ -3,6 +3,7 @@ package com.inkapplications.karps.parser.weather
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.HundredthInches
 import inkapplications.spondee.spatial.Degrees
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
@@ -31,9 +32,9 @@ class PositionlessWeatherParserTest {
         assertEquals(Degrees.of(220), result.windData.direction)
         assertEquals(4.mph, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
-        assertEquals(1.hundredthsOfInch, result.precipitation.rainLastHour)
-        assertEquals(2.hundredthsOfInch, result.precipitation.rainLast24Hours)
-        assertEquals(3.hundredthsOfInch, result.precipitation.rainToday)
+        assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
+        assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
+        assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
         assertEquals(50.percent, result.humidity)
         assertEquals(9900.decapascals, result.pressure)
         assertNull(result.irradiance)
@@ -62,7 +63,7 @@ class PositionlessWeatherParserTest {
         assertNull(result.windData.gust)
         assertNull(result.precipitation.rainLastHour)
         assertNull(result.precipitation.rainLast24Hours)
-        assertEquals(12.hundredthsOfInch, result.precipitation.rainToday)
+        assertEquals(HundredthInches.of(12), result.precipitation.rainToday)
         assertNull(result.humidity)
         assertNull(result.pressure)
         assertNull(result.irradiance)

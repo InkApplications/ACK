@@ -7,6 +7,7 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.HundredthInches
 import inkapplications.spondee.spatial.Degrees
 
 class PositionlessWeatherParser: PacketTypeParser {
@@ -45,9 +46,9 @@ class PositionlessWeatherParser: PacketTypeParser {
                 gust = windGust.result
             ),
             precipitation = Precipitation(
-                rainLastHour = weatherData.result?.get('r')?.hundredthsOfInch,
-                rainLast24Hours = weatherData.result?.get('p')?.hundredthsOfInch,
-                rainToday = weatherData.result?.get('P')?.hundredthsOfInch,
+                rainLastHour = weatherData.result?.get('r')?.let { HundredthInches.of(it) },
+                rainLast24Hours = weatherData.result?.get('p')?.let { HundredthInches.of(it) },
+                rainToday = weatherData.result?.get('P')?.let { HundredthInches.of(it) },
                 rawRain = weatherData.result?.get('#')
             ),
             temperature = temperature.result,
