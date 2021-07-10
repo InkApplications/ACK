@@ -5,6 +5,7 @@ import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
 import inkapplications.spondee.spatial.Degrees
 import kotlinx.datetime.Clock
@@ -35,7 +36,7 @@ class WeatherParserTest {
         assertEquals(Degrees.of(220), result.windData.direction)
         assertEquals(4.knots, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
-        assertEquals((-7).degreesFahrenheit, result.temperature)
+        assertEquals(Fahrenheit.of((-7)), result.temperature)
         assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
         assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
@@ -95,7 +96,7 @@ class WeatherParserTest {
         assertEquals(Degrees.of(88), result.windData.direction)
         assertEquals(36.2.knots, result.windData.speed)
         assertEquals(5.mph, result.windData.gust)
-        assertEquals((77).degreesFahrenheit, result.temperature)
+        assertEquals(Fahrenheit.of((77)), result.temperature)
         assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
         assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)

@@ -7,6 +7,7 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
 import inkapplications.spondee.spatial.Degrees
 
@@ -21,7 +22,7 @@ class PositionlessWeatherParser: PacketTypeParser {
     private val windGustParser = WeatherElementChunker('g', 3)
         .mapParsed { it?.mph }
     private val tempParser = WeatherElementChunker('t', 3)
-        .mapParsed { it?.degreesFahrenheit }
+        .mapParsed { it?.let { Fahrenheit.of(it) } }
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket.Weather {
         val timestamp = timestampParser.parse(packet)
