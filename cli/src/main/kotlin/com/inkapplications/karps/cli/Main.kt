@@ -2,6 +2,7 @@ package com.inkapplications.karps.cli
 
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
+import com.inkapplications.karps.cli.parse.ParseFileCommand
 import kotlin.system.exitProcess
 
 class Main: NoOpCliktCommand() {

@@ -1,6 +1,7 @@
 plugins {
     application
     kotlin("jvm")
+    id("com.jakewharton.mosaic")
 }
 
 application {
