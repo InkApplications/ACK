@@ -1,6 +1,6 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.Speed
+import inkapplications.spondee.measure.Speed
 import inkapplications.spondee.spatial.Angle
 
 /**

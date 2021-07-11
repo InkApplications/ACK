@@ -4,7 +4,7 @@ import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.structures.ReportState
 import com.inkapplications.karps.structures.at
-import com.inkapplications.karps.structures.unit.knots
+import com.inkapplications.karps.structures.unit.Knots
 import inkapplications.spondee.spatial.Degrees
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -25,7 +25,7 @@ class ObjectParserTest {
         assertEquals(45, resultDateTime?.minute)
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
-        assertEquals(Degrees.of(88) at 36.knots, result.trajectory)
+        assertEquals(Degrees.of(88) at Knots.of(36), result.trajectory)
     }
 
     @Test
@@ -42,7 +42,7 @@ class ObjectParserTest {
         assertEquals(45, resultDateTime?.minute)
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
-        assertEquals(Degrees.of(88) at 36.knots, result.trajectory)
+        assertEquals(Degrees.of(88) at Knots.of(36), result.trajectory)
     }
 
     @Test

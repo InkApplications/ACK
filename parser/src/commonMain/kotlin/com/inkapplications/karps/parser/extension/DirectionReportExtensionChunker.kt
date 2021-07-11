@@ -9,7 +9,7 @@ import com.inkapplications.karps.parser.optionalValue
 import com.inkapplications.karps.structures.DirectionReport
 import com.inkapplications.karps.structures.QualityReport
 import com.inkapplications.karps.structures.at
-import com.inkapplications.karps.structures.unit.knots
+import com.inkapplications.karps.structures.unit.Knots
 import inkapplications.spondee.measure.Miles
 import inkapplications.spondee.spatial.Degrees
 import kotlin.math.pow
@@ -27,7 +27,7 @@ internal object DirectionReportExtensionChunker: Chunker<DirectionReportExtra> {
         data[11].requireControl('/')
 
         val course = data.substring(0, 3).optionalValue?.let(Degrees::of)
-        val speed = data.substring(4, 7).optionalValue?.knots
+        val speed = data.substring(4, 7).optionalValue?.let { Knots.of(it) }
         val bearing = data.substring(8, 11).toInt().let(Degrees::of)
         val quality = data.substring(12, 15).let {
             QualityReport(
@@ -38,10 +38,10 @@ internal object DirectionReportExtensionChunker: Chunker<DirectionReportExtra> {
         }
 
         return DirectionReport(
-                trajectory = course at speed,
-                bearing = bearing,
-                quality = quality
-            )
+            trajectory = course at speed,
+            bearing = bearing,
+            quality = quality
+        )
             .let(::DirectionReportExtra)
             .let { Chunk(it, data.substring(15)) }
     }

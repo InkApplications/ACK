@@ -7,10 +7,7 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
-import inkapplications.spondee.measure.Fahrenheit
-import inkapplications.spondee.measure.HundredthInches
-import inkapplications.spondee.measure.Pascals
-import inkapplications.spondee.measure.WattsPerSquareMeter
+import inkapplications.spondee.measure.*
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
 import inkapplications.spondee.structure.Deka
@@ -23,9 +20,9 @@ class PositionlessWeatherParser: PacketTypeParser {
     private val windDirectionParser = WeatherElementChunker('c', 3)
         .mapParsed { it?.let(Degrees::of) }
     private val windSpeedParser = WeatherElementChunker('s', 3)
-        .mapParsed { it?.mph }
+        .mapParsed { it?.let { MilesPerHour.of(it) } }
     private val windGustParser = WeatherElementChunker('g', 3)
-        .mapParsed { it?.mph }
+        .mapParsed { it?.let { MilesPerHour.of(it) } }
     private val tempParser = WeatherElementChunker('t', 3)
         .mapParsed { it?.let { Fahrenheit.of(it) } }
 

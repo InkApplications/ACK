@@ -7,11 +7,13 @@ import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.MilesPerHour
 import inkapplications.spondee.measure.Pascals
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
 import inkapplications.spondee.structure.Deka
 import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.value
 import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -38,8 +40,8 @@ class WeatherParserTest {
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
         assertEquals(-72.0291, result.coordinates?.longitude?.asDecimal, 0.0001)
         assertEquals(Degrees.of(220), result.windData.direction)
-        assertEquals(4.knots, result.windData.speed)
-        assertEquals(5.mph, result.windData.gust)
+        assertEquals(Knots.of(4), result.windData.speed)
+        assertEquals(MilesPerHour.of(5), result.windData.gust)
         assertEquals(Fahrenheit.of((-7)), result.temperature)
         assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
@@ -60,7 +62,7 @@ class WeatherParserTest {
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
         assertEquals(-72.0291, result.coordinates?.longitude?.asDecimal, 0.0001)
         assertEquals(Degrees.of(220), result.windData.direction)
-        assertEquals(4.knots, result.windData.speed)
+        assertEquals(Knots.of(4), result.windData.speed)
         assertNull(result.windData.gust)
         assertNull(result.temperature)
         assertNull(result.precipitation.rainToday)
@@ -98,8 +100,8 @@ class WeatherParserTest {
         assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
         assertEquals(-72.75, result.coordinates?.longitude?.asDecimal, 0.1)
         assertEquals(Degrees.of(88), result.windData.direction)
-        assertEquals(36.2.knots, result.windData.speed)
-        assertEquals(5.mph, result.windData.gust)
+        assertEquals(36.2, result.windData.speed!!.value(Knots), 1e-1)
+        assertEquals(MilesPerHour.of(5), result.windData.gust)
         assertEquals(Fahrenheit.of((77)), result.temperature)
         assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)

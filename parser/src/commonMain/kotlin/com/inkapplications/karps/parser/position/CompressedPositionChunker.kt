@@ -54,11 +54,11 @@ internal object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
                     .let(Base91::decode)
                     .times(4)
                     .let(Degrees::of)
-                val speed = data[11]
+                val speed = Knots.of(data[11]
                     .let(Base91::decode)
                     .let { 1.08.pow(it) }
                     .minus(1)
-                    .knots
+                )
                 CompressedPositionExtensions.TrajectoryExtra(bearing at speed)
             }
             else -> null

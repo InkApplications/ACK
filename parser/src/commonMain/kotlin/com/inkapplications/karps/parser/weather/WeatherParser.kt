@@ -13,10 +13,7 @@ import com.inkapplications.karps.parser.timestamp.*
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
-import inkapplications.spondee.measure.Fahrenheit
-import inkapplications.spondee.measure.HundredthInches
-import inkapplications.spondee.measure.Pascals
-import inkapplications.spondee.measure.WattsPerSquareMeter
+import inkapplications.spondee.measure.*
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.structure.Deka
 import inkapplications.spondee.structure.of
@@ -58,7 +55,7 @@ class WeatherParser(
             windData = WindData(
                 direction = windData?.direction,
                 speed = windData?.speed,
-                gust = weatherData.result['g']?.mph
+                gust = weatherData.result['g']?.let { MilesPerHour.of(it) }
             ),
             precipitation = Precipitation(
                 rainLastHour = weatherData.result['r']?.let { HundredthInches.of(it) },

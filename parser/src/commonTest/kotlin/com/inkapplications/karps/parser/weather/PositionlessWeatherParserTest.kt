@@ -4,6 +4,7 @@ import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.MilesPerHour
 import inkapplications.spondee.measure.Pascals
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
@@ -34,8 +35,8 @@ class PositionlessWeatherParserTest {
 
         assertEquals(expectedTime, result.timestamp)
         assertEquals(Degrees.of(220), result.windData.direction)
-        assertEquals(4.mph, result.windData.speed)
-        assertEquals(5.mph, result.windData.gust)
+        assertEquals(MilesPerHour.of(4), result.windData.speed)
+        assertEquals(MilesPerHour.of(5), result.windData.gust)
         assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
         assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
