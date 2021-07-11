@@ -4,6 +4,7 @@ import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Irradiance
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Temperature
+import inkapplications.spondee.scalar.Percentage
 import inkapplications.spondee.spatial.GeoCoordinates
 import kotlinx.datetime.Instant
 
