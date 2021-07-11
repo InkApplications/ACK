@@ -7,6 +7,7 @@ import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.measure.Miles
+import inkapplications.spondee.measure.Watts
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.toAngle
 import inkapplications.spondee.structure.value
@@ -46,7 +47,7 @@ class PositionParserTest {
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test 001234", result.comment)
         assertEquals(symbolOf('/', '#'), result.symbol)
-        assertEquals(25.watts, result.transmitterInfo?.power)
+        assertEquals(Watts.of(25), result.transmitterInfo?.power)
         assertEquals(Feet.of(20), result.transmitterInfo?.height)
         assertEquals(3.decibels, result.transmitterInfo?.gain)
         assertNull(result.timestamp)
