@@ -4,8 +4,11 @@ import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.Pascals
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.structure.Deka
+import inkapplications.spondee.structure.of
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
 import kotlin.test.Test
@@ -37,7 +40,7 @@ class PositionlessWeatherParserTest {
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
         assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
         assertEquals(WholePercentage.of(50), result.humidity)
-        assertEquals(9900.decapascals, result.pressure)
+        assertEquals(Pascals.of(Deka, 9900), result.pressure)
         assertNull(result.irradiance)
         assertNull(result.symbol)
         assertNull(result.coordinates)

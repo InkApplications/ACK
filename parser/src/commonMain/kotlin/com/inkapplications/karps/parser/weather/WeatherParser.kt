@@ -15,8 +15,11 @@ import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.Pascals
 import inkapplications.spondee.measure.WattsPerSquareMeter
 import inkapplications.spondee.scalar.WholePercentage
+import inkapplications.spondee.structure.Deka
+import inkapplications.spondee.structure.of
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 
@@ -65,7 +68,7 @@ class WeatherParser(
             ),
             temperature = weatherData.result['t']?.let { Fahrenheit.of(it) },
             humidity = weatherData.result['h']?.let { WholePercentage.of(it) },
-            pressure = weatherData.result['b']?.decapascals,
+            pressure = weatherData.result['b']?.let { Pascals.of(Deka, it) },
             irradiance = weatherData.result['L']?.let { WattsPerSquareMeter.of(it) }
                 ?: weatherData.result['l']?.plus(1000)?.let { WattsPerSquareMeter.of(it) }
         )

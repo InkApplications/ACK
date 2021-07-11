@@ -9,9 +9,12 @@ import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.Pascals
 import inkapplications.spondee.measure.WattsPerSquareMeter
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.structure.Deka
+import inkapplications.spondee.structure.of
 
 class PositionlessWeatherParser: PacketTypeParser {
     override val dataTypeFilter: CharArray? = charArrayOf('_')
@@ -56,7 +59,7 @@ class PositionlessWeatherParser: PacketTypeParser {
             ),
             temperature = temperature.result,
             humidity = weatherData.result?.get('h')?.let { WholePercentage.of(it) },
-            pressure = weatherData.result?.get('b')?.decapascals,
+            pressure = weatherData.result?.get('b')?.let { Pascals.of(Deka, it) },
             irradiance = weatherData.result?.get('L')?.let { WattsPerSquareMeter.of(it) }
                 ?: weatherData.result?.get('l')?.plus(1000)?.let { WattsPerSquareMeter.of(it) }
         )

@@ -7,8 +7,11 @@ import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.Pascals
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.structure.Deka
+import inkapplications.spondee.structure.of
 import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -42,7 +45,7 @@ class WeatherParserTest {
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
         assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
         assertEquals(WholePercentage.of(50), result.humidity)
-        assertEquals(9900.decapascals, result.pressure)
+        assertEquals(Pascals.of(Deka, 9900), result.pressure)
         assertEquals(symbolOf('/', '_'), result.symbol)
         assertNull(result.irradiance)
     }
@@ -102,7 +105,7 @@ class WeatherParserTest {
         assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
         assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
         assertEquals(WholePercentage.of(50), result.humidity)
-        assertEquals(9900.decapascals, result.pressure)
+        assertEquals(Pascals.of(Deka, 9900), result.pressure)
         assertEquals(symbolOf('/', '_'), result.symbol)
         assertNull(result.irradiance)
     }
