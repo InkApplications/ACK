@@ -1,6 +1,7 @@
 package com.inkapplications.karps.structures
 
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.Irradiance
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Temperature
 import inkapplications.spondee.spatial.GeoCoordinates

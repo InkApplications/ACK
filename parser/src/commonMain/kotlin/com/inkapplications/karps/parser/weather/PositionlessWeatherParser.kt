@@ -9,6 +9,7 @@ import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Fahrenheit
 import inkapplications.spondee.measure.HundredthInches
+import inkapplications.spondee.measure.WattsPerSquareMeter
 import inkapplications.spondee.spatial.Degrees
 
 class PositionlessWeatherParser: PacketTypeParser {
@@ -55,7 +56,8 @@ class PositionlessWeatherParser: PacketTypeParser {
             temperature = temperature.result,
             humidity = weatherData.result?.get('h')?.percent,
             pressure = weatherData.result?.get('b')?.decapascals,
-            irradiance = weatherData.result?.get('L')?.wattsPerSquareMeter ?: weatherData.result?.get('l')?.plus(1000)?.wattsPerSquareMeter
+            irradiance = weatherData.result?.get('L')?.let { WattsPerSquareMeter.of(it) }
+                ?: weatherData.result?.get('l')?.plus(1000)?.let { WattsPerSquareMeter.of(it) }
         )
     }
 }
