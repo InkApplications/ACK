@@ -6,8 +6,8 @@ import com.inkapplications.karps.parser.chunk.requireStartsWith
 import com.inkapplications.karps.parser.digit
 import com.inkapplications.karps.parser.extension.DataExtensions.OmniDfSignalExtra
 import com.inkapplications.karps.structures.SignalInfo
+import com.inkapplications.karps.structures.unit.Strength
 import com.inkapplications.karps.structures.unit.decibels
-import com.inkapplications.karps.structures.unit.strength
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.spatial.Degrees
 import kotlin.math.pow
@@ -22,7 +22,7 @@ internal object SignalExtensionChunker: Chunker<OmniDfSignalExtra> {
         data.requireStartsWith("DFS")
 
         val signal = SignalInfo(
-            strength = data[3].digit.strength,
+            strength = Strength(data[3].digit),
             height = Feet.of(2.0.pow(data[4].digit.toInt()).times(10)),
             gain = data[5].digit.decibels,
             direction = data[6].digit.times(45).takeIf { it != 0 }?.let(Degrees::of)

@@ -16,7 +16,7 @@ class SignalExtensionChunkerTest {
 
         val result = SignalExtensionChunker.popChunk(given)
 
-        assertEquals(2.strength, result.result.value.strength)
+        assertEquals(Strength(2), result.result.value.strength)
         assertEquals(Cardinal.South.toAngle(), result.result.value.direction)
         assertEquals(6.decibels, result.result.value.gain)
         assertEquals(Feet.of(80), result.result.value.height)
@@ -29,7 +29,7 @@ class SignalExtensionChunkerTest {
 
         val result = SignalExtensionChunker.popChunk(given)
 
-        assertEquals(2.strength, result.result.value.strength)
+        assertEquals(Strength(2), result.result.value.strength)
         assertNull(result.result.value.direction)
         assertEquals(6.decibels, result.result.value.gain)
         assertEquals(Feet.of(80), result.result.value.height)
