@@ -5,11 +5,14 @@ import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
 import com.inkapplications.karps.structures.symbolOf
 import com.inkapplications.karps.structures.unit.*
+import inkapplications.spondee.measure.Bels
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.measure.Miles
 import inkapplications.spondee.measure.Watts
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.toAngle
+import inkapplications.spondee.structure.Deci
+import inkapplications.spondee.structure.of
 import inkapplications.spondee.structure.value
 import kotlinx.datetime.Clock
 import kotlin.test.Test
@@ -49,7 +52,7 @@ class PositionParserTest {
         assertEquals(symbolOf('/', '#'), result.symbol)
         assertEquals(Watts.of(25), result.transmitterInfo?.power)
         assertEquals(Feet.of(20), result.transmitterInfo?.height)
-        assertEquals(3.decibels, result.transmitterInfo?.gain)
+        assertEquals(Bels.of(Deci, 3), result.transmitterInfo?.gain)
         assertNull(result.timestamp)
         assertEquals(Cardinal.East.toAngle(), result.transmitterInfo?.direction)
         assertNull(result.altitude)
