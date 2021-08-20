@@ -1,6 +1,5 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.Irradiance
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Pressure
@@ -110,6 +109,17 @@ sealed class AprsPacket {
         val addressee: Address,
         val message: String,
         val messageNumber: Int?
+    ): AprsPacket()
+
+    data class TelemetryReport(
+        override val received: Instant,
+        override val dataTypeIdentifier: Char,
+        override val source: Address,
+        override val destination: Address,
+        override val digipeaters: List<Digipeater>,
+        val sequenceId: String,
+        val data: TelemetryValues,
+        val comment: String,
     ): AprsPacket()
 
     data class Unknown(

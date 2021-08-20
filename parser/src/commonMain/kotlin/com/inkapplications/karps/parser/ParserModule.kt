@@ -4,6 +4,7 @@ import com.inkapplications.karps.parser.item.ItemParser
 import com.inkapplications.karps.parser.item.ObjectParser
 import com.inkapplications.karps.parser.message.MessageParser
 import com.inkapplications.karps.parser.position.PositionParser
+import com.inkapplications.karps.parser.telemetry.TelemetryParser
 import com.inkapplications.karps.parser.weather.PositionlessWeatherParser
 import com.inkapplications.karps.parser.weather.WeatherParser
 import kimchi.logger.EmptyLogger
@@ -23,7 +24,8 @@ class ParserModule {
             ObjectParser(timezone = timezone),
             ItemParser(),
             PositionParser(timezone = timezone),
-            MessageParser()
+            MessageParser(),
+            TelemetryParser(),
         )
     }
 

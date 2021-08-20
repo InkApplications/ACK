@@ -8,9 +8,6 @@ import kotlin.math.min
 /**
  * Pop string data off until a control character is reached.
  *
- * This does not pop the control character off of the string, only the
- * data encountered before the string.
- *
  * @param stopChars Characters to match to indicate the end of this chunk.
  * @param minLength The minimum number of characters before the control character.
  * @param maxLength The maximum number of characters before the control character.
@@ -18,17 +15,23 @@ import kotlin.math.min
 internal class SpanUntilChunker(
     private val stopChars: CharArray,
     private val minLength: Int = 0,
-    private val maxLength: Int = Int.MAX_VALUE,
-    private val required: Boolean = false
+    private val maxLength: Int? = null,
+    private val required: Boolean = false,
+    private val popControlCharacter: Boolean = false,
 ): Chunker<String> {
-    override fun popChunk(data: String): Chunk<String> {
-        val end = min(maxLength, data.length)
-        val workingData = data.substring(minLength, end)
-        val controlPosition = workingData.indexOfFirst { it in stopChars }.takeIf { it != -1 }?.plus(minLength)
+    override fun popChunk(data: String): Chunk<out String> {
+        val controlSearchEnd = min(maxLength?.plus(1) ?: data.length, data.length)
+        val controlSubstring = data.substring(minLength, controlSearchEnd)
+        val controlPosition = controlSubstring.indexOfFirst { it in stopChars }
+            .takeIf { it != -1 }
+            ?.plus(minLength)
 
-        if (required && controlPosition == null) throw PacketFormatException("Control Character was not found in string. Expected one of <${stopChars.joinToString()}>")
-        val endPosition = controlPosition ?: end
+        if (required && controlPosition == null) throw PacketFormatException("Control Character was not found in string. Expected one of <${stopChars.joinToString()}>. Working <$controlSubstring>")
 
-        return Chunk(data.substring(0, endPosition), data.substring(endPosition))
+        val chunkEndPosition = controlPosition ?: min(maxLength ?: (data.length), (data.length))
+        val chunkData = data.substring(0, chunkEndPosition)
+        val remainingData = data.substring(chunkEndPosition.let { if (popControlCharacter && controlPosition != null) it + 1 else it })
+
+        return Chunk(chunkData, remainingData)
     }
 }

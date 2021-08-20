@@ -10,8 +10,6 @@ class SpanUntilChunkerTest {
         val given = "12345,6789"
         val parser = SpanUntilChunker(
             charArrayOf(','),
-            maxLength = 5,
-            minLength = 5
         )
 
         val result = parser.popChunk(given)
@@ -21,12 +19,80 @@ class SpanUntilChunkerTest {
     }
 
     @Test
+    fun optional() {
+        val given = "12345"
+        val parser = SpanUntilChunker(
+            charArrayOf(','),
+        )
+
+        val result = parser.popChunk(given)
+
+        assertEquals("12345", result.result)
+        assertEquals("", result.remainingData)
+    }
+
+    @Test
+    fun required() {
+        val given = "12345"
+        val parser = SpanUntilChunker(
+            charArrayOf(','),
+            required = true,
+        )
+
+        assertFails("Required char was missing") { parser.popChunk(given) }
+    }
+
+    @Test
+    fun exactLength() {
+        val given = "12345,6789"
+        val parser = SpanUntilChunker(
+            charArrayOf(','),
+            minLength = 5,
+            maxLength = 5,
+            required = true,
+        )
+
+        val result = parser.popChunk(given)
+
+        assertEquals("12345", result.result)
+        assertEquals(",6789", result.remainingData)
+    }
+
+    @Test
+    fun minLength() {
+        val given = "12345,6789"
+        val parser = SpanUntilChunker(
+            charArrayOf(','),
+            minLength = 6,
+        )
+
+        val result = parser.popChunk(given)
+
+        assertEquals("12345,6789", result.result)
+        assertEquals("", result.remainingData)
+    }
+
+    @Test
+    fun maxLength() {
+        val given = "12345,6789"
+        val parser = SpanUntilChunker(
+            charArrayOf(','),
+            maxLength = 4,
+        )
+
+        val result = parser.popChunk(given)
+
+        assertEquals("1234", result.result)
+        assertEquals("5,6789", result.remainingData)
+    }
+
+    @Test
     fun maxLengthFail() {
         val given = "12345,6789"
         val parser = SpanUntilChunker(
             charArrayOf(','),
             maxLength = 4,
-            minLength = 5
+            required = true,
         )
 
         assertFails("Maximum length of span enforced.") { parser.popChunk(given) }
@@ -37,10 +103,24 @@ class SpanUntilChunkerTest {
         val given = "12345,6789"
         val parser = SpanUntilChunker(
             charArrayOf(','),
-            maxLength = 5,
-            minLength = 6
+            minLength = 6,
+            required = true,
         )
 
-        assertFails("Maximum length of span enforced.") { parser.popChunk(given) }
+        assertFails("Minimum length of span enforced.") { parser.popChunk(given) }
+    }
+
+    @Test
+    fun popControl() {
+        val given = "12345,6789"
+        val parser = SpanUntilChunker(
+            charArrayOf(','),
+            popControlCharacter = true
+        )
+
+        val result = parser.popChunk(given)
+
+        assertEquals("12345", result.result)
+        assertEquals("6789", result.remainingData)
     }
 }

@@ -25,7 +25,7 @@ class ListenCommand: CliktCommand() {
     private val server: String by option(
         names = arrayOf("--server"),
         help = "APRS server to connect to."
-    ).default("first.aprs.net")
+    ).default("45.63.21.153")
 
     private val port: Int by option(
         names = arrayOf("--port"),
