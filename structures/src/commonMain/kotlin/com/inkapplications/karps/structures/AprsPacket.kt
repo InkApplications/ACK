@@ -122,6 +122,16 @@ sealed class AprsPacket {
         val comment: String,
     ): AprsPacket()
 
+    data class StatusReport(
+        override val received: Instant,
+        override val dataTypeIdentifier: Char,
+        override val source: Address,
+        override val destination: Address,
+        override val digipeaters: List<Digipeater>,
+        val time: Instant?,
+        val status: String,
+    ): AprsPacket()
+
     data class Unknown(
         override val received: Instant,
         override val dataTypeIdentifier: Char,

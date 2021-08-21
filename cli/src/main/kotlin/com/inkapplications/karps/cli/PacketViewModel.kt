@@ -18,6 +18,7 @@ data class PacketViewModel(
         is AprsPacket.ItemReport -> magenta.span("${packet.source}")
         is AprsPacket.Message -> green.span("${packet.source}")
         is AprsPacket.TelemetryReport -> "${packet.source}"
+        is AprsPacket.StatusReport -> "${packet.source}"
         is AprsPacket.Unknown -> lightRed.span("${packet.source}")
     }
 
@@ -28,6 +29,7 @@ data class PacketViewModel(
         is AprsPacket.ItemReport -> "${packet.state.name} ${packet.name}"
         is AprsPacket.Message -> "-> ${green.span("${packet.addressee}")}: ${packet.message}"
         is AprsPacket.TelemetryReport -> "${packet.sequenceId} ${packet.data}"
+        is AprsPacket.StatusReport -> packet.status
         is AprsPacket.Unknown -> packet.body
     }
 
