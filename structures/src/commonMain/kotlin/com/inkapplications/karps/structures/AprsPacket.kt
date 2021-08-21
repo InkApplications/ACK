@@ -132,6 +132,15 @@ sealed class AprsPacket {
         val status: String,
     ): AprsPacket()
 
+    data class CapabilityReport(
+        override val received: Instant,
+        override val dataTypeIdentifier: Char,
+        override val source: Address,
+        override val destination: Address,
+        override val digipeaters: List<Digipeater>,
+        val capabilityData: Set<Capability>
+    ): AprsPacket()
+
     data class Unknown(
         override val received: Instant,
         override val dataTypeIdentifier: Char,

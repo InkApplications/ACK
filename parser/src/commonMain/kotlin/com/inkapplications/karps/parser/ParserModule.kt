@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser
 
+import com.inkapplications.karps.parser.capabilities.CapabilitiesParser
 import com.inkapplications.karps.parser.item.ItemParser
 import com.inkapplications.karps.parser.item.ObjectParser
 import com.inkapplications.karps.parser.message.MessageParser
@@ -28,6 +29,7 @@ class ParserModule {
             MessageParser(),
             TelemetryParser(),
             StatusReportParser(),
+            CapabilitiesParser(),
         )
     }
 

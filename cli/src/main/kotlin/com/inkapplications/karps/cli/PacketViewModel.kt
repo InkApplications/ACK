@@ -17,9 +17,8 @@ data class PacketViewModel(
         is AprsPacket.ObjectReport -> magenta.span("${packet.source}")
         is AprsPacket.ItemReport -> magenta.span("${packet.source}")
         is AprsPacket.Message -> green.span("${packet.source}")
-        is AprsPacket.TelemetryReport -> "${packet.source}"
-        is AprsPacket.StatusReport -> "${packet.source}"
         is AprsPacket.Unknown -> lightRed.span("${packet.source}")
+        else -> "${packet.source}"
     }
 
     val message = when (packet) {
@@ -30,6 +29,7 @@ data class PacketViewModel(
         is AprsPacket.Message -> "-> ${green.span("${packet.addressee}")}: ${packet.message}"
         is AprsPacket.TelemetryReport -> "${packet.sequenceId} ${packet.data}"
         is AprsPacket.StatusReport -> packet.status
+        is AprsPacket.CapabilityReport -> packet.capabilityData.toString()
         is AprsPacket.Unknown -> packet.body
     }
 
