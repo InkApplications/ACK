@@ -23,6 +23,7 @@ class CapabilitiesParser: PacketTypeParser {
         val capabilities = capabilitiesChunker.parse(packet)
 
         return AprsPacket.CapabilityReport(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,

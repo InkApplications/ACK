@@ -40,6 +40,7 @@ class ItemParser: PacketTypeParser {
         } else null
 
         return AprsPacket.ItemReport(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,

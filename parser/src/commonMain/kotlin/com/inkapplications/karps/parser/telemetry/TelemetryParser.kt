@@ -51,6 +51,7 @@ class TelemetryParser: PacketTypeParser {
         )
 
         return AprsPacket.TelemetryReport(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,

@@ -30,6 +30,7 @@ class PositionParser(
         val altitudeComment = AltitudeChunker.parseOptionalAfter(plainExtension ?: position)
 
         return AprsPacket.Position(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,

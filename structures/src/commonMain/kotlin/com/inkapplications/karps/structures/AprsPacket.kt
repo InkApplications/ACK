@@ -12,6 +12,7 @@ import kotlinx.datetime.Instant
  * A Single APRS record.
  */
 sealed class AprsPacket {
+    abstract val raw: String
     abstract val received: Instant
     abstract val dataTypeIdentifier: Char
     abstract val source: Address
@@ -19,6 +20,7 @@ sealed class AprsPacket {
     abstract val digipeaters: List<Digipeater>
 
     data class Position(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -42,6 +44,7 @@ sealed class AprsPacket {
     }
 
     data class Weather(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -57,11 +60,12 @@ sealed class AprsPacket {
         val pressure: Pressure?,
         val irradiance: Irradiance?
     ): AprsPacket() {
-        @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"))
+        @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"), level = DeprecationLevel.ERROR)
         val luminosity = irradiance
     }
 
     data class ObjectReport(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -82,6 +86,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class ItemReport(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -101,6 +106,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class Message(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -112,6 +118,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class TelemetryReport(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -123,6 +130,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class StatusReport(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -133,6 +141,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class CapabilityReport(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
@@ -142,6 +151,7 @@ sealed class AprsPacket {
     ): AprsPacket()
 
     data class Unknown(
+        override val raw: String,
         override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,

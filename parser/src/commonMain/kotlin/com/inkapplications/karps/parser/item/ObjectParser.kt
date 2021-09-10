@@ -49,6 +49,7 @@ class ObjectParser(
         } else null
 
         return AprsPacket.ObjectReport(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,

@@ -18,6 +18,7 @@ class StatusReportParser(
         val status = time.remainingData
 
         return AprsPacket.StatusReport(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,

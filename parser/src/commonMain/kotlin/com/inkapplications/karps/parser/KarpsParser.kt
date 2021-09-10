@@ -28,6 +28,7 @@ internal class KarpsParser(
         val dataType = packet.charAfter(':')
 
         val prototype = AprsPacket.Unknown(
+            raw = packet,
             received = clock.now(),
             dataTypeIdentifier = dataType,
             source = source,
@@ -75,6 +76,7 @@ internal class KarpsParser(
         val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
 
         val prototype = AprsPacket.Unknown(
+            raw = packet.decodeToString(),
             received = clock.now(),
             dataTypeIdentifier = dataType,
             source = source,

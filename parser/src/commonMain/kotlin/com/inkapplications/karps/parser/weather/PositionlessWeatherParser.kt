@@ -35,6 +35,7 @@ class PositionlessWeatherParser: PacketTypeParser {
         val weatherData = WeatherChunker.parseOptionalAfter(temperature)
 
         return AprsPacket.Weather(
+            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
