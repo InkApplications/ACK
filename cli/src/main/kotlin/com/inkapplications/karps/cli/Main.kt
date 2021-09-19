@@ -9,7 +9,8 @@ class Main: NoOpCliktCommand() {
     init {
         subcommands(
             ListenCommand(),
-            ParseFileCommand()
+            ParseFileCommand(),
+            GeneratePasscodeCommand(),
         )
     }
 }
