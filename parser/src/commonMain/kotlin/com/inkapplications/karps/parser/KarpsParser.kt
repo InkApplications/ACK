@@ -6,13 +6,14 @@ import com.inkapplications.karps.structures.Digipeater
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 internal class KarpsParser(
     private val infoParsers: Array<PacketTypeParser>,
     private val logger: KimchiLogger = EmptyLogger,
     private val clock: Clock = Clock.System
 ): AprsParser {
-    override fun fromString(packet: String): AprsPacket {
+    override fun fromString(packet: String, received: Instant = clock.now()): AprsPacket {
         logger.trace("Parsing packet: $packet")
         val source = packet.substringBefore('>').parseAddress()
         val route = packet.substringAfter('>')
@@ -29,7 +30,7 @@ internal class KarpsParser(
 
         val prototype = AprsPacket.Unknown(
             raw = packet,
-            received = clock.now(),
+            received = received,
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
@@ -52,7 +53,7 @@ internal class KarpsParser(
         return prototype
     }
 
-    override fun fromAx25(packet: ByteArray): AprsPacket {
+    override fun fromAx25(packet: ByteArray, received: Instant = clock.now()): AprsPacket {
         logger.trace("Parsing packet from bytes: $packet")
         val unsignedByteArray = packet.toUByteArray()
 
