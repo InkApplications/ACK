@@ -30,12 +30,12 @@ class PositionParser(
         val altitudeComment = AltitudeChunker.parseOptionalAfter(plainExtension ?: position)
 
         return AprsPacket.Position(
-            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
+            raw = packet.raw,
             timestamp = timestamp.result,
             coordinates = position.result.coordinates,
             symbol = position.result.symbol,

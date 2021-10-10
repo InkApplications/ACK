@@ -13,7 +13,9 @@ internal class KarpsParser(
     private val logger: KimchiLogger = EmptyLogger,
     private val clock: Clock = Clock.System
 ): AprsParser {
-    override fun fromString(packet: String, received: Instant = clock.now()): AprsPacket {
+    override fun fromString(packet: String) = fromString(packet, clock.now())
+
+    override fun fromString(packet: String, received: Instant): AprsPacket {
         logger.trace("Parsing packet: $packet")
         val source = packet.substringBefore('>').parseAddress()
         val route = packet.substringAfter('>')
@@ -29,12 +31,12 @@ internal class KarpsParser(
         val dataType = packet.charAfter(':')
 
         val prototype = AprsPacket.Unknown(
-            raw = packet,
             received = received,
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
             digipeaters = digipeaters,
+            raw = packet.encodeToByteArray(),
             body = body
         )
 
@@ -53,7 +55,9 @@ internal class KarpsParser(
         return prototype
     }
 
-    override fun fromAx25(packet: ByteArray, received: Instant = clock.now()): AprsPacket {
+    override fun fromAx25(packet: ByteArray) = fromAx25(packet, clock.now())
+
+    override fun fromAx25(packet: ByteArray, received: Instant): AprsPacket {
         logger.trace("Parsing packet from bytes: $packet")
         val unsignedByteArray = packet.toUByteArray()
 
@@ -77,12 +81,12 @@ internal class KarpsParser(
         val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
 
         val prototype = AprsPacket.Unknown(
-            raw = packet.decodeToString(),
             received = clock.now(),
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
             digipeaters = digipeaters,
+            raw = packet,
             body = body
         )
 

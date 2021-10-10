@@ -49,12 +49,12 @@ class ObjectParser(
         } else null
 
         return AprsPacket.ObjectReport(
-            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
+            raw = packet.raw,
             timestamp = timestamp.result,
             name = name.result,
             state = state.result,

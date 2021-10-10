@@ -8,7 +8,7 @@ object TestData {
     val now = Clock.System.now()
 
     val prototype = AprsPacket.Unknown(
-        raw = "",
+        raw = "".encodeToByteArray(),
         received = now,
         dataTypeIdentifier = '=',
         source = Address("KE0YOG"),

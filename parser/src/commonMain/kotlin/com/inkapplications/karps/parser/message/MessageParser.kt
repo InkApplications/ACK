@@ -29,12 +29,12 @@ class MessageParser: PacketTypeParser {
         val endControl = endControl.parseOptionalAfter(message)
 
         return AprsPacket.Message(
-            raw = packet.raw,
             received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
+            raw = packet.raw,
             addressee = addressee.result,
             message = message.result,
             messageNumber = runCatching { endControl.remainingData.toInt() }.getOrNull()
