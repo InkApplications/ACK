@@ -14,7 +14,7 @@ class StatusReportParserTest {
 
         val result = StatusReportParser().parse(TestData.prototype.copy(body = given))
 
-        assertNull(result.time)
+        assertNull(result.timestamp)
         assertEquals("Net Control Center", result.status)
     }
 
@@ -24,9 +24,9 @@ class StatusReportParserTest {
 
         val result = StatusReportParser().parse(TestData.prototype.copy(body = given))
 
-        assertEquals(9, result.time?.toLocalDateTime(TimeZone.UTC)?.dayOfMonth)
-        assertEquals(23, result.time?.toLocalDateTime(TimeZone.UTC)?.hour)
-        assertEquals(45, result.time?.toLocalDateTime(TimeZone.UTC)?.minute)
+        assertEquals(9, result.timestamp?.toLocalDateTime(TimeZone.UTC)?.dayOfMonth)
+        assertEquals(23, result.timestamp?.toLocalDateTime(TimeZone.UTC)?.hour)
+        assertEquals(45, result.timestamp?.toLocalDateTime(TimeZone.UTC)?.minute)
         assertEquals("Net Control Center", result.status)
     }
 

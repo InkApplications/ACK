@@ -24,7 +24,7 @@ class StatusReportParser(
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            time = time.result,
+            timestamp = time.result,
             status = status,
         )
     }

@@ -1,5 +1,6 @@
 package com.inkapplications.karps.structures
 
+import com.inkapplications.karps.structures.capabilities.*
 import inkapplications.spondee.measure.Irradiance
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Pressure
@@ -26,17 +27,17 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         override val raw: ByteArray,
-        val timestamp: Instant?,
-        val coordinates: GeoCoordinates,
-        val symbol: Symbol,
-        val comment: String,
-        val altitude: Length?,
-        val trajectory: Trajectory?,
-        val range: Length?,
-        val transmitterInfo: TransmitterInfo?,
+        override val timestamp: Instant?,
+        override val coordinates: GeoCoordinates,
+        override val symbol: Symbol,
+        override val comment: String,
+        override val altitude: Length?,
+        override val trajectory: Trajectory?,
+        override val range: Length?,
+        override val transmitterInfo: TransmitterInfo?,
         val signalInfo: SignalInfo?,
         val directionReportExtra: DirectionReport?
-    ): AprsPacket() {
+    ): AprsPacket(), Report, Commented, Timestamped {
         val supportsMessaging = when (dataTypeIdentifier) {
             '=', '@' -> true
             else -> false
@@ -50,16 +51,16 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         override val raw: ByteArray,
-        val timestamp: Instant?,
+        override val timestamp: Instant?,
         val windData: WindData,
         val precipitation: Precipitation,
-        val coordinates: GeoCoordinates?,
-        val symbol: Symbol?,
+        override val coordinates: GeoCoordinates?,
+        override val symbol: Symbol?,
         val temperature: Temperature?,
         val humidity: Percentage?,
         val pressure: Pressure?,
         val irradiance: Irradiance?
-    ): AprsPacket() {
+    ): AprsPacket(), Timestamped, Mapable {
         @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"), level = DeprecationLevel.ERROR)
         val luminosity = irradiance
     }
@@ -71,19 +72,19 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         override val raw: ByteArray,
-        val name: String,
+        override val name: String,
         val state: ReportState,
-        val timestamp: Instant?,
-        val coordinates: GeoCoordinates,
-        val symbol: Symbol,
-        val comment: String,
-        val altitude: Length?,
-        val trajectory: Trajectory?,
-        val range: Length?,
-        val transmitterInfo: TransmitterInfo?,
+        override val timestamp: Instant?,
+        override val coordinates: GeoCoordinates,
+        override val symbol: Symbol,
+        override val comment: String,
+        override val altitude: Length?,
+        override val trajectory: Trajectory?,
+        override val range: Length?,
+        override val transmitterInfo: TransmitterInfo?,
         val signalInfo: SignalInfo?,
         val directionReportExtra: DirectionReport?
-    ): AprsPacket()
+    ): AprsPacket(), Named, Report, Commented, Timestamped
 
     data class ItemReport(
         override val received: Instant,
@@ -92,18 +93,18 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         override val raw: ByteArray,
-        val name: String,
+        override val name: String,
         val state: ReportState,
-        val coordinates: GeoCoordinates,
-        val symbol: Symbol,
-        val comment: String,
-        val altitude: Length?,
-        val trajectory: Trajectory?,
-        val range: Length?,
-        val transmitterInfo: TransmitterInfo?,
+        override val coordinates: GeoCoordinates,
+        override val symbol: Symbol,
+        override val comment: String,
+        override val altitude: Length?,
+        override val trajectory: Trajectory?,
+        override val range: Length?,
+        override val transmitterInfo: TransmitterInfo?,
         val signalInfo: SignalInfo?,
         val directionReportExtra: DirectionReport?
-    ): AprsPacket()
+    ): AprsPacket(), Named, Report, Commented
 
     data class Message(
         override val received: Instant,
@@ -126,8 +127,8 @@ sealed class AprsPacket {
         override val raw: ByteArray,
         val sequenceId: String,
         val data: TelemetryValues,
-        val comment: String,
-    ): AprsPacket()
+        override val comment: String,
+    ): AprsPacket(), Commented
 
     data class StatusReport(
         override val received: Instant,
@@ -136,9 +137,9 @@ sealed class AprsPacket {
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
         override val raw: ByteArray,
-        val time: Instant?,
+        override val timestamp: Instant?,
         val status: String,
-    ): AprsPacket()
+    ): AprsPacket(), Timestamped
 
     data class CapabilityReport(
         override val received: Instant,
