@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.extension
 
-import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
+import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.requireControl
 import com.inkapplications.karps.parser.extension.DataExtensions.TrajectoryExtra
 import com.inkapplications.karps.parser.optionalValue
@@ -28,4 +28,3 @@ internal object TrajectoryExtensionChunker: Chunker<TrajectoryExtra> {
             .let { Chunk(it, data.substring(7)) }
     }
 }
-

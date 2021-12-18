@@ -1,7 +1,9 @@
 package com.inkapplications.karps.parser.altitude
 
 import inkapplications.spondee.measure.Feet
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
 
 class AltitudeChunkerTest {
     @Test

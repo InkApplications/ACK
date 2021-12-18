@@ -50,6 +50,12 @@ sealed class Symbol {
     }
 }
 
+fun Symbol.toTableCodePair() = when {
+    this is Symbol.Primary -> '/' to id
+    this is Symbol.Alternate && overlay != null -> overlay to id
+    else -> '\\' to id
+}
+
 /**
  * Create a symbol from a table/code pair.
  *

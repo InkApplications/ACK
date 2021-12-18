@@ -1,21 +1,25 @@
 package com.inkapplications.karps.parser.weather
 
 import com.inkapplications.karps.parser.PacketTypeParser
-import com.inkapplications.karps.parser.chunk.*
-import com.inkapplications.karps.parser.timestamp.MdhmChunker
+import com.inkapplications.karps.parser.chunk.mapParsed
+import com.inkapplications.karps.parser.chunk.parse
+import com.inkapplications.karps.parser.chunk.parseAfter
+import com.inkapplications.karps.parser.chunk.parseOptionalAfter
+import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
-import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.*
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
 import inkapplications.spondee.structure.Deka
 import inkapplications.spondee.structure.of
 
-class PositionlessWeatherParser: PacketTypeParser {
-    override val dataTypeFilter: CharArray? = charArrayOf('_')
-    private val timestampParser = MdhmChunker()
+internal class PositionlessWeatherParser(
+    timestampModule: TimestampModule,
+): PacketTypeParser {
+    override val dataTypeFilter: CharArray = charArrayOf('_')
+    private val timestampParser = timestampModule.mdhmChunker
 
     private val windDirectionParser = WeatherElementChunker('c', 3)
         .mapParsed { it?.let(Degrees::of) }
@@ -35,8 +39,6 @@ class PositionlessWeatherParser: PacketTypeParser {
         val weatherData = WeatherChunker.parseOptionalAfter(temperature)
 
         return AprsPacket.Weather(
-            raw = packet.raw,
-            received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,

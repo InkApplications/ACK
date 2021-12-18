@@ -7,4 +7,6 @@ data class TelemetryValues(
     val analog4: Float,
     val analog5: Float,
     val digital: UByte,
-)
+) {
+    val analogValues = arrayOf(analog1, analog2, analog3, analog4, analog5)
+}

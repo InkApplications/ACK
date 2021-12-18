@@ -1,8 +1,8 @@
 package com.inkapplications.karps.parser.chunk.common
 
-import com.inkapplications.karps.parser.chunk.Chunker
-import com.inkapplications.karps.parser.chunk.Chunk
 import com.inkapplications.karps.parser.PacketFormatException
+import com.inkapplications.karps.parser.chunk.Chunk
+import com.inkapplications.karps.parser.chunk.Chunker
 import kotlin.math.min
 
 /**

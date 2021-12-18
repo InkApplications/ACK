@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.weather
 
-import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
+import com.inkapplications.karps.parser.chunk.Chunker
 
 /**
  * Extracts key/value data from weather data.

@@ -5,17 +5,13 @@ import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 
 internal class KarpsParser(
     private val infoParsers: Array<PacketTypeParser>,
+    private val encoders: Array<PacketGenerator>,
     private val logger: KimchiLogger = EmptyLogger,
-    private val clock: Clock = Clock.System
 ): AprsParser {
-    override fun fromString(packet: String) = fromString(packet, clock.now())
-
-    override fun fromString(packet: String, received: Instant): AprsPacket {
+    override fun fromString(packet: String): AprsPacket {
         logger.trace("Parsing packet: $packet")
         val source = packet.substringBefore('>').parseAddress()
         val route = packet.substringAfter('>')
@@ -31,12 +27,10 @@ internal class KarpsParser(
         val dataType = packet.charAfter(':')
 
         val prototype = AprsPacket.Unknown(
-            received = received,
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
             digipeaters = digipeaters,
-            raw = packet.encodeToByteArray(),
             body = body
         )
 
@@ -55,9 +49,7 @@ internal class KarpsParser(
         return prototype
     }
 
-    override fun fromAx25(packet: ByteArray) = fromAx25(packet, clock.now())
-
-    override fun fromAx25(packet: ByteArray, received: Instant): AprsPacket {
+    override fun fromAx25(packet: ByteArray): AprsPacket {
         logger.trace("Parsing packet from bytes: $packet")
         val unsignedByteArray = packet.toUByteArray()
 
@@ -81,12 +73,10 @@ internal class KarpsParser(
         val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
 
         val prototype = AprsPacket.Unknown(
-            received = clock.now(),
             dataTypeIdentifier = dataType,
             source = source,
             destination = destination,
             digipeaters = digipeaters,
-            raw = packet,
             body = body
         )
 
@@ -103,6 +93,22 @@ internal class KarpsParser(
             }
         logger.warn("No parser was able to parse packet.")
         return prototype
+    }
+
+    override fun toString(packet: AprsPacket): String {
+        val route = arrayOf(packet.destination, *packet.digipeaters.toTypedArray()).joinToString(",")
+        encoders.forEach { encoder ->
+            try {
+                val body = encoder.generate(packet)
+                return "${packet.source}>$route:${packet.dataTypeIdentifier}$body"
+            } catch (pass: UnhandledEncodingException) {
+                logger.trace { "Encoding is unhandled by <${encoder::class.simpleName}>" }
+            } catch (error: Throwable) {
+                logger.warn(error) { "Encoder <${encoder::class.simpleName}> threw unknown error." }
+            }
+        }
+
+        throw IllegalArgumentException("No packet encoder was able to handle the given packet type.")
     }
 
     private fun List<UByte>.toCallsign(): String {

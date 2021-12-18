@@ -13,20 +13,16 @@ import kotlinx.datetime.Instant
  * A Single APRS record.
  */
 sealed class AprsPacket {
-    abstract val received: Instant
     abstract val dataTypeIdentifier: Char
     abstract val source: Address
     abstract val destination: Address
     abstract val digipeaters: List<Digipeater>
-    abstract val raw: ByteArray
 
     data class Position(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         override val timestamp: Instant?,
         override val coordinates: GeoCoordinates,
         override val symbol: Symbol,
@@ -45,12 +41,10 @@ sealed class AprsPacket {
     }
 
     data class Weather(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         override val timestamp: Instant?,
         val windData: WindData,
         val precipitation: Precipitation,
@@ -66,12 +60,10 @@ sealed class AprsPacket {
     }
 
     data class ObjectReport(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         override val name: String,
         val state: ReportState,
         override val timestamp: Instant?,
@@ -83,16 +75,14 @@ sealed class AprsPacket {
         override val range: Length?,
         override val transmitterInfo: TransmitterInfo?,
         val signalInfo: SignalInfo?,
-        val directionReportExtra: DirectionReport?
+        val directionReport: DirectionReport?
     ): AprsPacket(), Named, Report, Commented, Timestamped
 
     data class ItemReport(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         override val name: String,
         val state: ReportState,
         override val coordinates: GeoCoordinates,
@@ -103,61 +93,51 @@ sealed class AprsPacket {
         override val range: Length?,
         override val transmitterInfo: TransmitterInfo?,
         val signalInfo: SignalInfo?,
-        val directionReportExtra: DirectionReport?
+        val directionReport: DirectionReport?
     ): AprsPacket(), Named, Report, Commented
 
     data class Message(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         val addressee: Address,
         val message: String,
         val messageNumber: Int?
     ): AprsPacket()
 
     data class TelemetryReport(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         val sequenceId: String,
         val data: TelemetryValues,
         override val comment: String,
     ): AprsPacket(), Commented
 
     data class StatusReport(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         override val timestamp: Instant?,
         val status: String,
     ): AprsPacket(), Timestamped
 
     data class CapabilityReport(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         val capabilityData: Set<Capability>
     ): AprsPacket()
 
     data class Unknown(
-        override val received: Instant,
         override val dataTypeIdentifier: Char,
         override val source: Address,
         override val destination: Address,
         override val digipeaters: List<Digipeater>,
-        override val raw: ByteArray,
         val body: String
     ): AprsPacket()
 }

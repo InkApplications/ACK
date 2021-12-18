@@ -3,7 +3,10 @@ package com.inkapplications.karps.parser.extension
 import com.inkapplications.karps.structures.unit.Knots
 import inkapplications.spondee.measure.Miles
 import inkapplications.spondee.spatial.Degrees
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertNull
 
 class DirectionReportExtensionChunkerTest {
     @Test

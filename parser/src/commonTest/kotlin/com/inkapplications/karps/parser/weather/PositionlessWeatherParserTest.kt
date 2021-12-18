@@ -2,7 +2,6 @@ package com.inkapplications.karps.parser.weather
 
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.timestamp.withUtcValues
-import com.inkapplications.karps.structures.unit.*
 import inkapplications.spondee.measure.HundredthInches
 import inkapplications.spondee.measure.MilesPerHour
 import inkapplications.spondee.measure.Pascals
@@ -18,11 +17,13 @@ import kotlin.test.assertFails
 import kotlin.test.assertNull
 
 class PositionlessWeatherParserTest {
+    private val parser = PositionlessWeatherParser(TestData.timestampModule)
+    
     @Test
     fun parse() {
         val given = "10090556c220s004g005t077r001p002P003h50b09900wRSW"
 
-        val result = PositionlessWeatherParser().parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.prototype.copy(body = given))
         val expectedTime = Clock.System.now()
             .withUtcValues(
                 month = Month.OCTOBER,
@@ -51,7 +52,7 @@ class PositionlessWeatherParserTest {
     fun empty() {
         val given = "10090556c...s   g...t...P012Jim"
 
-        val result = PositionlessWeatherParser().parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.prototype.copy(body = given))
         val expectedTime = Clock.System.now()
             .withUtcValues(
                 month = Month.OCTOBER,
@@ -80,6 +81,6 @@ class PositionlessWeatherParserTest {
     fun nonWeather() {
         val given = "Hello World"
 
-        assertFails { PositionlessWeatherParser().parse(TestData.prototype.copy(body = given)) }
+        assertFails { parser.parse(TestData.prototype.copy(body = given)) }
     }
 }

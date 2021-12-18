@@ -20,7 +20,7 @@ class KarpsParserTest {
             0x46u, 0x6fu, 0x6fu
         ).toByteArray()
 
-        val result = KarpsParser(emptyArray()).fromAx25(data)
+        val result = KarpsParser(emptyArray(), emptyArray()).fromAx25(data)
 
         assertEquals(Address("NJ7P", ssid = "0"), result.destination)
         assertEquals(Address("N7LEM", ssid = "0"), result.source)
@@ -35,7 +35,7 @@ class KarpsParserTest {
     fun stringParse() {
         val data = "ON0CPS-S>APDG01,TCPIP*,qAC,ON0CPS-GS:;Foo"
 
-        val result = KarpsParser(emptyArray()).fromString(data)
+        val result = KarpsParser(emptyArray(), emptyArray()).fromString(data)
 
         assertEquals(Address("ON0CPS", "S"), result.source)
         assertEquals(Address("APDG01"), result.destination)
@@ -48,4 +48,28 @@ class KarpsParserTest {
         assertTrue(result is AprsPacket.Unknown)
         assertEquals("Foo", result.body)
     }
+
+    @Test
+    fun stringEncode() {
+        val data = AprsPacket.Unknown(
+            dataTypeIdentifier = '=',
+            source = Address("T3ST", "S"),
+            destination = Address("T3ST", "D"),
+            digipeaters = listOf(
+                Digipeater(
+                    address = Address("T3ST", "A"),
+                    heard = true
+                ),
+                Digipeater(
+                    address = Address("T3ST", "B"),
+                )
+            ),
+            body = "Hello World"
+        )
+
+        val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketGenertator)).toString(data)
+
+        assertEquals("T3ST-S>T3ST-D,T3ST-A*,T3ST-B:=Hello World", result)
+    }
 }
+

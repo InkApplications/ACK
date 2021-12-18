@@ -9,26 +9,24 @@ import com.inkapplications.karps.parser.position.CompressedPositionExtensions
 import com.inkapplications.karps.parser.position.MixedPositionChunker
 import com.inkapplications.karps.parser.position.PositionReport
 import com.inkapplications.karps.parser.position.compressedExtension
-import com.inkapplications.karps.parser.timestamp.*
+import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.valueFor
-import com.inkapplications.karps.structures.*
-import com.inkapplications.karps.structures.unit.*
+import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.Precipitation
+import com.inkapplications.karps.structures.WindData
 import inkapplications.spondee.measure.*
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.structure.Deka
 import inkapplications.spondee.structure.of
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
 
-class WeatherParser(
-    clock: Clock = Clock.System,
-    timezone: TimeZone = TimeZone.UTC
+internal class WeatherParser(
+    timestampModule: TimestampModule,
 ): PacketTypeParser {
     override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
     private val timestampParser = CompositeChunker(
-        DhmlChunker(clock, timezone),
-        DhmzChunker(),
-        HmsChunker()
+        timestampModule.dhmlChunker,
+        timestampModule.dhmzChunker,
+        timestampModule.hmsChunker,
     )
 
     override fun parse(packet: AprsPacket.Unknown): AprsPacket.Weather {
@@ -44,12 +42,10 @@ class WeatherParser(
         val weatherData = WeatherChunker.parseAfter(plainWindExtension ?: position)
 
         return AprsPacket.Weather(
-            received = packet.received,
             dataTypeIdentifier = packet.dataTypeIdentifier,
             source = packet.source,
             destination = packet.destination,
             digipeaters = packet.digipeaters,
-            raw = packet.raw,
             timestamp = timestamp.result,
             coordinates = position.result.coordinates,
             symbol = position.result.symbol,
