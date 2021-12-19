@@ -2,7 +2,10 @@ package com.inkapplications.karps.parser.item
 
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
-import com.inkapplications.karps.structures.*
+import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.ReportState
+import com.inkapplications.karps.structures.TransmitterInfo
+import com.inkapplications.karps.structures.symbolOf
 import inkapplications.spondee.measure.Bels
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.measure.Watts
@@ -17,9 +20,9 @@ import kotlin.test.*
 class ItemTransformerTest {
     @Test
     fun liveItem() {
-        val given = "AID #2!4903.50N/07201.75WA"
+        val given = ")AID #2!4903.50N/07201.75WA"
 
-        val result = ItemTransformer().parse(TestData.prototype.copy(body = given))
+        val result = ItemTransformer().parse(TestData.route, given)
 
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Live, result.state)
@@ -30,9 +33,9 @@ class ItemTransformerTest {
 
     @Test
     fun killedItem() {
-        val given = "AID #2_4903.50N/07201.75WA"
+        val given = ")AID #2_4903.50N/07201.75WA"
 
-        val result = ItemTransformer().parse(TestData.prototype.copy(body = given))
+        val result = ItemTransformer().parse(TestData.route, given)
 
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Kill, result.state)
@@ -43,16 +46,13 @@ class ItemTransformerTest {
 
     @Test
     fun nonItem() {
-        assertFails { ItemTransformer().parse(TestData.prototype.copy(body = "3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/")) }
+        assertFails { ItemTransformer().parse(TestData.route, "!3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/") }
     }
 
     @Test
     fun liveItemGenerate() {
         val given = AprsPacket.ItemReport(
-            dataTypeIdentifier = ')',
-            source = "KE0YOG".toAddress(),
-            destination = "KE0YOG-2".toAddress(),
-            digipeaters = listOf(),
+            route = TestData.route,
             name = "AID #2",
             state = ReportState.Live,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),
@@ -73,16 +73,13 @@ class ItemTransformerTest {
 
         val result = ItemTransformer().generate(given)
 
-        assertEquals("AID #2!4903.50N/07201.75WAPHG5132Hello World", result)
+        assertEquals(")AID #2!4903.50N/07201.75WAPHG5132Hello World", result)
     }
 
     @Test
     fun killedItemGenerate() {
         val given = AprsPacket.ItemReport(
-            dataTypeIdentifier = ')',
-            source = "KE0YOG".toAddress(),
-            destination = "KE0YOG-2".toAddress(),
-            digipeaters = listOf(),
+            route = TestData.route,
             name = "AID #2",
             state = ReportState.Kill,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),
@@ -103,6 +100,6 @@ class ItemTransformerTest {
 
         val result = ItemTransformer().generate(given)
 
-        assertEquals("AID #2_4903.50N/07201.75WAPHG5132Hello World", result)
+        assertEquals(")AID #2_4903.50N/07201.75WAPHG5132Hello World", result)
     }
 }

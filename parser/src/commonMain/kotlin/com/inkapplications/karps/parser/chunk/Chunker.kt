@@ -1,7 +1,5 @@
 package com.inkapplications.karps.parser.chunk
 
-import com.inkapplications.karps.structures.AprsPacket
-
 /**
  * Pops "chunks" of data off of a given string.
  */
@@ -24,20 +22,6 @@ internal inline fun <T, R> Chunker<T>.mapParsed(crossinline mapper: (T) -> R) = 
     override fun popChunk(data: String): Chunk<R> {
         return this@mapParsed.popChunk(data).mapParsed { mapper(it) }
     }
-}
-
-/**
- * Start parsing using an unknown APRS Packet Body.
- */
-internal fun <T> Chunker<T>.parse(packet: AprsPacket.Unknown): Chunk<out T> {
-    return popChunk(packet.body)
-}
-
-/**
- * Start parsing using an unknown APRS Packet Body, catching any errors.
- */
-internal fun <T> Chunker<T>.parseOptional(packet: AprsPacket.Unknown): Chunk<out T?> {
-    return runCatching { popChunk(packet.body) }.getOrNull() ?: Chunk(null, packet.body)
 }
 
 /**

@@ -1,6 +1,5 @@
 package com.inkapplications.karps.parser.chunk
 
-import com.inkapplications.karps.parser.TestData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -18,25 +17,6 @@ class ChunkerTest {
     }
 
     @Test
-    fun parseOptionalValid() {
-        val result = StubChunker.parseOptional(TestData.prototype)
-
-        assertEquals("Parsed", result.result)
-        assertEquals("Remaining", result.remainingData)
-    }
-
-    @Test
-    fun parseOptionalInvalid() {
-        val given = object: Chunker<String> {
-            override fun popChunk(data: String): Chunk<out String> = TODO()
-        }
-        val result = given.parseOptional(TestData.prototype)
-
-        assertNull(result.result)
-        assertEquals(TestData.prototype.body, result.remainingData)
-    }
-
-    @Test
     fun parseOptionalAfterValid() {
         val result = StubChunker.parseOptionalAfter(Chunk("", ""))
 
@@ -49,10 +29,10 @@ class ChunkerTest {
         val given = object: Chunker<String> {
             override fun popChunk(data: String): Chunk<out String> = TODO()
         }
-        val result = given.parseOptionalAfter(Chunk("", ""))
+        val result = given.parseOptionalAfter(Chunk("", "test"))
 
         assertNull(result.result)
-        assertEquals(TestData.prototype.body, result.remainingData)
+        assertEquals("test", result.remainingData)
     }
 
     @Test

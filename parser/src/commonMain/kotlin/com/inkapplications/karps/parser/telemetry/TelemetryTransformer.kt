@@ -5,16 +5,17 @@ import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.common.SpanChunker
 import com.inkapplications.karps.parser.chunk.common.SpanUntilChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
-import com.inkapplications.karps.parser.chunk.parse
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.parser.unhandled
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 import com.inkapplications.karps.structures.TelemetryValues
 import kotlin.math.roundToInt
 
 class TelemetryTransformer: PacketTransformer {
-    override val dataTypeFilter: CharArray = charArrayOf('T')
+    private val dataTypeCharacter = 'T'
+    private val dataTypeChunker = ControlCharacterChunker(dataTypeCharacter)
     private val sequenceStartChar = ControlCharacterChunker('#')
     private val sequenceChunk = SpanUntilChunker(
         stopChars = charArrayOf(','),
@@ -34,8 +35,9 @@ class TelemetryTransformer: PacketTransformer {
         it.toUByte(2)
     }
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket.TelemetryReport {
-        val start = sequenceStartChar.parse(packet)
+    override fun parse(route: PacketRoute, body: String): AprsPacket.TelemetryReport {
+        val dataTypeIdentifier = dataTypeChunker.popChunk(body)
+        val start = sequenceStartChar.parseAfter(dataTypeIdentifier)
         val sequence = sequenceChunk.parseAfter(start)
         val analog1 = analogValueChunk.parseAfter(sequence)
         val analog2 = analogValueChunk.parseAfter(analog1)
@@ -54,10 +56,7 @@ class TelemetryTransformer: PacketTransformer {
         )
 
         return AprsPacket.TelemetryReport(
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
+            route = route,
             sequenceId = sequence.result,
             data = telemetryValues,
             comment = digital.remainingData,
@@ -76,6 +75,6 @@ class TelemetryTransformer: PacketTransformer {
             }
         }
         val digitalString = packet.data.digital.toString(2).toInt().fixedLength(8)
-        return "#$sequence,$analogStrings,$digitalString${packet.comment}"
+        return "$dataTypeCharacter#$sequence,$analogStrings,$digitalString${packet.comment}"
     }
 }

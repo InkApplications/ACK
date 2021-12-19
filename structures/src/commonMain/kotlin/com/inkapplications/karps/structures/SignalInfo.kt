@@ -1,6 +1,6 @@
 package com.inkapplications.karps.structures
 
-import com.inkapplications.karps.structures.unit.*
+import com.inkapplications.karps.structures.unit.Strength
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Level
 import inkapplications.spondee.spatial.Angle

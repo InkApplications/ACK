@@ -2,8 +2,9 @@ package com.inkapplications.karps.parser.weather
 
 import com.inkapplications.karps.parser.PacketTypeParser
 import com.inkapplications.karps.parser.chunk.common.CompositeChunker
+import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.parseAfter
-import com.inkapplications.karps.parser.chunk.parseOptional
+import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.extension.TrajectoryExtensionChunker
 import com.inkapplications.karps.parser.position.CompressedPositionExtensions
 import com.inkapplications.karps.parser.position.MixedPositionChunker
@@ -12,6 +13,7 @@ import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import inkapplications.spondee.measure.*
@@ -22,15 +24,16 @@ import inkapplications.spondee.structure.of
 internal class WeatherParser(
     timestampModule: TimestampModule,
 ): PacketTypeParser {
-    override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
+    private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')
     private val timestampParser = CompositeChunker(
         timestampModule.dhmlChunker,
         timestampModule.dhmzChunker,
         timestampModule.hmsChunker,
     )
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket.Weather {
-        val timestamp = timestampParser.parseOptional(packet)
+    override fun parse(route: PacketRoute, body: String): AprsPacket.Weather {
+        val dataTypeIdentifier = dataTypeChunker.popChunk(body)
+        val timestamp = timestampParser.parseOptionalAfter(dataTypeIdentifier)
         val position = MixedPositionChunker.parseAfter(timestamp)
         val compressedWind = position.result.compressedExtension
         val plainWindExtension = if (position.result is PositionReport.Plain) TrajectoryExtensionChunker.parseAfter(position) else null
@@ -42,10 +45,7 @@ internal class WeatherParser(
         val weatherData = WeatherChunker.parseAfter(plainWindExtension ?: position)
 
         return AprsPacket.Weather(
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
+            route = route,
             timestamp = timestamp.result,
             coordinates = position.result.coordinates,
             symbol = position.result.symbol,

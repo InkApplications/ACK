@@ -1,10 +1,10 @@
 package com.inkapplications.karps.cli
 
 import com.inkapplications.karps.cli.Control.Color.blue
-import com.inkapplications.karps.cli.Control.Color.yellow
-import com.inkapplications.karps.cli.Control.Color.magenta
 import com.inkapplications.karps.cli.Control.Color.green
 import com.inkapplications.karps.cli.Control.Color.lightRed
+import com.inkapplications.karps.cli.Control.Color.magenta
+import com.inkapplications.karps.cli.Control.Color.yellow
 import com.inkapplications.karps.structures.AprsPacket
 
 data class PacketViewModel(
@@ -12,13 +12,13 @@ data class PacketViewModel(
     val data: String,
 ) {
     val alias: String = when (packet) {
-        is AprsPacket.Position -> blue.span("${packet.source}")
-        is AprsPacket.Weather -> yellow.span("${packet.source}")
-        is AprsPacket.ObjectReport -> magenta.span("${packet.source}")
-        is AprsPacket.ItemReport -> magenta.span("${packet.source}")
-        is AprsPacket.Message -> green.span("${packet.source}")
-        is AprsPacket.Unknown -> lightRed.span("${packet.source}")
-        else -> "${packet.source}"
+        is AprsPacket.Position -> blue.span("${packet.route.source}")
+        is AprsPacket.Weather -> yellow.span("${packet.route.source}")
+        is AprsPacket.ObjectReport -> magenta.span("${packet.route.source}")
+        is AprsPacket.ItemReport -> magenta.span("${packet.route.source}")
+        is AprsPacket.Message -> green.span("${packet.route.source}")
+        is AprsPacket.Unknown -> lightRed.span("${packet.route.source}")
+        else -> "${packet.route.source}"
     }
 
     val message = when (packet) {

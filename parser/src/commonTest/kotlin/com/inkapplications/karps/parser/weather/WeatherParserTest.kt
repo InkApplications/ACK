@@ -24,7 +24,7 @@ class WeatherParserTest {
     private val parser = WeatherParser(TestData.timestampModule)
     @Test
     fun plainComplete() {
-        val given = "092345z4903.50N/07201.75W_220/004g005t-07r001p002P003h50b09900wRSW"
+        val given = "/092345z4903.50N/07201.75W_220/004g005t-07r001p002P003h50b09900wRSW"
 
         val expectedTime = Clock.System.now()
             .withUtcValues(
@@ -35,7 +35,7 @@ class WeatherParserTest {
                 nanosecond = 0
             )
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(expectedTime, result.timestamp)
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
@@ -55,9 +55,9 @@ class WeatherParserTest {
 
     @Test
     fun plainMinimum() {
-        val given = "4903.50N/07201.75W_220/004g...t...r...p...P...h..b.....wRSW"
+        val given = "!4903.50N/07201.75W_220/004g...t...r...p...P...h..b.....wRSW"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertNull(result.timestamp)
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
@@ -77,14 +77,14 @@ class WeatherParserTest {
 
     @Test
     fun plainLocation() {
-        val given = "4903.50N/07201.75W#225/000Hello World!"
+        val given = "!4903.50N/07201.75W#225/000Hello World!"
 
-        assertFails { parser.parse(TestData.prototype.copy(body = given)) }
+        assertFails { parser.parse(TestData.route, given) }
     }
 
     @Test
     fun compressedComplete() {
-        val given = "092345z/5L!!<*e7_7P[g005t077r001p002P003h50b09900wRSW"
+        val given = "/092345z/5L!!<*e7_7P[g005t077r001p002P003h50b09900wRSW"
 
         val expectedTime = Clock.System.now()
             .withUtcValues(
@@ -95,7 +95,7 @@ class WeatherParserTest {
                 nanosecond = 0
             )
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(expectedTime, result.timestamp)
         assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
@@ -115,9 +115,9 @@ class WeatherParserTest {
 
     @Test
     fun compressedEmpty() {
-        val given = "/5L!!<*e7_ sTg...t...r...p...P...h..b     wRSW"
+        val given = "//5L!!<*e7_ sTg...t...r...p...P...h..b     wRSW"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertNull(result.timestamp)
         assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
@@ -137,8 +137,8 @@ class WeatherParserTest {
 
     @Test
     fun compressedLocation() {
-        val given = "/5L!!<*e7_ sTHello World!"
+        val given = "//5L!!<*e7_ sTHello World!"
 
-        assertFails { parser.parse(TestData.prototype.copy(body = given)) }
+        assertFails { parser.parse(TestData.route, given) }
     }
 }

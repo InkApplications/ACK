@@ -13,16 +13,10 @@ import kotlinx.datetime.Instant
  * A Single APRS record.
  */
 sealed class AprsPacket {
-    abstract val dataTypeIdentifier: Char
-    abstract val source: Address
-    abstract val destination: Address
-    abstract val digipeaters: List<Digipeater>
+    abstract val route: PacketRoute
 
     data class Position(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         override val timestamp: Instant?,
         override val coordinates: GeoCoordinates,
         override val symbol: Symbol,
@@ -32,19 +26,23 @@ sealed class AprsPacket {
         override val range: Length?,
         override val transmitterInfo: TransmitterInfo?,
         val signalInfo: SignalInfo?,
-        val directionReportExtra: DirectionReport?
+        val directionReportExtra: DirectionReport?,
+        val supportsMessaging: Boolean,
     ): AprsPacket(), Report, Commented, Timestamped {
-        val supportsMessaging = when (dataTypeIdentifier) {
-            '=', '@' -> true
-            else -> false
-        }
+//        override val dataTypeIdentifier: Char = when {
+//            supportsMessaging && timestamp == null -> '='
+//            supportsMessaging -> '@'
+//            timestamp == null -> '!'
+//            else -> '/'
+//        }
+//        val supportsMessaging = when (dataTypeIdentifier) {
+//            '=', '@' -> true
+//            else -> false
+//        }
     }
 
     data class Weather(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         override val timestamp: Instant?,
         val windData: WindData,
         val precipitation: Precipitation,
@@ -55,15 +53,17 @@ sealed class AprsPacket {
         val pressure: Pressure?,
         val irradiance: Irradiance?
     ): AprsPacket(), Timestamped, Mapable {
+//        override val dataTypeIdentifier: Char = when {
+//            coordinates == null -> '_'
+//            timestamp == null -> '!'
+//            else -> '/'
+//        }
         @Deprecated("APRS traditionally calls this field luminosity, however this is actually measured in irradiance.", ReplaceWith("irradiance"), level = DeprecationLevel.ERROR)
         val luminosity = irradiance
     }
 
     data class ObjectReport(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         override val name: String,
         val state: ReportState,
         override val timestamp: Instant?,
@@ -79,10 +79,7 @@ sealed class AprsPacket {
     ): AprsPacket(), Named, Report, Commented, Timestamped
 
     data class ItemReport(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         override val name: String,
         val state: ReportState,
         override val coordinates: GeoCoordinates,
@@ -97,47 +94,32 @@ sealed class AprsPacket {
     ): AprsPacket(), Named, Report, Commented
 
     data class Message(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         val addressee: Address,
         val message: String,
         val messageNumber: Int?
     ): AprsPacket()
 
     data class TelemetryReport(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         val sequenceId: String,
         val data: TelemetryValues,
         override val comment: String,
     ): AprsPacket(), Commented
 
     data class StatusReport(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         override val timestamp: Instant?,
         val status: String,
     ): AprsPacket(), Timestamped
 
     data class CapabilityReport(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         val capabilityData: Set<Capability>
     ): AprsPacket()
 
     data class Unknown(
-        override val dataTypeIdentifier: Char,
-        override val source: Address,
-        override val destination: Address,
-        override val digipeaters: List<Digipeater>,
+        override val route: PacketRoute,
         val body: String
     ): AprsPacket()
 }

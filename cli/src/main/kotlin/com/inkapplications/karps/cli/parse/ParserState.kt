@@ -19,7 +19,7 @@ sealed interface ParserState {
         val unidentifiedIdentifiers = tests.filterIsInstance<LineStatus.Passed>()
             .map { it.packet }
             .filterIsInstance<AprsPacket.Unknown>()
-            .groupBy { it.dataTypeIdentifier }
+            .groupBy { it.body[0] }
             .map {
                 it.key to it.value.count()
             }

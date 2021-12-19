@@ -1,12 +1,13 @@
 package com.inkapplications.karps.parser.weather
 
 import com.inkapplications.karps.parser.PacketTypeParser
+import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
-import com.inkapplications.karps.parser.chunk.parse
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import inkapplications.spondee.measure.*
@@ -18,7 +19,7 @@ import inkapplications.spondee.structure.of
 internal class PositionlessWeatherParser(
     timestampModule: TimestampModule,
 ): PacketTypeParser {
-    override val dataTypeFilter: CharArray = charArrayOf('_')
+    private val dataType = ControlCharacterChunker('_')
     private val timestampParser = timestampModule.mdhmChunker
 
     private val windDirectionParser = WeatherElementChunker('c', 3)
@@ -30,8 +31,9 @@ internal class PositionlessWeatherParser(
     private val tempParser = WeatherElementChunker('t', 3)
         .mapParsed { it?.let { Fahrenheit.of(it) } }
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket.Weather {
-        val timestamp = timestampParser.parse(packet)
+    override fun parse(route: PacketRoute, body: String): AprsPacket.Weather {
+        val dataType = dataType.popChunk(body)
+        val timestamp = timestampParser.parseAfter(dataType)
         val windDirection = windDirectionParser.parseAfter(timestamp)
         val windSpeed = windSpeedParser.parseAfter(windDirection)
         val windGust = windGustParser.parseAfter(windSpeed)
@@ -39,10 +41,7 @@ internal class PositionlessWeatherParser(
         val weatherData = WeatherChunker.parseOptionalAfter(temperature)
 
         return AprsPacket.Weather(
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
+            route = route,
             timestamp = timestamp.result,
             coordinates = null,
             symbol = null,

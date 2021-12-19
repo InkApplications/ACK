@@ -22,9 +22,9 @@ class ObjectTransformerTest {
 
     @Test
     fun liveObject() {
-        val given = "LEADER   *092345z4903.50N/07201.75W>088/036"
+        val given = ";LEADER   *092345z4903.50N/07201.75W>088/036"
 
-        val result = transformer.parse(TestData.prototype.copy(body = given))
+        val result = transformer.parse(TestData.route, given)
         val resultDateTime = result.timestamp?.toLocalDateTime(TimeZone.UTC)
 
         assertEquals("LEADER", result.name)
@@ -39,9 +39,9 @@ class ObjectTransformerTest {
 
     @Test
     fun killedObject() {
-        val given = "LEADER   _092345z4903.50N/07201.75W>088/036"
+        val given = ";LEADER   _092345z4903.50N/07201.75W>088/036"
 
-        val result = transformer.parse(TestData.prototype.copy(body = given))
+        val result = transformer.parse(TestData.route, given)
         val resultDateTime = result.timestamp?.toLocalDateTime(TimeZone.UTC)
 
         assertEquals("LEADER", result.name)
@@ -56,18 +56,15 @@ class ObjectTransformerTest {
 
     @Test
     fun nonObject() {
-        val given = "LEA_092345z4903.50N/07201.75W>088/036"
+        val given = ";LEA_092345z4903.50N/07201.75W>088/036"
 
-        assertFails { transformer.parse(TestData.prototype.copy(body = given)) }
+        assertFails { transformer.parse(TestData.route, given) }
     }
 
     @Test
     fun liveGenerated() {
         val given = AprsPacket.ObjectReport(
-            dataTypeIdentifier = ')',
-            source = "KE0YOG".toAddress(),
-            destination = "KE0YOG-2".toAddress(),
-            digipeaters = listOf(),
+            route = TestData.route,
             timestamp = TestData.now.withUtcValues(
                 dayOfMonth = 9,
                 hour = 23,
@@ -93,6 +90,6 @@ class ObjectTransformerTest {
 
         val result = transformer.generate(given)
 
-        assertEquals("LEADER   *092345z4903.50N/07201.75W>PHG5132", result)
+        assertEquals(";LEADER   *092345z4903.50N/07201.75W>PHG5132", result)
     }
 }

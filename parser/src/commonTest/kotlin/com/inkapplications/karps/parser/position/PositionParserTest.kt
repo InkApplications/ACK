@@ -14,24 +14,23 @@ import inkapplications.spondee.structure.Deci
 import inkapplications.spondee.structure.of
 import inkapplications.spondee.structure.value
 import kotlinx.datetime.Clock
-import kotlin.test.Test
+import kotlin.test.*
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertNull
 
 class PositionParserTest {
     private val parser = PositionParser(TestData.timestampModule)
 
     @Test
     fun plainPosition() {
-        val given = "4903.50N/07201.75W-Test 001234"
+        val given = "!4903.50N/07201.75W-Test 001234"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test 001234", result.comment)
         assertEquals(symbolOf('/', '-'), result.symbol)
+        assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
         assertNull(result.altitude)
         assertNull(result.trajectory)
@@ -43,9 +42,9 @@ class PositionParserTest {
 
     @Test
     fun plainTransmitterInfoExtension() {
-        val given = "4903.50N/07201.75W#PHG5132Test 001234"
+        val given = "=4903.50N/07201.75W#PHG5132Test 001234"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
@@ -54,6 +53,7 @@ class PositionParserTest {
         assertEquals(Watts.of(25), result.transmitterInfo?.power)
         assertEquals(Feet.of(20), result.transmitterInfo?.height)
         assertEquals(Bels.of(Deci, 3), result.transmitterInfo?.gain)
+        assertTrue(result.supportsMessaging)
         assertNull(result.timestamp)
         assertEquals(Cardinal.East.toAngle(), result.transmitterInfo?.direction)
         assertNull(result.altitude)
@@ -65,14 +65,15 @@ class PositionParserTest {
 
     @Test
     fun plainAltitude() {
-        val given = "4903.50N/07201.75W-Test/A=001234"
+        val given = "!4903.50N/07201.75W-Test/A=001234"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test", result.comment)
         assertEquals(symbolOf('/', '-'), result.symbol)
+        assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
         assertEquals(Feet.of(1234), result.altitude)
         assertNull(result.trajectory)
@@ -84,9 +85,9 @@ class PositionParserTest {
 
     @Test
     fun plainTimestamp() {
-        val given = "092345z4903.50N/07201.75W>Test1234"
+        val given = "/092345z4903.50N/07201.75W>Test1234"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         val expected = Clock.System.now()
             .withUtcValues(
@@ -102,6 +103,7 @@ class PositionParserTest {
         assertEquals("Test1234", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
         assertEquals(expected, result.timestamp)
+        assertFalse(result.supportsMessaging)
         assertNull(result.altitude)
         assertNull(result.trajectory)
         assertNull(result.range)
@@ -113,14 +115,15 @@ class PositionParserTest {
 
     @Test
     fun compressedPosition() {
-        val given = "/5L!!<*e7> sTComment"
+        val given = "@/5L!!<*e7> sTComment"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(49.5, result.coordinates.latitude.asDecimal, 1e-1)
         assertEquals(-72.75, result.coordinates.longitude.asDecimal, 1e-2)
         assertEquals("Comment", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
+        assertTrue(result.supportsMessaging)
         assertNull(result.timestamp)
         assertNull(result.altitude)
         assertNull(result.trajectory)
@@ -132,14 +135,15 @@ class PositionParserTest {
 
     @Test
     fun compressedRange() {
-        val given = "/5L!!<*e7>{?!Comment"
+        val given = "//5L!!<*e7>{?!Comment"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         assertEquals(49.5, result.coordinates.latitude.asDecimal, 1e-1)
         assertEquals(-72.75, result.coordinates.longitude.asDecimal, 1e-2)
         assertEquals("Comment", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
+        assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
         assertNull(result.altitude)
         assertNull(result.trajectory)
@@ -151,9 +155,9 @@ class PositionParserTest {
 
     @Test
     fun compressedTimestamp() {
-        val given = "092345z/5L!!<*e7>{?!Comment"
+        val given = "/092345z/5L!!<*e7>{?!Comment"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
 
         val expected = Clock.System.now()
             .withUtcValues(
@@ -168,6 +172,7 @@ class PositionParserTest {
         assertEquals(-72.75, result.coordinates.longitude.asDecimal, 1e-2)
         assertEquals("Comment", result.comment)
         assertEquals(symbolOf('/', '>'), result.symbol)
+        assertFalse(result.supportsMessaging)
         assertEquals(expected, result.timestamp)
         assertNull(result.altitude)
         assertNull(result.trajectory)
@@ -179,8 +184,8 @@ class PositionParserTest {
 
     @Test
     fun nonPosition() {
-        val given = "Hello World"
+        val given = ":Hello World"
 
-        assertFails { parser.parse(TestData.prototype.copy(body = given)) }
+        assertFails { parser.parse(TestData.route, given) }
     }
 }

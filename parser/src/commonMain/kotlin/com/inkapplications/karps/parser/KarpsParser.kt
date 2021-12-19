@@ -3,6 +3,7 @@ package com.inkapplications.karps.parser
 import com.inkapplications.karps.structures.Address
 import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Digipeater
+import com.inkapplications.karps.structures.PacketRoute
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
@@ -21,32 +22,27 @@ internal class KarpsParser(
         val digipeaters = route.slice(1 until route.size).map {
             Digipeater(it.trimEnd('*').parseAddress(), it.endsWith('*'))
         }
-        val body = packet.substringAfter(':').let {
-            it.substring(1)
-        }
-        val dataType = packet.charAfter(':')
+        val body = packet.substringAfter(':')
 
-        val prototype = AprsPacket.Unknown(
-            dataTypeIdentifier = dataType,
+        val packetRoute = PacketRoute(
             source = source,
             destination = destination,
             digipeaters = digipeaters,
-            body = body
         )
 
         infoParsers
-            .filter { parser ->
-                parser.dataTypeFilter?.let { dataType in it } ?: true
-            }
             .forEach { parser ->
                 try {
-                    return parser.parse(prototype)
+                    return parser.parse(packetRoute, body)
                 } catch (error: Throwable) {
                     logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
                 }
             }
         logger.warn("No parser was able to parse packet.")
-        return prototype
+        return AprsPacket.Unknown(
+            route = packetRoute,
+            body = body
+        )
     }
 
     override fun fromAx25(packet: ByteArray): AprsPacket {
@@ -69,38 +65,35 @@ internal class KarpsParser(
             .map { Address(it.slice(0..5).toCallsign(), it[6].toSsid()) }
             .map { Digipeater(it) }
 
-        val dataType = packet[17 + lastDigipeater].toChar()
-        val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
+        val body = packet.drop(17 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
 
-        val prototype = AprsPacket.Unknown(
-            dataTypeIdentifier = dataType,
+        val route = PacketRoute(
             source = source,
             destination = destination,
             digipeaters = digipeaters,
-            body = body
         )
 
         infoParsers
-            .filter { parser ->
-                parser.dataTypeFilter?.let { dataType in it } ?: true
-            }
             .forEach { parser ->
                 try {
-                    return parser.parse(prototype)
+                    return parser.parse(route, body)
                 } catch (error: Throwable) {
                     logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
                 }
             }
         logger.warn("No parser was able to parse packet.")
-        return prototype
+        return AprsPacket.Unknown(
+            route = route,
+            body = body
+        )
     }
 
     override fun toString(packet: AprsPacket): String {
-        val route = arrayOf(packet.destination, *packet.digipeaters.toTypedArray()).joinToString(",")
+        val route = arrayOf(packet.route.destination, *packet.route.digipeaters.toTypedArray()).joinToString(",")
         encoders.forEach { encoder ->
             try {
                 val body = encoder.generate(packet)
-                return "${packet.source}>$route:${packet.dataTypeIdentifier}$body"
+                return "${packet.route.source}>$route:$body"
             } catch (pass: UnhandledEncodingException) {
                 logger.trace { "Encoding is unhandled by <${encoder::class.simpleName}>" }
             } catch (error: Throwable) {

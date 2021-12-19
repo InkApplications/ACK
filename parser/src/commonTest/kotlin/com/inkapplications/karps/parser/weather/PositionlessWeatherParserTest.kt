@@ -21,9 +21,9 @@ class PositionlessWeatherParserTest {
     
     @Test
     fun parse() {
-        val given = "10090556c220s004g005t077r001p002P003h50b09900wRSW"
+        val given = "_10090556c220s004g005t077r001p002P003h50b09900wRSW"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
         val expectedTime = Clock.System.now()
             .withUtcValues(
                 month = Month.OCTOBER,
@@ -50,9 +50,9 @@ class PositionlessWeatherParserTest {
 
     @Test
     fun empty() {
-        val given = "10090556c...s   g...t...P012Jim"
+        val given = "_10090556c...s   g...t...P012Jim"
 
-        val result = parser.parse(TestData.prototype.copy(body = given))
+        val result = parser.parse(TestData.route, given)
         val expectedTime = Clock.System.now()
             .withUtcValues(
                 month = Month.OCTOBER,
@@ -79,8 +79,8 @@ class PositionlessWeatherParserTest {
 
     @Test
     fun nonWeather() {
-        val given = "Hello World"
+        val given = ">Hello World"
 
-        assertFails { parser.parse(TestData.prototype.copy(body = given)) }
+        assertFails { parser.parse(TestData.route, given) }
     }
 }

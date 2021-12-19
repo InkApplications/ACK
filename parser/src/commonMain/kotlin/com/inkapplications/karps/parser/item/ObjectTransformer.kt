@@ -3,9 +3,9 @@ package com.inkapplications.karps.parser.item
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketTransformer
 import com.inkapplications.karps.parser.chunk.common.CharChunker
+import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.common.SpanChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
-import com.inkapplications.karps.parser.chunk.parse
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.extension.DataExtensionChunker
@@ -18,6 +18,7 @@ import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.unhandled
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 import com.inkapplications.karps.structures.ReportState
 
 private const val NAME_LENGTH = 9
@@ -25,7 +26,8 @@ private const val NAME_LENGTH = 9
 internal class ObjectTransformer(
     private val timestamps: TimestampModule,
 ): PacketTransformer {
-    override val dataTypeFilter: CharArray = charArrayOf(';')
+    private val dataTypeCharacter = ';'
+    private val dataTypeChunker = ControlCharacterChunker(dataTypeCharacter)
 
     private val nameParser = SpanChunker(NAME_LENGTH).mapParsed {
         it.trim()
@@ -42,8 +44,9 @@ internal class ObjectTransformer(
 
     private val timestampParser = timestamps.timestampChunker
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket.ObjectReport {
-        val name = nameParser.parse(packet)
+    override fun parse(route: PacketRoute, body: String): AprsPacket.ObjectReport {
+        val dataTypeIdentifier = dataTypeChunker.popChunk(body)
+        val name = nameParser.parseAfter(dataTypeIdentifier)
         val state = stateParser.parseAfter(name)
         val timestamp = timestampParser.parseAfter(state)
         val position = MixedPositionChunker.parseAfter(timestamp)
@@ -53,10 +56,7 @@ internal class ObjectTransformer(
         } else null
 
         return AprsPacket.ObjectReport(
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
+            route = route,
             timestamp = timestamp.result,
             name = name.result,
             state = state.result,
@@ -87,7 +87,7 @@ internal class ObjectTransformer(
                 directionReport = packet.directionReport
             )
             val timestamp = packet.timestamp?.let { timestamps.dhmzCodec.encode(it) }.orEmpty()
-            "${packet.name.padEnd(NAME_LENGTH, ' ')}${packet.state.symbol}$timestamp$encodedLocation"
+            "$dataTypeCharacter${packet.name.padEnd(NAME_LENGTH, ' ')}${packet.state.symbol}$timestamp$encodedLocation"
         }
         else -> unhandled()
     }

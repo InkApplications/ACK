@@ -2,7 +2,7 @@ package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.structures.Address
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -17,11 +17,9 @@ internal object TestData {
         }
     )
 
-    val prototype = AprsPacket.Unknown(
-        dataTypeIdentifier = '=',
+    val route = PacketRoute(
         source = Address("KE0YOG"),
         destination = Address("KE0YOG"),
         digipeaters = emptyList(),
-        body = ""
     )
 }

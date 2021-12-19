@@ -3,9 +3,9 @@ package com.inkapplications.karps.parser.item
 import com.inkapplications.karps.parser.PacketFormatException
 import com.inkapplications.karps.parser.PacketTransformer
 import com.inkapplications.karps.parser.chunk.common.CharChunker
+import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.common.SpanUntilChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
-import com.inkapplications.karps.parser.chunk.parse
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.extension.DataExtensionChunker
@@ -17,11 +17,12 @@ import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.unhandled
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 import com.inkapplications.karps.structures.ReportState
 
 internal class ItemTransformer: PacketTransformer {
-    override val dataTypeFilter = charArrayOf(')')
-
+    private val dataTypeCharacter = ')'
+    private val dataTypeCunker = ControlCharacterChunker(dataTypeCharacter)
     private val nameParser = SpanUntilChunker(
         stopChars = charArrayOf('!', '_'),
         minLength = 3,
@@ -32,8 +33,9 @@ internal class ItemTransformer: PacketTransformer {
         ReportState.values().firstOrNull { it.symbol == char } ?: throw PacketFormatException("Unexpected State Identifier: <$char>")
     }
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket.ItemReport {
-        val name = nameParser.parse(packet)
+    override fun parse(route: PacketRoute, body: String): AprsPacket.ItemReport {
+        val dataTypeIdentifier = dataTypeCunker.popChunk(body)
+        val name = nameParser.parseAfter(dataTypeIdentifier)
         val state = stateParser.parseAfter(name)
         val position = MixedPositionChunker.parseAfter(state)
         val compressedExtension = position.result.compressedExtension
@@ -42,10 +44,7 @@ internal class ItemTransformer: PacketTransformer {
         } else null
 
         return AprsPacket.ItemReport(
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
+            route = route,
             name = name.result,
             state = state.result,
             coordinates = position.result.coordinates,
@@ -74,7 +73,7 @@ internal class ItemTransformer: PacketTransformer {
                 signalInfo = packet.signalInfo,
                 directionReport = packet.directionReport
             )
-            "${packet.name}${packet.state.symbol}${encodedLocation}${packet.comment}"
+            "$dataTypeCharacter${packet.name}${packet.state.symbol}${encodedLocation}${packet.comment}"
         }
         else -> unhandled()
     }

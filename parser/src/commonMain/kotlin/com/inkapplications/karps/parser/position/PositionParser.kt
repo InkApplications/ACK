@@ -2,35 +2,38 @@ package com.inkapplications.karps.parser.position
 
 import com.inkapplications.karps.parser.PacketTypeParser
 import com.inkapplications.karps.parser.altitude.AltitudeChunker
+import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.parseAfter
-import com.inkapplications.karps.parser.chunk.parseOptional
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.extension.DataExtensionChunker
 import com.inkapplications.karps.parser.extension.DataExtensions
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketRoute
 
 internal class PositionParser(
     timestampModule: TimestampModule,
 ): PacketTypeParser {
-    override val dataTypeFilter = charArrayOf('!', '/', '@', '=')
+    private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')
     private val timestampParser = timestampModule.timestampChunker
 
-    override fun parse(packet: AprsPacket.Unknown): AprsPacket.Position {
-        val timestamp = timestampParser.parseOptional(packet)
+    override fun parse(route: PacketRoute, body: String): AprsPacket.Position {
+        val dataTypeIdentifier = dataTypeChunker.popChunk(body)
+        val timestamp = timestampParser.parseOptionalAfter(dataTypeIdentifier)
         val position = MixedPositionChunker.parseAfter(timestamp)
         val compressedExtension = position.result.compressedExtension
         val plainExtension = if (compressedExtension == null) {
             DataExtensionChunker.parseOptionalAfter(position)
         } else null
         val altitudeComment = AltitudeChunker.parseOptionalAfter(plainExtension ?: position)
+        val supportsMessaging = when (dataTypeIdentifier.result) {
+            "=", "@" -> true
+            else -> false
+        }
 
         return AprsPacket.Position(
-            dataTypeIdentifier = packet.dataTypeIdentifier,
-            source = packet.source,
-            destination = packet.destination,
-            digipeaters = packet.digipeaters,
+            route = route,
             timestamp = timestamp.result,
             coordinates = position.result.coordinates,
             symbol = position.result.symbol,
@@ -43,7 +46,8 @@ internal class PositionParser(
                 ?: plainExtension?.result?.valueFor(DataExtensions.RangeExtra::class),
             transmitterInfo = plainExtension?.result?.valueFor(DataExtensions.TransmitterInfoExtra::class),
             signalInfo = plainExtension?.result?.valueFor(DataExtensions.OmniDfSignalExtra::class),
-            directionReportExtra = plainExtension?.result?.valueFor(DataExtensions.DirectionReportExtra::class)
+            directionReportExtra = plainExtension?.result?.valueFor(DataExtensions.DirectionReportExtra::class),
+            supportsMessaging = supportsMessaging,
         )
     }
 }
