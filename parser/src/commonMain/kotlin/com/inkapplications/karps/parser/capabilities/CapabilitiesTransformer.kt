@@ -6,6 +6,7 @@ import com.inkapplications.karps.parser.chunk.common.CsvChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.capabilityOf
 
@@ -31,7 +32,7 @@ class CapabilitiesTransformer: PacketTransformer {
         )
     }
 
-    override fun generate(packet: PacketData): String {
+    override fun generate(packet: PacketData, config: EncodingConfig): String {
         if (packet !is PacketData.CapabilityReport) unhandled()
 
         val capabilities = packet.capabilityData.joinToString(",") { it.toString() }

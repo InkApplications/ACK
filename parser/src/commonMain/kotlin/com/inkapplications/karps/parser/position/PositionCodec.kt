@@ -16,6 +16,7 @@ import kotlin.math.roundToInt
 
 object PositionCodec {
     fun encodeBody(
+        config: EncodingConfig,
         coordinates: GeoCoordinates,
         symbol: Symbol,
         altitude: Length? = null,
@@ -25,8 +26,19 @@ object PositionCodec {
         signalInfo: SignalInfo? = null,
         directionReport: DirectionReport? = null,
     ): String {
+        val plainRequired = directionReport != null || signalInfo != null || transmitterInfo != null
+        val compressedRequired = altitude != null
         return when {
-            directionReport != null || signalInfo != null || transmitterInfo != null -> encodePlain(
+            config.compression == EncodingPreference.Required && plainRequired -> throw IllegalArgumentException(
+                "Position Information Contains non-compressible data."
+            )
+            config.compression == EncodingPreference.Barred && compressedRequired -> throw IllegalArgumentException(
+                "Position Information Contains information that must be compressed"
+            )
+            plainRequired && compressedRequired -> throw IllegalStateException(
+                "Cannot encode packet without data loss."
+            )
+            plainRequired || (!compressedRequired && config.compression in arrayOf(EncodingPreference.Disfavored, EncodingPreference.Barred)) -> encodePlain(
                 coordinates = coordinates,
                 symbol = symbol,
                 directionReport = directionReport,

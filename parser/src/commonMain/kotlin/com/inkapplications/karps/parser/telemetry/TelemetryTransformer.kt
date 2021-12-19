@@ -8,6 +8,7 @@ import com.inkapplications.karps.parser.chunk.mapParsed
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.TelemetryValues
 import kotlin.math.roundToInt
@@ -61,7 +62,7 @@ class TelemetryTransformer: PacketTransformer {
         )
     }
 
-    override fun generate(packet: PacketData): String {
+    override fun generate(packet: PacketData, config: EncodingConfig): String {
         if (packet !is PacketData.TelemetryReport) unhandled()
         val sequence = packet.sequenceId.fixedLength(3)
         val useFloat = packet.data.analogValues.all { it < 10 }

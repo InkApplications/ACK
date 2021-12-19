@@ -17,6 +17,7 @@ import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.unhandled
 import com.inkapplications.karps.parser.valueFor
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.ReportState
 
@@ -72,9 +73,10 @@ internal class ObjectTransformer(
         )
     }
 
-    override fun generate(packet: PacketData): String = when (packet) {
+    override fun generate(packet: PacketData, config: EncodingConfig): String = when (packet) {
         is PacketData.ObjectReport -> {
             val encodedLocation = PositionCodec.encodeBody(
+                config = config,
                 coordinates = packet.coordinates,
                 symbol = packet.symbol,
                 altitude = packet.altitude,

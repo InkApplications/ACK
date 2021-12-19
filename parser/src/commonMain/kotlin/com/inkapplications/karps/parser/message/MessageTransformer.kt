@@ -10,6 +10,7 @@ import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.parser.format.leftPad
 import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.toAddress
 
@@ -39,7 +40,7 @@ class MessageTransformer: PacketTransformer {
         )
     }
 
-    override fun generate(packet: PacketData): String = when (packet) {
+    override fun generate(packet: PacketData, config: EncodingConfig): String = when (packet) {
         is PacketData.Message -> {
             val addressee = packet.addressee.toString().fixedLength(9)
             val number = packet.messageNumber?.let { "{${it.leftPad(3)}" }.orEmpty()

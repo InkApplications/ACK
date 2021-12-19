@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser
 
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 
 /**
@@ -10,7 +11,7 @@ interface PacketTypeParser {
 }
 
 interface PacketGenerator {
-    fun generate(packet: PacketData): String
+    fun generate(packet: PacketData, config: EncodingConfig = EncodingConfig()): String
 }
 
 interface PacketTransformer: PacketTypeParser, PacketGenerator

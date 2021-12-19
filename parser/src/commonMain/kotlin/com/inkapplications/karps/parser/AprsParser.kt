@@ -1,6 +1,7 @@
 package com.inkapplications.karps.parser
 
 import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.EncodingConfig
 
 /**
  * Parse APRS Packets.
@@ -19,5 +20,5 @@ interface AprsParser {
     /**
      * Encode a packet into a String
      */
-    fun toString(packet: AprsPacket): String
+    fun toString(packet: AprsPacket, config: EncodingConfig = EncodingConfig()): String
 }

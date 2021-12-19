@@ -91,11 +91,11 @@ internal class KarpsParser(
         )
     }
 
-    override fun toString(packet: AprsPacket): String {
+    override fun toString(packet: AprsPacket, config: EncodingConfig): String {
         val route = arrayOf(packet.route.destination, *packet.route.digipeaters.toTypedArray()).joinToString(",")
         encoders.forEach { encoder ->
             try {
-                val body = encoder.generate(packet.data)
+                val body = encoder.generate(packet.data, config)
                 return "${packet.route.source}>$route:$body"
             } catch (pass: UnhandledEncodingException) {
                 logger.trace { "Encoding is unhandled by <${encoder::class.simpleName}>" }

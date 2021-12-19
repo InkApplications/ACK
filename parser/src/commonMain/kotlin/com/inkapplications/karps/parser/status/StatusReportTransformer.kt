@@ -5,6 +5,7 @@ import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 
 internal class StatusReportTransformer(
@@ -26,7 +27,7 @@ internal class StatusReportTransformer(
         )
     }
 
-    override fun generate(packet: PacketData): String {
+    override fun generate(packet: PacketData, config: EncodingConfig): String {
         if (packet !is PacketData.StatusReport) unhandled()
         val timestamp = packet.timestamp
             ?.let { timestampModule.dhmzCodec.encode(it) }
