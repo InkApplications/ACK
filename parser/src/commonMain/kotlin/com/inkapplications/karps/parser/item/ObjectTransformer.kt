@@ -17,8 +17,7 @@ import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.unhandled
 import com.inkapplications.karps.parser.valueFor
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.ReportState
 
 private const val NAME_LENGTH = 9
@@ -44,7 +43,7 @@ internal class ObjectTransformer(
 
     private val timestampParser = timestamps.timestampChunker
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.ObjectReport {
+    override fun parse(body: String): PacketData.ObjectReport {
         val dataTypeIdentifier = dataTypeChunker.popChunk(body)
         val name = nameParser.parseAfter(dataTypeIdentifier)
         val state = stateParser.parseAfter(name)
@@ -55,8 +54,7 @@ internal class ObjectTransformer(
             DataExtensionChunker.parseOptionalAfter(position)
         } else null
 
-        return AprsPacket.ObjectReport(
-            route = route,
+        return PacketData.ObjectReport(
             timestamp = timestamp.result,
             name = name.result,
             state = state.result,
@@ -74,8 +72,8 @@ internal class ObjectTransformer(
         )
     }
 
-    override fun generate(packet: AprsPacket): String = when (packet) {
-        is AprsPacket.ObjectReport -> {
+    override fun generate(packet: PacketData): String = when (packet) {
+        is PacketData.ObjectReport -> {
             val encodedLocation = PositionCodec.encodeBody(
                 coordinates = packet.coordinates,
                 symbol = packet.symbol,

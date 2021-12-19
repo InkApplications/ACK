@@ -1,8 +1,7 @@
 package com.inkapplications.karps.parser.capabilities
 
-import com.inkapplications.karps.parser.TestData
-import com.inkapplications.karps.structures.AprsPacket
 import com.inkapplications.karps.structures.Capability
+import com.inkapplications.karps.structures.PacketData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -12,7 +11,7 @@ class CapabilitiesParserTest {
     fun parse() {
         val given = "<IGate, MSG_CNT=123, LOC_CNT=asdf"
 
-        val result = CapabilitiesTransformer().parse(TestData.route, given)
+        val result = CapabilitiesTransformer().parse(given)
 
         assertTrue(Capability.Token("IGate") in result.capabilityData, "Expected IGate token in ${result.capabilityData}")
         assertTrue(Capability.Value("MSG_CNT", "123") in result.capabilityData, "Expected MSG_CNT in ${result.capabilityData}")
@@ -21,8 +20,7 @@ class CapabilitiesParserTest {
 
     @Test
     fun encode() {
-        val given = AprsPacket.CapabilityReport(
-            route = TestData.route,
+        val given = PacketData.CapabilityReport(
             capabilityData = setOf(
                 Capability.Token("IGate"),
                 Capability.Value("MSG_CNT", "123"),

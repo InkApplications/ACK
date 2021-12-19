@@ -1,9 +1,6 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.structures.Address
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.Digipeater
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -27,8 +24,9 @@ class KarpsParserTest {
         assertEquals(Address("N7LEM", ssid = "0"), result.route.source)
         assertEquals(1, result.route.digipeaters.size)
         assertEquals(Address("N7OO", ssid = "1"), result.route.digipeaters.first().address)
-        assertTrue(result is AprsPacket.Unknown)
-        assertEquals("=Foo", result.body)
+        val packetData = result.data
+        assertTrue(packetData is PacketData.Unknown)
+        assertEquals("=Foo", packetData.body)
     }
 
     @Test
@@ -44,13 +42,14 @@ class KarpsParserTest {
             Digipeater(Address("qAC")),
             Digipeater(Address("ON0CPS", "GS"))
         ), result.route.digipeaters)
-        assertTrue(result is AprsPacket.Unknown)
-        assertEquals(";Foo", result.body)
+        val packetData = result.data
+        assertTrue(packetData is PacketData.Unknown)
+        assertEquals(";Foo", packetData.body)
     }
 
     @Test
     fun stringEncode() {
-        val data = AprsPacket.Unknown(
+        val data = AprsPacket(
             route = PacketRoute(
                 source = Address("T3ST", "S"),
                 destination = Address("T3ST", "D"),
@@ -64,7 +63,7 @@ class KarpsParserTest {
                     )
                 ),
             ),
-            body = "=Hello World"
+            data = PacketData.Unknown("=Hello World")
         )
 
         val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketGenertator)).toString(data)

@@ -6,8 +6,7 @@ import com.inkapplications.karps.parser.chunk.mapParsed
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.timestamp.TimestampModule
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import inkapplications.spondee.measure.*
@@ -31,7 +30,7 @@ internal class PositionlessWeatherParser(
     private val tempParser = WeatherElementChunker('t', 3)
         .mapParsed { it?.let { Fahrenheit.of(it) } }
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.Weather {
+    override fun parse(body: String): PacketData.Weather {
         val dataType = dataType.popChunk(body)
         val timestamp = timestampParser.parseAfter(dataType)
         val windDirection = windDirectionParser.parseAfter(timestamp)
@@ -40,8 +39,7 @@ internal class PositionlessWeatherParser(
         val temperature = tempParser.parseAfter(windGust)
         val weatherData = WeatherChunker.parseOptionalAfter(temperature)
 
-        return AprsPacket.Weather(
-            route = route,
+        return PacketData.Weather(
             timestamp = timestamp.result,
             coordinates = null,
             symbol = null,

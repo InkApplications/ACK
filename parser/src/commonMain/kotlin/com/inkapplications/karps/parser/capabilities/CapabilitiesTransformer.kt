@@ -6,8 +6,7 @@ import com.inkapplications.karps.parser.chunk.common.CsvChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.unhandled
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.capabilityOf
 
 class CapabilitiesTransformer: PacketTransformer {
@@ -23,18 +22,17 @@ class CapabilitiesTransformer: PacketTransformer {
             }.toSet()
         }
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.CapabilityReport {
+    override fun parse(body: String): PacketData.CapabilityReport {
         val dataTypeIdentifier = dataTypeChunker.popChunk(body)
         val capabilities = capabilitiesChunker.parseAfter(dataTypeIdentifier)
 
-        return AprsPacket.CapabilityReport(
-            route = route,
+        return PacketData.CapabilityReport(
             capabilityData = capabilities.result,
         )
     }
 
-    override fun generate(packet: AprsPacket): String {
-        if (packet !is AprsPacket.CapabilityReport) unhandled()
+    override fun generate(packet: PacketData): String {
+        if (packet !is PacketData.CapabilityReport) unhandled()
 
         val capabilities = packet.capabilityData.joinToString(",") { it.toString() }
 

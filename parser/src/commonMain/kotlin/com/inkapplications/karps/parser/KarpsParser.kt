@@ -1,9 +1,6 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.structures.Address
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.Digipeater
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.*
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
@@ -33,15 +30,18 @@ internal class KarpsParser(
         infoParsers
             .forEach { parser ->
                 try {
-                    return parser.parse(packetRoute, body)
+                    return AprsPacket(
+                        route = packetRoute,
+                        data = parser.parse(body),
+                    )
                 } catch (error: Throwable) {
                     logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
                 }
             }
         logger.warn("No parser was able to parse packet.")
-        return AprsPacket.Unknown(
+        return AprsPacket(
             route = packetRoute,
-            body = body
+            data = PacketData.Unknown(body)
         )
     }
 
@@ -76,15 +76,18 @@ internal class KarpsParser(
         infoParsers
             .forEach { parser ->
                 try {
-                    return parser.parse(route, body)
+                    return AprsPacket(
+                        route = route,
+                        data = parser.parse(body),
+                    )
                 } catch (error: Throwable) {
                     logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
                 }
             }
         logger.warn("No parser was able to parse packet.")
-        return AprsPacket.Unknown(
+        return AprsPacket(
             route = route,
-            body = body
+            data = PacketData.Unknown(body)
         )
     }
 
@@ -92,7 +95,7 @@ internal class KarpsParser(
         val route = arrayOf(packet.route.destination, *packet.route.digipeaters.toTypedArray()).joinToString(",")
         encoders.forEach { encoder ->
             try {
-                val body = encoder.generate(packet)
+                val body = encoder.generate(packet.data)
                 return "${packet.route.source}>$route:$body"
             } catch (pass: UnhandledEncodingException) {
                 logger.trace { "Encoding is unhandled by <${encoder::class.simpleName}>" }

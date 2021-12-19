@@ -2,7 +2,7 @@ package com.inkapplications.karps.parser.status
 
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.timestamp.withUtcValues
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketData
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.Test
@@ -16,7 +16,7 @@ class StatusReportTransformerTest {
     fun parse() {
         val given = ">Net Control Center"
 
-        val result = transformer.parse(TestData.route, given)
+        val result = transformer.parse(given)
 
         assertNull(result.timestamp)
         assertEquals("Net Control Center", result.status)
@@ -26,7 +26,7 @@ class StatusReportTransformerTest {
     fun withTime() {
         val given = ">092345zNet Control Center"
 
-        val result = transformer.parse(TestData.route, given)
+        val result = transformer.parse(given)
 
         assertEquals(9, result.timestamp?.toLocalDateTime(TimeZone.UTC)?.dayOfMonth)
         assertEquals(23, result.timestamp?.toLocalDateTime(TimeZone.UTC)?.hour)
@@ -36,8 +36,7 @@ class StatusReportTransformerTest {
 
     @Test
     fun generate() {
-        val given = AprsPacket.StatusReport(
-            route = TestData.route,
+        val given = PacketData.StatusReport(
             timestamp = null,
             status = "Hello World"
         )
@@ -49,8 +48,7 @@ class StatusReportTransformerTest {
 
     @Test
     fun generateTimestamp() {
-        val given = AprsPacket.StatusReport(
-            route = TestData.route,
+        val given = PacketData.StatusReport(
             timestamp = TestData.now.withUtcValues(
                 dayOfMonth = 9,
                 hour = 23,

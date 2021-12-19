@@ -1,7 +1,6 @@
 package com.inkapplications.karps.parser.telemetry
 
-import com.inkapplications.karps.parser.TestData
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.TelemetryValues
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,7 +10,7 @@ class TelemetryTransformerTest {
     fun parse() {
         val given = "T#005,199,000,255,073,123,01101001Hello World"
 
-        val result = TelemetryTransformer().parse(TestData.route, given)
+        val result = TelemetryTransformer().parse(given)
 
         assertEquals("005", result.sequenceId)
         assertEquals(199, result.data.analog1.toInt())
@@ -27,7 +26,7 @@ class TelemetryTransformerTest {
     fun parseMic() {
         val given = "T#MIC199,000,255,073,123,01101001Hello World"
 
-        val result = TelemetryTransformer().parse(TestData.route, given)
+        val result = TelemetryTransformer().parse(given)
 
         assertEquals("MIC", result.sequenceId)
         assertEquals(199, result.data.analog1.toInt())
@@ -43,7 +42,7 @@ class TelemetryTransformerTest {
     fun parseFloats() {
         val given = "T#005,1.2,2.3,3.4,4.5,5.6,01101001Hello World"
 
-        val result = TelemetryTransformer().parse(TestData.route, given)
+        val result = TelemetryTransformer().parse(given)
 
         assertEquals("005", result.sequenceId)
         assertEquals(1.2f, result.data.analog1)
@@ -57,8 +56,7 @@ class TelemetryTransformerTest {
 
     @Test
     fun generate() {
-        val given = AprsPacket.TelemetryReport(
-            route = TestData.route,
+        val given = PacketData.TelemetryReport(
             sequenceId = "666",
             data = TelemetryValues(1.2f, 2.3f, 3.4f, 4.5f, 5.6f, 105u),
             comment = "Hello World",
@@ -71,8 +69,7 @@ class TelemetryTransformerTest {
 
     @Test
     fun generateMic() {
-        val given = AprsPacket.TelemetryReport(
-            route = TestData.route,
+        val given = PacketData.TelemetryReport(
             sequenceId = "MIC",
             data = TelemetryValues(1.2f, 2.3f, 3.4f, 4.5f, 5.6f, 105u),
             comment = "Hello World",
@@ -85,8 +82,7 @@ class TelemetryTransformerTest {
 
     @Test
     fun generateInts() {
-        val given = AprsPacket.TelemetryReport(
-            route = TestData.route,
+        val given = PacketData.TelemetryReport(
             sequenceId = "000",
             data = TelemetryValues(123f, 456f, 789f, 0f, 246.8f, 0u),
             comment = "",

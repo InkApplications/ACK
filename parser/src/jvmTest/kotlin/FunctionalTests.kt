@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketData
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okio.Okio
@@ -27,7 +27,7 @@ class FunctionalTests {
         val newResults = CoverageResults(
             total = resultsList.size,
             failed = resultsList.count { it.isFailure },
-            unknown = resultsList.count { it.getOrNull() is AprsPacket.Unknown }
+            unknown = resultsList.count { it.getOrNull()?.data is PacketData.Unknown }
         )
 
         val recordFile = File("coverage.json").also { it.createNewFile() }

@@ -1,17 +1,16 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 
 /**
  * Parse an unknown packet into a known type based on the information field.
  */
 interface PacketTypeParser {
-    fun parse(route: PacketRoute, body: String): AprsPacket
+    fun parse(body: String): PacketData
 }
 
 interface PacketGenerator {
-    fun generate(packet: AprsPacket): String
+    fun generate(packet: PacketData): String
 }
 
 interface PacketTransformer: PacketTypeParser, PacketGenerator

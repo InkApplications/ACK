@@ -12,8 +12,7 @@ import com.inkapplications.karps.parser.position.PositionReport
 import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.valueFor
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import inkapplications.spondee.measure.*
@@ -31,7 +30,7 @@ internal class WeatherParser(
         timestampModule.hmsChunker,
     )
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.Weather {
+    override fun parse(body: String): PacketData.Weather {
         val dataTypeIdentifier = dataTypeChunker.popChunk(body)
         val timestamp = timestampParser.parseOptionalAfter(dataTypeIdentifier)
         val position = MixedPositionChunker.parseAfter(timestamp)
@@ -44,8 +43,7 @@ internal class WeatherParser(
         }
         val weatherData = WeatherChunker.parseAfter(plainWindExtension ?: position)
 
-        return AprsPacket.Weather(
-            route = route,
+        return PacketData.Weather(
             timestamp = timestamp.result,
             coordinates = position.result.coordinates,
             symbol = position.result.symbol,

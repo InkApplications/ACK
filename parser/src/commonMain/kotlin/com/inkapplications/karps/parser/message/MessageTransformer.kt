@@ -10,8 +10,7 @@ import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.parser.format.leftPad
 import com.inkapplications.karps.parser.unhandled
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.toAddress
 
 class MessageTransformer: PacketTransformer {
@@ -26,23 +25,22 @@ class MessageTransformer: PacketTransformer {
         maxLength = 67
     )
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.Message {
+    override fun parse(body: String): PacketData.Message {
         val dataTypeIdentifier = dataTypeChunker.popChunk(body)
         val addressee = addresseeParser.parseAfter(dataTypeIdentifier)
         val startControl = startControl.parseAfter(addressee)
         val message = messageParser.parseAfter(startControl)
         val endControl = endControl.parseOptionalAfter(message)
 
-        return AprsPacket.Message(
-            route = route,
+        return PacketData.Message(
             addressee = addressee.result,
             message = message.result,
             messageNumber = runCatching { endControl.remainingData.toInt() }.getOrNull()
         )
     }
 
-    override fun generate(packet: AprsPacket): String = when (packet) {
-        is AprsPacket.Message -> {
+    override fun generate(packet: PacketData): String = when (packet) {
+        is PacketData.Message -> {
             val addressee = packet.addressee.toString().fixedLength(9)
             val number = packet.messageNumber?.let { "{${it.leftPad(3)}" }.orEmpty()
 

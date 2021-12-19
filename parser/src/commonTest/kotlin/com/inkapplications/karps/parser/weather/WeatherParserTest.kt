@@ -35,7 +35,7 @@ class WeatherParserTest {
                 nanosecond = 0
             )
 
-        val result = parser.parse(TestData.route, given)
+        val result = parser.parse(given)
 
         assertEquals(expectedTime, result.timestamp)
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
@@ -57,7 +57,7 @@ class WeatherParserTest {
     fun plainMinimum() {
         val given = "!4903.50N/07201.75W_220/004g...t...r...p...P...h..b.....wRSW"
 
-        val result = parser.parse(TestData.route, given)
+        val result = parser.parse(given)
 
         assertNull(result.timestamp)
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
@@ -79,7 +79,7 @@ class WeatherParserTest {
     fun plainLocation() {
         val given = "!4903.50N/07201.75W#225/000Hello World!"
 
-        assertFails { parser.parse(TestData.route, given) }
+        assertFails { parser.parse(given) }
     }
 
     @Test
@@ -95,7 +95,7 @@ class WeatherParserTest {
                 nanosecond = 0
             )
 
-        val result = parser.parse(TestData.route, given)
+        val result = parser.parse(given)
 
         assertEquals(expectedTime, result.timestamp)
         assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
@@ -117,7 +117,7 @@ class WeatherParserTest {
     fun compressedEmpty() {
         val given = "//5L!!<*e7_ sTg...t...r...p...P...h..b     wRSW"
 
-        val result = parser.parse(TestData.route, given)
+        val result = parser.parse(given)
 
         assertNull(result.timestamp)
         assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
@@ -139,6 +139,6 @@ class WeatherParserTest {
     fun compressedLocation() {
         val given = "//5L!!<*e7_ sTHello World!"
 
-        assertFails { parser.parse(TestData.route, given) }
+        assertFails { parser.parse(given) }
     }
 }

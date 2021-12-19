@@ -1,8 +1,7 @@
 package com.inkapplications.karps.parser.item
 
-import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.ReportState
 import com.inkapplications.karps.structures.TransmitterInfo
 import com.inkapplications.karps.structures.symbolOf
@@ -22,7 +21,7 @@ class ItemTransformerTest {
     fun liveItem() {
         val given = ")AID #2!4903.50N/07201.75WA"
 
-        val result = ItemTransformer().parse(TestData.route, given)
+        val result = ItemTransformer().parse(given)
 
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Live, result.state)
@@ -35,7 +34,7 @@ class ItemTransformerTest {
     fun killedItem() {
         val given = ")AID #2_4903.50N/07201.75WA"
 
-        val result = ItemTransformer().parse(TestData.route, given)
+        val result = ItemTransformer().parse(given)
 
         assertEquals("AID #2", result.name)
         assertEquals(ReportState.Kill, result.state)
@@ -46,13 +45,12 @@ class ItemTransformerTest {
 
     @Test
     fun nonItem() {
-        assertFails { ItemTransformer().parse(TestData.route, "!3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/") }
+        assertFails { ItemTransformer().parse("!3746.72N/08402.19W\$112/002/A=000761 https://aprsdroid.org/") }
     }
 
     @Test
     fun liveItemGenerate() {
-        val given = AprsPacket.ItemReport(
-            route = TestData.route,
+        val given = PacketData.ItemReport(
             name = "AID #2",
             state = ReportState.Live,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),
@@ -78,8 +76,7 @@ class ItemTransformerTest {
 
     @Test
     fun killedItemGenerate() {
-        val given = AprsPacket.ItemReport(
-            route = TestData.route,
+        val given = PacketData.ItemReport(
             name = "AID #2",
             state = ReportState.Kill,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),

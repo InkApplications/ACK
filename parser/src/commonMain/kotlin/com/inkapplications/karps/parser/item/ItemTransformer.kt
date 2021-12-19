@@ -16,8 +16,7 @@ import com.inkapplications.karps.parser.position.PositionCodec
 import com.inkapplications.karps.parser.position.compressedExtension
 import com.inkapplications.karps.parser.unhandled
 import com.inkapplications.karps.parser.valueFor
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.ReportState
 
 internal class ItemTransformer: PacketTransformer {
@@ -33,7 +32,7 @@ internal class ItemTransformer: PacketTransformer {
         ReportState.values().firstOrNull { it.symbol == char } ?: throw PacketFormatException("Unexpected State Identifier: <$char>")
     }
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.ItemReport {
+    override fun parse(body: String): PacketData.ItemReport {
         val dataTypeIdentifier = dataTypeCunker.popChunk(body)
         val name = nameParser.parseAfter(dataTypeIdentifier)
         val state = stateParser.parseAfter(name)
@@ -43,8 +42,7 @@ internal class ItemTransformer: PacketTransformer {
             DataExtensionChunker.parseOptionalAfter(position)
         } else null
 
-        return AprsPacket.ItemReport(
-            route = route,
+        return PacketData.ItemReport(
             name = name.result,
             state = state.result,
             coordinates = position.result.coordinates,
@@ -61,8 +59,8 @@ internal class ItemTransformer: PacketTransformer {
         )
     }
 
-    override fun generate(packet: AprsPacket): String = when (packet) {
-        is AprsPacket.ItemReport -> {
+    override fun generate(packet: PacketData): String = when (packet) {
+        is PacketData.ItemReport -> {
             val encodedLocation = PositionCodec.encodeBody(
                 coordinates = packet.coordinates,
                 symbol = packet.symbol,

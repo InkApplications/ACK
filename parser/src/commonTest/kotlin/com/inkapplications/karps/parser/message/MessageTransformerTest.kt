@@ -1,8 +1,7 @@
 package com.inkapplications.karps.parser.message
 
-import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.structures.Address
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -13,7 +12,7 @@ class MessageTransformerTest {
     fun parseMessage() {
         val given = ":WU2Z     :Testing"
 
-        val result = MessageTransformer().parse(TestData.route, given)
+        val result = MessageTransformer().parse(given)
 
         assertEquals("WU2Z", result.addressee.callsign)
         assertEquals("0", result.addressee.ssid)
@@ -25,7 +24,7 @@ class MessageTransformerTest {
     fun parseMessageWithNumber() {
         val given = ":WU2Z-2   :Testing{003"
 
-        val result = MessageTransformer().parse(TestData.route, given)
+        val result = MessageTransformer().parse(given)
 
         assertEquals("WU2Z", result.addressee.callsign)
         assertEquals("2", result.addressee.ssid)
@@ -37,13 +36,12 @@ class MessageTransformerTest {
     fun parseNonMessage() {
         val given = ":LEA_092345z4903.50N/07201.75W>088/036"
 
-        assertFails { MessageTransformer().parse(TestData.route, given) }
+        assertFails { MessageTransformer().parse(given) }
     }
 
     @Test
     fun generate() {
-        val given = AprsPacket.Message(
-            route = TestData.route,
+        val given = PacketData.Message(
             addressee = Address("KE0YOG", "3"),
             message = "Hello World",
             messageNumber = 3,
@@ -56,8 +54,7 @@ class MessageTransformerTest {
 
     @Test
     fun generateNoNumber() {
-        val given = AprsPacket.Message(
-            route = TestData.route,
+        val given = PacketData.Message(
             addressee = Address("KE0YOG", "3"),
             message = "Hello World",
             messageNumber = null,

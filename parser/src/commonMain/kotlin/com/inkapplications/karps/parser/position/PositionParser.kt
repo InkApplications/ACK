@@ -9,8 +9,7 @@ import com.inkapplications.karps.parser.extension.DataExtensionChunker
 import com.inkapplications.karps.parser.extension.DataExtensions
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.valueFor
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 
 internal class PositionParser(
     timestampModule: TimestampModule,
@@ -18,7 +17,7 @@ internal class PositionParser(
     private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')
     private val timestampParser = timestampModule.timestampChunker
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.Position {
+    override fun parse(body: String): PacketData.Position {
         val dataTypeIdentifier = dataTypeChunker.popChunk(body)
         val timestamp = timestampParser.parseOptionalAfter(dataTypeIdentifier)
         val position = MixedPositionChunker.parseAfter(timestamp)
@@ -32,8 +31,7 @@ internal class PositionParser(
             else -> false
         }
 
-        return AprsPacket.Position(
-            route = route,
+        return PacketData.Position(
             timestamp = timestamp.result,
             coordinates = position.result.coordinates,
             symbol = position.result.symbol,

@@ -5,8 +5,7 @@ import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.unhandled
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.PacketRoute
+import com.inkapplications.karps.structures.PacketData
 
 internal class StatusReportTransformer(
     private val timestampModule: TimestampModule,
@@ -16,20 +15,19 @@ internal class StatusReportTransformer(
 
     private val timestampChunker = timestampModule.dhmzChunker
 
-    override fun parse(route: PacketRoute, body: String): AprsPacket.StatusReport {
+    override fun parse(body: String): PacketData.StatusReport {
         val dataTypeIdentifier = dataTypeChunker.popChunk(body)
         val time = timestampChunker.parseOptionalAfter(dataTypeIdentifier)
         val status = time.remainingData
 
-        return AprsPacket.StatusReport(
-            route = route,
+        return PacketData.StatusReport(
             timestamp = time.result,
             status = status,
         )
     }
 
-    override fun generate(packet: AprsPacket): String {
-        if (packet !is AprsPacket.StatusReport) unhandled()
+    override fun generate(packet: PacketData): String {
+        if (packet !is PacketData.StatusReport) unhandled()
         val timestamp = packet.timestamp
             ?.let { timestampModule.dhmzCodec.encode(it) }
             .orEmpty()
