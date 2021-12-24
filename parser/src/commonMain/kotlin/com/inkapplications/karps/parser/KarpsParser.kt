@@ -27,22 +27,18 @@ internal class KarpsParser(
             digipeaters = digipeaters,
         )
 
-        infoParsers
-            .forEach { parser ->
-                try {
-                    return AprsPacket(
-                        route = packetRoute,
-                        data = parser.parse(body),
-                    )
-                } catch (error: Throwable) {
-                    logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
-                }
+        infoParsers.forEach { parser ->
+            try {
+                return AprsPacket(
+                    route = packetRoute,
+                    data = parser.parse(body),
+                )
+            } catch (error: Throwable) {
+                logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
             }
-        logger.warn("No parser was able to parse packet.")
-        return AprsPacket(
-            route = packetRoute,
-            data = PacketData.Unknown(body)
-        )
+        }
+
+        throw IllegalArgumentException("No parser was able to parse packet.")
     }
 
     override fun fromAx25(packet: ByteArray): AprsPacket {
@@ -73,22 +69,18 @@ internal class KarpsParser(
             digipeaters = digipeaters,
         )
 
-        infoParsers
-            .forEach { parser ->
-                try {
-                    return AprsPacket(
-                        route = route,
-                        data = parser.parse(body),
-                    )
-                } catch (error: Throwable) {
-                    logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
-                }
+        infoParsers.forEach { parser ->
+            try {
+                return AprsPacket(
+                    route = route,
+                    data = parser.parse(body),
+                )
+            } catch (error: Throwable) {
+                logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
             }
-        logger.warn("No parser was able to parse packet.")
-        return AprsPacket(
-            route = route,
-            data = PacketData.Unknown(body)
-        )
+        }
+
+        throw IllegalArgumentException("No parser was able to parse packet.")
     }
 
     override fun toString(packet: AprsPacket, config: EncodingConfig): String {

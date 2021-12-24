@@ -33,9 +33,7 @@ class ParserModule(
         )
     }
     fun defaultGenerators(): Array<PacketDataGenerator> {
-        return arrayOf(
-            UnknownPacketGenertator,
-        )
+        return arrayOf()
     }
     fun defaultTransformers(): Array<PacketDataTransformer> {
         return arrayOf(
@@ -45,6 +43,7 @@ class ParserModule(
             MessageTransformer(),
             TelemetryTransformer(),
             StatusReportTransformer(timestampModule = timestampModule),
+            UnknownPacketTransformer,
         )
     }
 

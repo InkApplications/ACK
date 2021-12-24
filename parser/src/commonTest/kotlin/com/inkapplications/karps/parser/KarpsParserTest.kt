@@ -18,7 +18,7 @@ class KarpsParserTest {
             0x46u, 0x6fu, 0x6fu
         ).toByteArray()
 
-        val result = KarpsParser(emptyArray(), emptyArray()).fromAx25(data)
+        val result = KarpsParser(arrayOf(UnknownPacketTransformer), emptyArray()).fromAx25(data)
 
         assertEquals(Address("NJ7P", ssid = "0"), result.route.destination)
         assertEquals(Address("N7LEM", ssid = "0"), result.route.source)
@@ -33,7 +33,7 @@ class KarpsParserTest {
     fun stringParse() {
         val data = "ON0CPS-S>APDG01,TCPIP*,qAC,ON0CPS-GS:;Foo"
 
-        val result = KarpsParser(emptyArray(), emptyArray()).fromString(data)
+        val result = KarpsParser(arrayOf(UnknownPacketTransformer), emptyArray()).fromString(data)
 
         assertEquals(Address("ON0CPS", "S"), result.route.source)
         assertEquals(Address("APDG01"), result.route.destination)
@@ -66,7 +66,7 @@ class KarpsParserTest {
             data = PacketData.Unknown("=Hello World")
         )
 
-        val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketGenertator)).toString(data)
+        val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketTransformer)).toString(data)
 
         assertEquals("T3ST-S>T3ST-D,T3ST-A*,T3ST-B:=Hello World", result)
     }
