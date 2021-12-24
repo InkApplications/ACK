@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.position
 
-import com.inkapplications.karps.parser.PacketTypeParser
+import com.inkapplications.karps.parser.PacketDataParser
 import com.inkapplications.karps.parser.altitude.AltitudeChunker
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.parseAfter
@@ -13,7 +13,7 @@ import com.inkapplications.karps.structures.PacketData
 
 internal class PositionParser(
     timestampModule: TimestampModule,
-): PacketTypeParser {
+): PacketDataParser {
     private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')
     private val timestampParser = timestampModule.timestampChunker
 

@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.message
 
-import com.inkapplications.karps.parser.PacketTransformer
+import com.inkapplications.karps.parser.PacketDataTransformer
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.common.SpanChunker
 import com.inkapplications.karps.parser.chunk.common.SpanUntilChunker
@@ -9,12 +9,12 @@ import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.parser.format.leftPad
-import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.parser.requireType
 import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.toAddress
 
-class MessageTransformer: PacketTransformer {
+class MessageTransformer: PacketDataTransformer {
     private val dataTypeCharacter = ':'
     private val dataTypeChunker = ControlCharacterChunker(dataTypeCharacter)
     private val addresseeParser = SpanChunker(9)
@@ -40,13 +40,11 @@ class MessageTransformer: PacketTransformer {
         )
     }
 
-    override fun generate(packet: PacketData, config: EncodingConfig): String = when (packet) {
-        is PacketData.Message -> {
-            val addressee = packet.addressee.toString().fixedLength(9)
-            val number = packet.messageNumber?.let { "{${it.leftPad(3)}" }.orEmpty()
+    override fun generate(packet: PacketData, config: EncodingConfig): String {
+        packet.requireType<PacketData.Message>()
+        val addressee = packet.addressee.toString().fixedLength(9)
+        val number = packet.messageNumber?.let { "{${it.leftPad(3)}" }.orEmpty()
 
-            "$dataTypeCharacter${addressee}:${packet.message}$number"
-        }
-        else -> unhandled()
+        return "$dataTypeCharacter${addressee}:${packet.message}$number"
     }
 }

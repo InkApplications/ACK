@@ -25,19 +25,19 @@ class ParserModule(
         timezone = timezone,
     )
 
-    fun defaultParsers(): Array<PacketTypeParser> {
+    fun defaultParsers(): Array<PacketDataParser> {
         return arrayOf(
             WeatherParser(timestampModule = timestampModule),
             PositionlessWeatherParser(timestampModule = timestampModule),
             PositionParser(timestampModule = timestampModule),
         )
     }
-    fun defaultGenerators(): Array<PacketGenerator> {
+    fun defaultGenerators(): Array<PacketDataGenerator> {
         return arrayOf(
             UnknownPacketGenertator,
         )
     }
-    fun defaultTransformers(): Array<PacketTransformer> {
+    fun defaultTransformers(): Array<PacketDataTransformer> {
         return arrayOf(
             CapabilitiesTransformer(),
             ObjectTransformer(timestampModule),
@@ -49,8 +49,8 @@ class ParserModule(
     }
 
     fun parser(
-        infoParsers: Array<PacketTypeParser>,
-        encoders: Array<PacketGenerator>,
+        infoParsers: Array<PacketDataParser>,
+        encoders: Array<PacketDataGenerator>,
         logger: KimchiLogger = EmptyLogger
     ): AprsParser = KarpsParser(infoParsers, encoders = encoders, logger = logger)
 

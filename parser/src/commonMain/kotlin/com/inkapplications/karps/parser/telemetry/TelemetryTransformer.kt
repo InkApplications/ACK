@@ -1,19 +1,19 @@
 package com.inkapplications.karps.parser.telemetry
 
-import com.inkapplications.karps.parser.PacketTransformer
+import com.inkapplications.karps.parser.PacketDataTransformer
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.common.SpanChunker
 import com.inkapplications.karps.parser.chunk.common.SpanUntilChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.format.fixedLength
-import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.parser.requireType
 import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.TelemetryValues
 import kotlin.math.roundToInt
 
-class TelemetryTransformer: PacketTransformer {
+class TelemetryTransformer: PacketDataTransformer {
     private val dataTypeCharacter = 'T'
     private val dataTypeChunker = ControlCharacterChunker(dataTypeCharacter)
     private val sequenceStartChar = ControlCharacterChunker('#')
@@ -63,7 +63,7 @@ class TelemetryTransformer: PacketTransformer {
     }
 
     override fun generate(packet: PacketData, config: EncodingConfig): String {
-        if (packet !is PacketData.TelemetryReport) unhandled()
+        packet.requireType<PacketData.TelemetryReport>()
         val sequence = packet.sequenceId.fixedLength(3)
         val useFloat = packet.data.analogValues.all { it < 10 }
         val analogStrings = packet.data.analogValues.joinToString(",") {

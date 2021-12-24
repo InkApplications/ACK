@@ -5,8 +5,8 @@ import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
 internal class KarpsParser(
-    private val infoParsers: Array<PacketTypeParser>,
-    private val encoders: Array<PacketGenerator>,
+    private val infoParsers: Array<PacketDataParser>,
+    private val encoders: Array<PacketDataGenerator>,
     private val logger: KimchiLogger = EmptyLogger,
 ): AprsParser {
     override fun fromString(packet: String): AprsPacket {

@@ -1,6 +1,6 @@
 package com.inkapplications.karps.parser.weather
 
-import com.inkapplications.karps.parser.PacketTypeParser
+import com.inkapplications.karps.parser.PacketDataParser
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.mapParsed
 import com.inkapplications.karps.parser.chunk.parseAfter
@@ -17,7 +17,7 @@ import inkapplications.spondee.structure.of
 
 internal class PositionlessWeatherParser(
     timestampModule: TimestampModule,
-): PacketTypeParser {
+): PacketDataParser {
     private val dataType = ControlCharacterChunker('_')
     private val timestampParser = timestampModule.mdhmChunker
 

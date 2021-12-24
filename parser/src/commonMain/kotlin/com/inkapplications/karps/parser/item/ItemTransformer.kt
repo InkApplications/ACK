@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.item
 
 import com.inkapplications.karps.parser.PacketFormatException
-import com.inkapplications.karps.parser.PacketTransformer
+import com.inkapplications.karps.parser.PacketDataTransformer
 import com.inkapplications.karps.parser.chunk.common.CharChunker
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.common.SpanUntilChunker
@@ -14,13 +14,13 @@ import com.inkapplications.karps.parser.position.CompressedPositionExtensions
 import com.inkapplications.karps.parser.position.MixedPositionChunker
 import com.inkapplications.karps.parser.position.PositionCodec
 import com.inkapplications.karps.parser.position.compressedExtension
-import com.inkapplications.karps.parser.unhandled
+import com.inkapplications.karps.parser.requireType
 import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.ReportState
 
-internal class ItemTransformer: PacketTransformer {
+internal class ItemTransformer: PacketDataTransformer {
     private val dataTypeCharacter = ')'
     private val dataTypeCunker = ControlCharacterChunker(dataTypeCharacter)
     private val nameParser = SpanUntilChunker(
@@ -60,22 +60,22 @@ internal class ItemTransformer: PacketTransformer {
         )
     }
 
-    override fun generate(packet: PacketData, config: EncodingConfig): String = when (packet) {
-        is PacketData.ItemReport -> {
-            val encodedLocation = PositionCodec.encodeBody(
-                config = config,
-                coordinates = packet.coordinates,
-                symbol = packet.symbol,
-                altitude = packet.altitude,
-                trajectory = packet.trajectory,
-                range = packet.range,
-                transmitterInfo = packet.transmitterInfo,
-                signalInfo = packet.signalInfo,
-                directionReport = packet.directionReport
-            )
-            "$dataTypeCharacter${packet.name}${packet.state.symbol}${encodedLocation}${packet.comment}"
-        }
-        else -> unhandled()
+    override fun generate(packet: PacketData, config: EncodingConfig): String {
+        packet.requireType<PacketData.ItemReport>()
+
+        val encodedLocation = PositionCodec.encodeBody(
+            config = config,
+            coordinates = packet.coordinates,
+            symbol = packet.symbol,
+            altitude = packet.altitude,
+            trajectory = packet.trajectory,
+            range = packet.range,
+            transmitterInfo = packet.transmitterInfo,
+            signalInfo = packet.signalInfo,
+            directionReport = packet.directionReport
+        )
+
+        return "$dataTypeCharacter${packet.name}${packet.state.symbol}${encodedLocation}${packet.comment}"
     }
 
     private val ReportState.symbol get() = when (this) {
