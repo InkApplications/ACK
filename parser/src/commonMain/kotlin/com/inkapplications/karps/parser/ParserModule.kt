@@ -29,7 +29,6 @@ class ParserModule(
         return arrayOf(
             WeatherParser(timestampModule = timestampModule),
             PositionlessWeatherParser(timestampModule = timestampModule),
-            PositionParser(timestampModule = timestampModule),
         )
     }
     fun defaultGenerators(): Array<PacketDataGenerator> {
@@ -37,6 +36,7 @@ class ParserModule(
     }
     fun defaultTransformers(): Array<PacketDataTransformer> {
         return arrayOf(
+            PositionParser(timestampModule = timestampModule),
             CapabilitiesTransformer(),
             ObjectTransformer(timestampModule),
             ItemTransformer(),

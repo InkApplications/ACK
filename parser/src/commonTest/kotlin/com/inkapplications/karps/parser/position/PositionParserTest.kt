@@ -3,13 +3,15 @@ package com.inkapplications.karps.parser.position
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
+import com.inkapplications.karps.structures.EncodingConfig
+import com.inkapplications.karps.structures.EncodingPreference
+import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.symbolOf
 import inkapplications.spondee.measure.Bels
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.measure.Miles
 import inkapplications.spondee.measure.Watts
-import inkapplications.spondee.spatial.Cardinal
-import inkapplications.spondee.spatial.toAngle
+import inkapplications.spondee.spatial.*
 import inkapplications.spondee.structure.Deci
 import inkapplications.spondee.structure.of
 import inkapplications.spondee.structure.value
@@ -187,5 +189,117 @@ class PositionParserTest {
         val given = ":Hello World"
 
         assertFails { parser.parse(given) }
+    }
+
+    @Test
+    fun generatePlainMinimum() {
+        val given = PacketData.Position(
+            coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
+            symbol = symbolOf('/', '-'),
+            comment = "Test 01234",
+            timestamp = null,
+            altitude = null,
+            trajectory = null,
+            range = null,
+            transmitterInfo = null,
+            signalInfo = null,
+            directionReportExtra = null,
+            supportsMessaging = false,
+        )
+
+        val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))
+
+        assertEquals("!4903.50N/07201.75W-Test 01234", result)
+    }
+
+    @Test
+    fun generateWithMessaging() {
+        val given = PacketData.Position(
+            coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
+            symbol = symbolOf('/', '-'),
+            comment = "Test 01234",
+            timestamp = null,
+            altitude = null,
+            trajectory = null,
+            range = null,
+            transmitterInfo = null,
+            signalInfo = null,
+            directionReportExtra = null,
+            supportsMessaging = true,
+        )
+
+        val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))
+
+        assertEquals("=4903.50N/07201.75W-Test 01234", result)
+    }
+
+    @Test
+    fun generateWithTimestamp() {
+        val t = Clock.System.now()
+            .withUtcValues(
+                dayOfMonth = 9,
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
+            )
+        val given = PacketData.Position(
+            coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
+            symbol = symbolOf('/', '-'),
+            comment = "Test 01234",
+            timestamp = Clock.System.now().withUtcValues(
+                dayOfMonth = 9,
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
+            ),
+            altitude = null,
+            trajectory = null,
+            range = null,
+            transmitterInfo = null,
+            signalInfo = null,
+            directionReportExtra = null,
+            supportsMessaging = false,
+        )
+
+        val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))
+
+        assertEquals("/092345z4903.50N/07201.75W-Test 01234", result)
+    }
+
+    @Test
+    fun generateWithMessagingAndTimestamp() {
+        val t = Clock.System.now()
+            .withUtcValues(
+                dayOfMonth = 9,
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
+            )
+        val given = PacketData.Position(
+            coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
+            symbol = symbolOf('/', '-'),
+            comment = "Test 01234",
+            timestamp = Clock.System.now().withUtcValues(
+                dayOfMonth = 9,
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
+            ),
+            altitude = null,
+            trajectory = null,
+            range = null,
+            transmitterInfo = null,
+            signalInfo = null,
+            directionReportExtra = null,
+            supportsMessaging = true,
+        )
+
+        val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))
+
+        assertEquals("@092345z4903.50N/07201.75W-Test 01234", result)
     }
 }

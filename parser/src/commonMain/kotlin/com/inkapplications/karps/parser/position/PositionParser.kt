@@ -1,19 +1,21 @@
 package com.inkapplications.karps.parser.position
 
-import com.inkapplications.karps.parser.PacketDataParser
+import com.inkapplications.karps.parser.PacketDataTransformer
 import com.inkapplications.karps.parser.altitude.AltitudeChunker
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
 import com.inkapplications.karps.parser.chunk.parseAfter
 import com.inkapplications.karps.parser.chunk.parseOptionalAfter
 import com.inkapplications.karps.parser.extension.DataExtensionChunker
 import com.inkapplications.karps.parser.extension.DataExtensions
+import com.inkapplications.karps.parser.requireType
 import com.inkapplications.karps.parser.timestamp.TimestampModule
 import com.inkapplications.karps.parser.valueFor
+import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 
 internal class PositionParser(
-    timestampModule: TimestampModule,
-): PacketDataParser {
+    private val timestampModule: TimestampModule,
+): PacketDataTransformer {
     private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')
     private val timestampParser = timestampModule.timestampChunker
 
@@ -47,5 +49,30 @@ internal class PositionParser(
             directionReportExtra = plainExtension?.result?.valueFor(DataExtensions.DirectionReportExtra::class),
             supportsMessaging = supportsMessaging,
         )
+    }
+
+    override fun generate(packet: PacketData, config: EncodingConfig): String {
+        packet.requireType<PacketData.Position>()
+
+        val identifier = when {
+            packet.supportsMessaging && packet.timestamp != null -> '@'
+            packet.supportsMessaging -> '='
+            packet.timestamp != null -> '/'
+            else -> '!'
+        }
+        val time = packet.timestamp?.let(timestampModule.dhmzCodec::encode).orEmpty()
+        val position = PositionCodec.encodeBody(
+            config = config,
+            coordinates = packet.coordinates,
+            symbol = packet.symbol,
+            altitude = packet.altitude,
+            trajectory = packet.trajectory,
+            range = packet.range,
+            transmitterInfo = packet.transmitterInfo,
+            signalInfo = packet.signalInfo,
+            directionReport = packet.directionReportExtra,
+        )
+
+        return "$identifier$time$position${packet.comment}"
     }
 }
