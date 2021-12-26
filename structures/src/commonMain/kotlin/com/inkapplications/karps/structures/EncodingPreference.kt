@@ -7,3 +7,7 @@ enum class EncodingPreference {
     Favored,
     Disfavored,
 }
+
+enum class DatePreference {
+
+}

@@ -3,14 +3,14 @@ package com.inkapplications.karps.parser.weather
 import com.inkapplications.karps.parser.TestData
 import com.inkapplications.karps.parser.assertEquals
 import com.inkapplications.karps.parser.timestamp.withUtcValues
-import com.inkapplications.karps.structures.symbolOf
+import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.Knots
-import inkapplications.spondee.measure.Fahrenheit
-import inkapplications.spondee.measure.HundredthInches
-import inkapplications.spondee.measure.MilesPerHour
-import inkapplications.spondee.measure.Pascals
+import inkapplications.spondee.measure.*
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.spatial.GeoCoordinates
+import inkapplications.spondee.spatial.latitude
+import inkapplications.spondee.spatial.longitude
 import inkapplications.spondee.structure.Deka
 import inkapplications.spondee.structure.of
 import inkapplications.spondee.structure.value
@@ -140,5 +140,63 @@ class WeatherParserTest {
         val given = "//5L!!<*e7_ sTHello World!"
 
         assertFails { parser.parse(given) }
+    }
+
+    @Test
+    fun generate() {
+        val given = PacketData.Weather(
+            timestamp = Clock.System.now().withUtcValues(
+                dayOfMonth = 9,
+                hour = 23,
+                minute = 45,
+                second = 0,
+                nanosecond = 0
+            ),
+            windData = WindData(
+                direction = Degrees.of(220),
+                speed = MilesPerHour.of(4),
+                gust = MilesPerHour.of(5),
+            ),
+            precipitation = Precipitation(
+                rainLastHour = HundredthInches.of(1),
+                rainLast24Hours = HundredthInches.of(2),
+                rainToday = HundredthInches.of(3),
+                snowLast24Hours = Inches.of(4),
+                rawRain = 789,
+            ),
+            coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
+            symbol = symbolOf('/', '_'),
+            temperature = Fahrenheit.of(-7),
+            humidity = WholePercentage.of(50),
+            pressure = Pascals.of(Deka, 9900),
+            irradiance = WattsPerSquareMeter.of(69),
+        )
+
+        val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))
+
+        assertEquals("/092345z4903.50N/07201.75W_220/004g005t-07r001p002P003h50b09900L069s004#789", result)
+    }
+
+    @Test
+    fun generateEmpty() {
+        val given = PacketData.Weather(
+            timestamp = null,
+            windData = WindData(
+                direction = null,
+                speed = null,
+                gust = null,
+            ),
+            precipitation = Precipitation(),
+            coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
+            symbol = symbolOf('/', '_'),
+            temperature = null,
+            humidity = null,
+            pressure = null,
+            irradiance = null,
+        )
+
+        val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))
+
+        assertEquals("!4903.50N/07201.75W_   /   ", result)
     }
 }

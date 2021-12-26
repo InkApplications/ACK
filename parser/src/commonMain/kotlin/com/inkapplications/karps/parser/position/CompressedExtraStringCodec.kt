@@ -3,11 +3,13 @@ package com.inkapplications.karps.parser.position
 import com.inkapplications.karps.parser.decode
 import com.inkapplications.karps.parser.format.Base91
 import com.inkapplications.karps.structures.Trajectory
+import com.inkapplications.karps.structures.WindData
 import com.inkapplications.karps.structures.at
 import com.inkapplications.karps.structures.unit.Knots
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Miles
+import inkapplications.spondee.measure.MilesPerHour
 import inkapplications.spondee.spatial.Degrees
 import inkapplications.spondee.structure.value
 import kotlin.math.log10
@@ -87,6 +89,26 @@ internal object CompressedExtraStringCodec {
 
         val speed = trajectory.speed
             ?.value(Knots)
+            ?.plus(SPEED_OFFSET)
+            ?.let { log10(it) }
+            ?.div(log10(SPEED_BASE))
+            ?.roundToInt()
+            ?.let(Base91::encode)
+            ?.get(0)
+
+        return "$course$speed"
+    }
+
+    fun encodeWindData(data: WindData): String {
+        val course = data.direction
+            ?.value(Degrees)
+            ?.div(COURSE_MULTIPLIER)
+            ?.roundToInt()
+            ?.let(Base91::encode)
+            ?.get(0)
+
+        val speed = data.speed
+            ?.value(MilesPerHour)
             ?.plus(SPEED_OFFSET)
             ?.let { log10(it) }
             ?.div(log10(SPEED_BASE))

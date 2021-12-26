@@ -9,6 +9,7 @@ import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.structures.*
 import com.inkapplications.karps.structures.unit.Knots
 import inkapplications.spondee.measure.Length
+import inkapplications.spondee.measure.MilesPerHour
 import inkapplications.spondee.spatial.Degrees
 import inkapplications.spondee.spatial.GeoCoordinates
 import inkapplications.spondee.structure.value
@@ -25,6 +26,7 @@ object PositionCodec {
         transmitterInfo: TransmitterInfo? = null,
         signalInfo: SignalInfo? = null,
         directionReport: DirectionReport? = null,
+        windData: WindData? = null,
     ): String {
         val plainRequired = directionReport != null || signalInfo != null || transmitterInfo != null
         val compressedRequired = altitude != null
@@ -46,6 +48,7 @@ object PositionCodec {
                 transmitterInfo = transmitterInfo,
                 range = range,
                 signalInfo = signalInfo,
+                windData = windData,
             )
             else -> encodeCompressed(
                 coordinates = coordinates,
@@ -53,6 +56,7 @@ object PositionCodec {
                 altitude = altitude,
                 trajectory = trajectory,
                 range = range,
+                windData = windData,
             )
         }
     }
@@ -65,6 +69,7 @@ object PositionCodec {
         transmitterInfo: TransmitterInfo? = null,
         range: Length? = null,
         signalInfo: SignalInfo? = null,
+        windData: WindData? = null,
     ): String {
         val (table, code) = symbol.toTableCodePair()
         val latitude = PlainPositionStringCodec.encodeLatitude(coordinates.latitude)
@@ -84,6 +89,11 @@ object PositionCodec {
                 val spd = trajectory.speed?.value(Knots)?.roundToInt()?.fixedLength(3) ?: "   "
                 "$dir/$spd"
             }
+            windData != null -> {
+                val dir = windData.direction?.value(Degrees)?.roundToInt()?.fixedLength(3) ?: "   "
+                val spd = windData.speed?.value(MilesPerHour)?.roundToInt()?.fixedLength(3) ?: "   "
+                "$dir/$spd"
+            }
             transmitterInfo != null -> TransmitterInfoCodec.encode(transmitterInfo)
             range != null -> RangeCodec.encode(range)
             else -> ""
@@ -98,6 +108,7 @@ object PositionCodec {
         altitude: Length? = null,
         trajectory: Trajectory? = null,
         range: Length? = null,
+        windData: WindData? = null,
     ): String {
         val (table, code) = symbol.toTableCodePair()
         val latitude = CompressedPositionStringTransformer.encodeLatitude(coordinates.latitude)
@@ -108,6 +119,7 @@ object PositionCodec {
             trajectory != null -> CompressedExtraStringCodec.encodeTrajectory(trajectory)
             range != null -> CompressedExtraStringCodec.encodeRange(range)
             altitude != null -> CompressedExtraStringCodec.encodeAltitude(altitude)
+            windData != null -> CompressedExtraStringCodec.encodeWindData(windData)
             else -> "  "
         }
 
