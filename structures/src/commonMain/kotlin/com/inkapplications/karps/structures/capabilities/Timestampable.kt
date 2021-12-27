@@ -5,7 +5,7 @@ import kotlinx.datetime.Instant
 /**
  * Packet with the ability to contain a originating time.
  */
-interface Timestamped {
+interface Timestampable {
     /**
      * Originating time that the event or packet data was sent or relevant.
      */
