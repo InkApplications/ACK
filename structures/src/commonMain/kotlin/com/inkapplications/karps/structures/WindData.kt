@@ -7,7 +7,7 @@ import inkapplications.spondee.spatial.Angle
  * Wraps information about the wind status.
  */
 data class WindData(
-    val direction: Angle?,
-    val speed: Speed?,
-    val gust: Speed?
+    val direction: Angle? = null,
+    val speed: Speed? = null,
+    val gust: Speed? = null,
 )
