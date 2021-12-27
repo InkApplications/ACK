@@ -13,7 +13,7 @@ import com.inkapplications.karps.parser.valueFor
 import com.inkapplications.karps.structures.EncodingConfig
 import com.inkapplications.karps.structures.PacketData
 
-internal class PositionParser(
+internal class PositionTransformer(
     private val timestampModule: TimestampModule,
 ): PacketDataTransformer {
     private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')

@@ -20,7 +20,7 @@ import kotlin.test.*
 import kotlin.test.assertEquals
 
 class PositionParserTest {
-    private val parser = PositionParser(TestData.timestampModule)
+    private val parser = PositionTransformer(TestData.timestampModule)
 
     @Test
     fun plainPosition() {

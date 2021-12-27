@@ -21,7 +21,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertNull
 
 class WeatherParserTest {
-    private val parser = WeatherParser(TestData.timestampModule)
+    private val parser = WeatherTransformer(TestData.timestampModule)
     @Test
     fun plainComplete() {
         val given = "/092345z4903.50N/07201.75W_220/004g005t-07r001p002P003h50b09900wRSW"

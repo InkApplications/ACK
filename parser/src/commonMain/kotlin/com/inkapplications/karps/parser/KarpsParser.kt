@@ -5,8 +5,8 @@ import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
 internal class KarpsParser(
-    private val infoParsers: Array<PacketDataParser>,
-    private val encoders: Array<PacketDataGenerator>,
+    private val dataParsers: Array<out PacketDataParser>,
+    private val dataGenerators: Array<out PacketDataGenerator>,
     private val logger: KimchiLogger = EmptyLogger,
 ): AprsParser {
     override fun fromString(packet: String): AprsPacket {
@@ -27,7 +27,7 @@ internal class KarpsParser(
             digipeaters = digipeaters,
         )
 
-        infoParsers.forEach { parser ->
+        dataParsers.forEach { parser ->
             try {
                 return AprsPacket(
                     route = packetRoute,
@@ -69,7 +69,7 @@ internal class KarpsParser(
             digipeaters = digipeaters,
         )
 
-        infoParsers.forEach { parser ->
+        dataParsers.forEach { parser ->
             try {
                 return AprsPacket(
                     route = route,
@@ -85,7 +85,7 @@ internal class KarpsParser(
 
     override fun toString(packet: AprsPacket, config: EncodingConfig): String {
         val route = arrayOf(packet.route.destination, *packet.route.digipeaters.toTypedArray()).joinToString(",")
-        encoders.forEach { encoder ->
+        dataGenerators.forEach { encoder ->
             try {
                 val body = encoder.generate(packet.data, config)
                 return "${packet.route.source}>$route:$body"

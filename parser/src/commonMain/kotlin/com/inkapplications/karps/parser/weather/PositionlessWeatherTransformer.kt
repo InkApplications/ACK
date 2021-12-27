@@ -1,6 +1,5 @@
 package com.inkapplications.karps.parser.weather
 
-import com.inkapplications.karps.parser.PacketDataParser
 import com.inkapplications.karps.parser.PacketDataTransformer
 import com.inkapplications.karps.parser.UnhandledEncodingException
 import com.inkapplications.karps.parser.chunk.common.ControlCharacterChunker
@@ -22,7 +21,7 @@ import inkapplications.spondee.structure.of
 import inkapplications.spondee.structure.value
 import kotlin.math.roundToInt
 
-internal class PositionlessWeatherParser(
+internal class PositionlessWeatherTransformer(
     private val timestampModule: TimestampModule,
 ): PacketDataTransformer {
     private val dataTypeIdentifier = '_'

@@ -6,10 +6,8 @@ import com.inkapplications.karps.structures.PacketData
 import com.inkapplications.karps.structures.Precipitation
 import com.inkapplications.karps.structures.WindData
 import inkapplications.spondee.measure.*
-import inkapplications.spondee.scalar.Percentage
 import inkapplications.spondee.scalar.WholePercentage
 import inkapplications.spondee.spatial.Degrees
-import inkapplications.spondee.spatial.GeoCoordinates
 import inkapplications.spondee.structure.Deka
 import inkapplications.spondee.structure.of
 import kotlinx.datetime.Clock
@@ -20,7 +18,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertNull
 
 class PositionlessWeatherParserTest {
-    private val parser = PositionlessWeatherParser(TestData.timestampModule)
+    private val parser = PositionlessWeatherTransformer(TestData.timestampModule)
     
     @Test
     fun parse() {

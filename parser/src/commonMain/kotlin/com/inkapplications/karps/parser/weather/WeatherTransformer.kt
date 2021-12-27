@@ -23,7 +23,7 @@ import inkapplications.spondee.structure.of
 import inkapplications.spondee.structure.value
 import kotlin.math.roundToInt
 
-internal class WeatherParser(
+internal class WeatherTransformer(
     private val timestampModule: TimestampModule,
 ): PacketDataTransformer {
     private val dataTypeChunker = ControlCharacterChunker('!', '/', '@', '=')
