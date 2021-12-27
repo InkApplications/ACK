@@ -1,7 +1,7 @@
 @file:OptIn(ExperimentalTime::class)
 package com.inkapplications.karps.cli.parse
 
-import com.inkapplications.karps.structures.AprsPacket
+import com.inkapplications.karps.structures.PacketData
 import java.io.File
 import kotlin.math.min
 import kotlin.time.Duration
@@ -15,11 +15,11 @@ sealed interface ParserState {
     data class Complete(override val testFile: File, val tests: List<LineStatus>, val time: Duration): ParserState {
         val passed = tests.filterIsInstance<LineStatus.Passed>().count()
         val failed = tests.filterIsInstance<LineStatus.Failed>().count()
-        val unknown = tests.filterIsInstance<LineStatus.Passed>().filter { it.packet is AprsPacket.Unknown }.count()
+        val unknown = tests.filterIsInstance<LineStatus.Passed>().filter { it.packet.data is PacketData.Unknown }.count()
         val unidentifiedIdentifiers = tests.filterIsInstance<LineStatus.Passed>()
             .map { it.packet }
-            .filterIsInstance<AprsPacket.Unknown>()
-            .groupBy { it.dataTypeIdentifier }
+            .filterIsInstance<PacketData.Unknown>()
+            .groupBy { it.body[0] }
             .map {
                 it.key to it.value.count()
             }

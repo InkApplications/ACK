@@ -52,8 +52,9 @@ class ListenCommand: CliktCommand() {
                 cause?.printStackTrace()
             }
         } else EmptyWriter
-        val logger = ConsolidatedLogger(writer)
-        val parser = ParserModule().defaultParser(logger)
+        val parser = ParserModule(
+            logger = ConsolidatedLogger(writer)
+        ).defaultParser()
         runBlocking {
             val client = AprsClientModule.createDataClient()
             client.connect(

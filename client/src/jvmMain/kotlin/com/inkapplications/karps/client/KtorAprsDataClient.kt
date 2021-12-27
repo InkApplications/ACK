@@ -1,13 +1,9 @@
 package com.inkapplications.karps.client
 
-import io.ktor.network.selector.ActorSelectorManager
-import io.ktor.network.sockets.aSocket
-import io.ktor.network.sockets.openReadChannel
-import io.ktor.network.sockets.openWriteChannel
-import io.ktor.util.cio.write
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.discardExact
-import io.ktor.utils.io.readUntilDelimiter
+import io.ktor.network.selector.*
+import io.ktor.network.sockets.*
+import io.ktor.util.cio.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel

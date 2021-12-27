@@ -4,7 +4,6 @@ import com.inkapplications.karps.parser.assertEquals
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.latitudeOf
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class PlainPositionChunkerTest {

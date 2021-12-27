@@ -1,14 +1,15 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.parser.capabilities.CapabilitiesParser
-import com.inkapplications.karps.parser.item.ItemParser
-import com.inkapplications.karps.parser.item.ObjectParser
-import com.inkapplications.karps.parser.message.MessageParser
-import com.inkapplications.karps.parser.position.PositionParser
-import com.inkapplications.karps.parser.status.StatusReportParser
-import com.inkapplications.karps.parser.telemetry.TelemetryParser
-import com.inkapplications.karps.parser.weather.PositionlessWeatherParser
-import com.inkapplications.karps.parser.weather.WeatherParser
+import com.inkapplications.karps.parser.capabilities.CapabilitiesTransformer
+import com.inkapplications.karps.parser.item.ItemTransformer
+import com.inkapplications.karps.parser.item.ObjectTransformer
+import com.inkapplications.karps.parser.message.MessageTransformer
+import com.inkapplications.karps.parser.position.PositionTransformer
+import com.inkapplications.karps.parser.status.StatusReportTransformer
+import com.inkapplications.karps.parser.telemetry.TelemetryTransformer
+import com.inkapplications.karps.parser.timestamp.TimestampModule
+import com.inkapplications.karps.parser.weather.PositionlessWeatherTransformer
+import com.inkapplications.karps.parser.weather.WeatherTransformer
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 import kotlinx.datetime.TimeZone
@@ -16,33 +17,49 @@ import kotlinx.datetime.TimeZone
 /**
  * Creates Parser instances.
  */
-class ParserModule {
-    fun defaultParsers(
-        timezone: TimeZone
-    ): Array<PacketTypeParser> {
+class ParserModule(
+    private val logger: KimchiLogger = EmptyLogger,
+    timezone: TimeZone = TimeZone.currentSystemDefault(),
+) {
+    private val timestampModule = TimestampModule(
+        timezone = timezone,
+    )
+
+    /**
+     * Create the collection of built-in Data Transformer classes.
+     */
+    fun defaultTransformers(): Array<PacketDataTransformer> {
         return arrayOf(
-            WeatherParser(timezone = timezone),
-            PositionlessWeatherParser(),
-            ObjectParser(timezone = timezone),
-            ItemParser(),
-            PositionParser(timezone = timezone),
-            MessageParser(),
-            TelemetryParser(),
-            StatusReportParser(),
-            CapabilitiesParser(),
+            WeatherTransformer(timestampModule = timestampModule),
+            PositionlessWeatherTransformer(timestampModule = timestampModule),
+            PositionTransformer(timestampModule = timestampModule),
+            CapabilitiesTransformer(),
+            ObjectTransformer(timestampModule),
+            ItemTransformer(),
+            MessageTransformer(),
+            TelemetryTransformer(),
+            StatusReportTransformer(timestampModule = timestampModule),
+            UnknownPacketTransformer,
         )
     }
 
+    /**
+     * Create a parser with specific parameters.
+     */
     fun parser(
-        infoParsers: Array<PacketTypeParser>,
-        logger: KimchiLogger = EmptyLogger
-    ): AprsParser = KarpsParser(infoParsers, logger = logger)
+        dataParsers: Array<out PacketDataParser>,
+        dataGenerators: Array<out PacketDataGenerator>,
+    ): AprsParser = KarpsParser(dataParsers, dataGenerators, logger)
 
     /**
      * Create a standard packet parser with the default parsing modules.
      */
-    fun defaultParser(
-        logger: KimchiLogger = EmptyLogger,
-        timezone: TimeZone = TimeZone.currentSystemDefault()
-    ): AprsParser = parser(defaultParsers(timezone), logger)
+    fun defaultParser(): AprsParser {
+        val transformers = defaultTransformers()
+
+        return parser(
+            dataParsers = transformers,
+            dataGenerators = transformers,
+        )
+    }
 }

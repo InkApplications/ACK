@@ -1,7 +1,7 @@
 package com.inkapplications.karps.parser.altitude
 
-import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
+import com.inkapplications.karps.parser.chunk.Chunker
 import inkapplications.spondee.measure.Feet
 import inkapplications.spondee.measure.Length
 

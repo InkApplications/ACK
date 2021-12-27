@@ -1,21 +1,15 @@
 package com.inkapplications.karps.parser
 
-import com.inkapplications.karps.structures.Address
-import com.inkapplications.karps.structures.AprsPacket
-import com.inkapplications.karps.structures.Digipeater
+import com.inkapplications.karps.structures.*
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 
 internal class KarpsParser(
-    private val infoParsers: Array<PacketTypeParser>,
+    private val dataParsers: Array<out PacketDataParser>,
+    private val dataGenerators: Array<out PacketDataGenerator>,
     private val logger: KimchiLogger = EmptyLogger,
-    private val clock: Clock = Clock.System
 ): AprsParser {
-    override fun fromString(packet: String) = fromString(packet, clock.now())
-
-    override fun fromString(packet: String, received: Instant): AprsPacket {
+    override fun fromString(packet: String): AprsPacket {
         logger.trace("Parsing packet: $packet")
         val source = packet.substringBefore('>').parseAddress()
         val route = packet.substringAfter('>')
@@ -25,39 +19,29 @@ internal class KarpsParser(
         val digipeaters = route.slice(1 until route.size).map {
             Digipeater(it.trimEnd('*').parseAddress(), it.endsWith('*'))
         }
-        val body = packet.substringAfter(':').let {
-            it.substring(1)
-        }
-        val dataType = packet.charAfter(':')
+        val body = packet.substringAfter(':')
 
-        val prototype = AprsPacket.Unknown(
-            received = received,
-            dataTypeIdentifier = dataType,
+        val packetRoute = PacketRoute(
             source = source,
             destination = destination,
             digipeaters = digipeaters,
-            raw = packet.encodeToByteArray(),
-            body = body
         )
 
-        infoParsers
-            .filter { parser ->
-                parser.dataTypeFilter?.let { dataType in it } ?: true
+        dataParsers.forEach { parser ->
+            try {
+                return AprsPacket(
+                    route = packetRoute,
+                    data = parser.parse(body),
+                )
+            } catch (error: Throwable) {
+                logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
             }
-            .forEach { parser ->
-                try {
-                    return parser.parse(prototype)
-                } catch (error: Throwable) {
-                    logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
-                }
-            }
-        logger.warn("No parser was able to parse packet.")
-        return prototype
+        }
+
+        throw IllegalArgumentException("No parser was able to parse packet.")
     }
 
-    override fun fromAx25(packet: ByteArray) = fromAx25(packet, clock.now())
-
-    override fun fromAx25(packet: ByteArray, received: Instant): AprsPacket {
+    override fun fromAx25(packet: ByteArray): AprsPacket {
         logger.trace("Parsing packet from bytes: $packet")
         val unsignedByteArray = packet.toUByteArray()
 
@@ -77,32 +61,42 @@ internal class KarpsParser(
             .map { Address(it.slice(0..5).toCallsign(), it[6].toSsid()) }
             .map { Digipeater(it) }
 
-        val dataType = packet[17 + lastDigipeater].toChar()
-        val body = packet.drop(18 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
+        val body = packet.drop(17 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
 
-        val prototype = AprsPacket.Unknown(
-            received = clock.now(),
-            dataTypeIdentifier = dataType,
+        val route = PacketRoute(
             source = source,
             destination = destination,
             digipeaters = digipeaters,
-            raw = packet,
-            body = body
         )
 
-        infoParsers
-            .filter { parser ->
-                parser.dataTypeFilter?.let { dataType in it } ?: true
+        dataParsers.forEach { parser ->
+            try {
+                return AprsPacket(
+                    route = route,
+                    data = parser.parse(body),
+                )
+            } catch (error: Throwable) {
+                logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
             }
-            .forEach { parser ->
-                try {
-                    return parser.parse(prototype)
-                } catch (error: Throwable) {
-                    logger.debug(error) { "${parser::class.simpleName} failed to parse: ${error.message}" }
-                }
+        }
+
+        throw IllegalArgumentException("No parser was able to parse packet.")
+    }
+
+    override fun toString(packet: AprsPacket, config: EncodingConfig): String {
+        val route = arrayOf(packet.route.destination, *packet.route.digipeaters.toTypedArray()).joinToString(",")
+        dataGenerators.forEach { encoder ->
+            try {
+                val body = encoder.generate(packet.data, config)
+                return "${packet.route.source}>$route:$body"
+            } catch (pass: UnhandledEncodingException) {
+                logger.trace { "Encoding is unhandled by <${encoder::class.simpleName}>" }
+            } catch (error: Throwable) {
+                logger.warn(error) { "Encoder <${encoder::class.simpleName}> threw unknown error." }
             }
-        logger.warn("No parser was able to parse packet.")
-        return prototype
+        }
+
+        throw IllegalArgumentException("No packet encoder was able to handle the given packet type.")
     }
 
     private fun List<UByte>.toCallsign(): String {

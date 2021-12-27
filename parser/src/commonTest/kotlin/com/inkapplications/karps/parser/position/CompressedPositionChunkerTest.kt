@@ -19,7 +19,7 @@ class CompressedPositionChunkerTest {
         assertEquals(49.5, result.result.coordinates.latitude.asDecimal, 0.01)
         assertEquals(-72.75, result.result.coordinates.longitude.asDecimal, 0.01)
         assertEquals(36.2, result.result.extension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.speed?.value(Knots)!!, 1e-1)
-        assertEquals(Degrees.of(88), result.result.extension?.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.direction)
+        assertEquals(Degrees.of(88), result.result.extension.valueFor(CompressedPositionExtensions.TrajectoryExtra::class)?.direction)
     }
 
     @Test

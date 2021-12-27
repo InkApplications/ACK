@@ -1,8 +1,8 @@
 package com.inkapplications.karps.parser.chunk.common
 
 import com.inkapplications.karps.parser.PacketFormatException
-import com.inkapplications.karps.parser.chunk.Chunker
 import com.inkapplications.karps.parser.chunk.Chunk
+import com.inkapplications.karps.parser.chunk.Chunker
 
 /**
  * Parse using the first of a set of parsers to match a result.

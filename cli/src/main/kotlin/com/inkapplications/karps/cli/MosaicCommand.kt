@@ -9,7 +9,9 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.jakewharton.mosaic.MosaicScope
 import com.jakewharton.mosaic.runMosaic
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.sample
 
 /**
  * Run a command with Mosaic/Compose rendering.
