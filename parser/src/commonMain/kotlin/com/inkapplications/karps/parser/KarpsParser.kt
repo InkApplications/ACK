@@ -1,5 +1,6 @@
 package com.inkapplications.karps.parser
 
+import com.inkapplications.karps.parser.format.fixedLength
 import com.inkapplications.karps.structures.*
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
@@ -61,7 +62,7 @@ internal class KarpsParser(
             .map { Address(it.slice(0..5).toCallsign(), it[6].toSsid()) }
             .map { Digipeater(it) }
 
-        val body = packet.drop(17 + lastDigipeater).map { it.toChar() }.toCharArray().concatToString()
+        val body = packet.drop(17 + lastDigipeater).map { it.toInt().toChar() }.toCharArray().concatToString()
 
         val route = PacketRoute(
             source = source,
@@ -97,6 +98,50 @@ internal class KarpsParser(
         }
 
         throw IllegalArgumentException("No packet encoder was able to handle the given packet type.")
+    }
+
+    fun toAx25(packet: AprsPacket, config: EncodingConfig = EncodingConfig()): ByteArray {
+        val destination = packet.route.destination.toBytes(hBit = true)
+        val source = packet.route.source.toBytes()
+        val digipeaters = packet.route.digipeaters.flatMapIndexed { index, digipeater ->
+            digipeater.address.toBytes(hBit = digipeater.heard, extensionBit = index == packet.route.digipeaters.size - 1).toList()
+        }.toByteArray()
+        val control = 0b00111110.toByte()
+        val pid = 0b11110000.toByte()
+
+        dataGenerators.forEach { encoder ->
+            try {
+                val body = encoder.generate(packet.data, config)
+
+                return destination + source + digipeaters + control + pid + body.toCharArray().map { it.code.toByte() }.toByteArray()
+            } catch (pass: UnhandledEncodingException) {
+                logger.trace { "Encoding is unhandled by <${encoder::class.simpleName}>" }
+            } catch (error: Throwable) {
+                logger.warn(error) { "Encoder <${encoder::class.simpleName}> threw unknown error." }
+            }
+        }
+
+        throw IllegalArgumentException("No packet encoder was able to handle the given packet type.")
+
+    }
+
+    private fun Address.toBytes(hBit: Boolean = false, extensionBit: Boolean = false): ByteArray {
+        val callsign = callsign
+            .fixedLength(6)
+            .encodeToByteArray()
+            .map { it.toInt() shl 1 }
+            .map { it.toUByte() }
+            .toUByteArray()
+            .toByteArray()
+        val ssid = ssid.toCharArray().firstOrNull()
+            ?.code
+            ?.shl(1)
+            .let { it ?: 0 }
+            .or(0b01100000)
+            .or(if (hBit) 0b10000000 else 0)
+            .or(if (extensionBit) 0b00000001 else 0)
+
+        return callsign + ssid.toByte()
     }
 
     private fun List<UByte>.toCallsign(): String {

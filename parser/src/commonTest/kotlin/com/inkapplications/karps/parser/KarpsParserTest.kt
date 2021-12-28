@@ -70,5 +70,36 @@ class KarpsParserTest {
 
         assertEquals("T3ST-S>T3ST-D,T3ST-A*,T3ST-B:=Hello World", result)
     }
+
+    @Test
+    fun byteEncode() {
+        val data = AprsPacket(
+            route = PacketRoute(
+                source = Address("N7LEM", "0"),
+                destination = Address("NJ7P", "0"),
+                digipeaters = listOf(
+                    Digipeater(
+                        address = Address("N7OO", ssid = "1"),
+                        heard = true,
+                    ),
+                ),
+            ),
+            data = PacketData.Unknown("=Foo")
+        )
+
+        val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketTransformer)).toAx25(data)
+
+        val expected = ubyteArrayOf(
+            0x9cu, 0x94u, 0x6eu, 0xa0u,
+            0x40u, 0x40u, 0xe0u, 0x9cu,
+            0x6eu, 0x98u, 0x8au, 0x9au,
+            0x40u, 0x60u, 0x9cu, 0x6eu,
+            0x9eu, 0x9eu, 0x40u, 0x40u,
+            0xe3u, 0x3eu, 0xf0u, 0x3du,
+            0x46u, 0x6fu, 0x6fu
+        ).toByteArray()
+
+        assertEquals(expected.decodeToString(), result.decodeToString())
+    }
 }
 
