@@ -106,7 +106,7 @@ internal class KarpsParser(
         val digipeaters = packet.route.digipeaters.flatMapIndexed { index, digipeater ->
             digipeater.address.toBytes(hBit = digipeater.heard, extensionBit = index == packet.route.digipeaters.size - 1).toList()
         }.toByteArray()
-        val control = 0b00111110.toByte()
+        val control = 0b0000011.toByte()
         val pid = 0b11110000.toByte()
 
         dataGenerators.forEach { encoder ->
