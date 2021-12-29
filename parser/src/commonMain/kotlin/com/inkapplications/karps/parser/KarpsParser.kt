@@ -100,7 +100,7 @@ internal class KarpsParser(
         throw IllegalArgumentException("No packet encoder was able to handle the given packet type.")
     }
 
-    fun toAx25(packet: AprsPacket, config: EncodingConfig = EncodingConfig()): ByteArray {
+    override fun toAx25(packet: AprsPacket, config: EncodingConfig): ByteArray {
         val destination = packet.route.destination.toBytes(hBit = true)
         val source = packet.route.source.toBytes()
         val digipeaters = packet.route.digipeaters.flatMapIndexed { index, digipeater ->

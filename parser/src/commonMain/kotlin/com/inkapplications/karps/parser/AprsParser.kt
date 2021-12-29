@@ -21,4 +21,9 @@ interface AprsParser {
      * Encode a packet into a String
      */
     fun toString(packet: AprsPacket, config: EncodingConfig = EncodingConfig()): String
+
+    /**
+     * Encode a packet into a AX.25 byte array
+     */
+    fun toAx25(packet: AprsPacket, config: EncodingConfig = EncodingConfig()): ByteArray
 }
