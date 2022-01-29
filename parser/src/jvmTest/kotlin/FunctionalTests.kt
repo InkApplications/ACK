@@ -1,6 +1,6 @@
-package com.inkapplications.karps.parser
+package com.inkapplications.ack.parser
 
-import com.inkapplications.karps.structures.PacketData
+import com.inkapplications.ack.structures.PacketData
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okio.Okio

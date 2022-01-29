@@ -1,7 +1,7 @@
-Karps
-=====
+ACK
+===
 
-Kotlin APRS Toolkit
+Aprs Client for Kotlin
 
 Experimental
 ------------

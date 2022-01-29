@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClassName = "com.inkapplications.karps.cli.MainKt"
+    mainClassName = "com.inkapplications.ack.cli.MainKt"
 }
 
 dependencies {

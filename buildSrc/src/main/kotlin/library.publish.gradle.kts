@@ -7,7 +7,7 @@ val javadocJar by tasks.registering(Jar::class) {
 }
 
 publishing {
-    group = "com.inkapplications.karps"
+    group = "com.inkapplications.ack"
     version = when (project.properties["version"]?.toString()) {
         null, "unspecified", "" -> "1.0-SNAPSHOT"
         else -> project.properties["version"].toString()
@@ -17,9 +17,9 @@ publishing {
             artifact(javadocJar.get())
 
             pom {
-                name.set("Karps ${project.name}")
-                description.set("APRS Toolkit")
-                url.set("https://github.com/inkapplications/karps")
+                name.set("ACK ${project.name}")
+                description.set("APRS Client for Kotlin")
+                url.set("https://ack.inkapplications.com")
                 licenses {
                     license {
                         name.set("MIT")
@@ -34,9 +34,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://github.com/InkApplications/karps.git")
-                    developerConnection.set("scm:git:ssh://git@github.com:InkApplications/karps.git")
-                    url.set("https://github.com/InkApplications/karps")
+                    connection.set("scm:git:https://github.com/InkApplications/ack.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:InkApplications/ack.git")
+                    url.set("https://github.com/InkApplications/ack")
                 }
             }
         }
