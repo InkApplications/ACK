@@ -1,4 +1,4 @@
-package com.inkapplications.ack.parser
+package com.inkapplications.ack.codec
 
 import com.inkapplications.ack.structures.PacketData
 import com.squareup.moshi.Moshi
