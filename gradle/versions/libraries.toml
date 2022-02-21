@@ -1,0 +1,5 @@
+[versions]
+
+[libraries.mosaic]
+version = "0.1.0"
+module = "com.jakewharton.mosaic:mosaic-gradle-plugin"

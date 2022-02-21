@@ -1,0 +1,9 @@
+[versions]
+
+[libraries.kimchi-logger]
+version = "1.1.0"
+module = "com.inkapplications.kimchi:logger"
+
+[libraries.ink-publishing]
+version = "1.0.0"
+module = "com.inkapplications.publishing:ink-publishing"
