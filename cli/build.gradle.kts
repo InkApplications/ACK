@@ -10,7 +10,7 @@ application {
 
 dependencies {
     implementation(projects.client)
-    implementation(projects.parser)
+    implementation(projects.codec)
     implementation(libraries.coroutines.core)
     implementation("com.github.ajalt.clikt:clikt:3.2.0")
 }

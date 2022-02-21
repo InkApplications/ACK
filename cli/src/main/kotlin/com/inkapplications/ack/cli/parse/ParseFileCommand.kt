@@ -6,7 +6,7 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.inkapplications.ack.cli.MosaicCommand
-import com.inkapplications.ack.parser.ParserModule
+import com.inkapplications.ack.parser.Ack
 import com.jakewharton.mosaic.Column
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -47,7 +47,7 @@ class ParseFileCommand: MosaicCommand<ParserState>() {
     }
 
     override suspend fun start(): ParserState {
-        val parser = ParserModule().defaultParser()
+        val parser = Ack().defaultParser()
         val lines: List<LineStatus> = file.readLines(Charsets.US_ASCII)
             .filterNot { it.startsWith('#') }
             .map { LineStatus.Todo(it) }

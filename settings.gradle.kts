@@ -15,6 +15,6 @@ dependencyResolutionManagement {
 
 include("cli")
 include("client")
-include("parser")
+include("codec")
 include("structures")
 

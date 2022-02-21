@@ -4,9 +4,9 @@ import com.inkapplications.ack.structures.AprsPacket
 import com.inkapplications.ack.structures.EncodingConfig
 
 /**
- * Parse APRS Packets.
+ * Encodes and Decodes APRS Packets to IS-strings and AX.25 packets.
  */
-interface AprsParser {
+interface AprsCodec {
     /**
      * Parse a packet from an IS string representation.
      */

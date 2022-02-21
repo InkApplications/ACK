@@ -12,17 +12,24 @@ import com.inkapplications.ack.parser.weather.PositionlessWeatherTransformer
 import com.inkapplications.ack.parser.weather.WeatherTransformer
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
+import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 
 /**
  * Creates Parser instances.
+ *
+ * @param logger Used for logging parsing information and non-fatal errors.
+ * @param timezone Overrides the timezone used by time based codecs.
+ * @param clock Overrides the current time for time based codecs.
  */
-class ParserModule(
+class Ack(
     private val logger: KimchiLogger = EmptyLogger,
     timezone: TimeZone = TimeZone.currentSystemDefault(),
+    clock: Clock = Clock.System,
 ) {
     private val timestampModule = TimestampModule(
         timezone = timezone,
+        clock = clock,
     )
 
     /**
@@ -49,12 +56,12 @@ class ParserModule(
     fun parser(
         dataParsers: Array<out PacketDataParser>,
         dataGenerators: Array<out PacketDataGenerator>,
-    ): AprsParser = KarpsParser(dataParsers, dataGenerators, logger)
+    ): AprsCodec = AckCodec(dataParsers, dataGenerators, logger)
 
     /**
      * Create a standard packet parser with the default parsing modules.
      */
-    fun defaultParser(): AprsParser {
+    fun defaultParser(): AprsCodec {
         val transformers = defaultTransformers()
 
         return parser(

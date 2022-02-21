@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class KarpsParserTest {
+class AckCodecTest {
     @Test
     fun ax25Parse() {
         val data = ubyteArrayOf(
@@ -18,7 +18,7 @@ class KarpsParserTest {
             0x46u, 0x6fu, 0x6fu
         ).toByteArray()
 
-        val result = KarpsParser(arrayOf(UnknownPacketTransformer), emptyArray()).fromAx25(data)
+        val result = AckCodec(arrayOf(UnknownPacketTransformer), emptyArray()).fromAx25(data)
 
         assertEquals(Address("NJ7P", ssid = "0"), result.route.destination)
         assertEquals(Address("N7LEM", ssid = "0"), result.route.source)
@@ -33,7 +33,7 @@ class KarpsParserTest {
     fun stringParse() {
         val data = "ON0CPS-S>APDG01,TCPIP*,qAC,ON0CPS-GS:;Foo"
 
-        val result = KarpsParser(arrayOf(UnknownPacketTransformer), emptyArray()).fromString(data)
+        val result = AckCodec(arrayOf(UnknownPacketTransformer), emptyArray()).fromString(data)
 
         assertEquals(Address("ON0CPS", "S"), result.route.source)
         assertEquals(Address("APDG01"), result.route.destination)
@@ -66,7 +66,7 @@ class KarpsParserTest {
             data = PacketData.Unknown("=Hello World")
         )
 
-        val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketTransformer)).toString(data)
+        val result = AckCodec(emptyArray(), arrayOf(UnknownPacketTransformer)).toString(data)
 
         assertEquals("T3ST-S>T3ST-D,T3ST-A*,T3ST-B:=Hello World", result)
     }
@@ -87,7 +87,7 @@ class KarpsParserTest {
             data = PacketData.Unknown("=Foo")
         )
 
-        val result = KarpsParser(emptyArray(), arrayOf(UnknownPacketTransformer)).toAx25(data)
+        val result = AckCodec(emptyArray(), arrayOf(UnknownPacketTransformer)).toAx25(data)
 
         val expected = ubyteArrayOf(
             0x9cu, 0x94u, 0x6eu, 0xa0u,

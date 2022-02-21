@@ -9,7 +9,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import com.inkapplications.ack.client.AprsClientModule
 import com.inkapplications.ack.client.Credentials
-import com.inkapplications.ack.parser.ParserModule
+import com.inkapplications.ack.parser.Ack
 import kimchi.logger.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -25,12 +25,12 @@ class ListenCommand: CliktCommand() {
     private val server: String by option(
         names = arrayOf("--server"),
         help = "APRS server to connect to."
-    ).default("45.63.21.153")
+    ).default("rotate.aprs2.net")
 
     private val port: Int by option(
         names = arrayOf("--port"),
         help = "APRS server to connect to."
-    ).int().default(10152)
+    ).int().default(14580)
 
     private val filter by option(
         names = arrayOf("--filter"),
@@ -52,7 +52,7 @@ class ListenCommand: CliktCommand() {
                 cause?.printStackTrace()
             }
         } else EmptyWriter
-        val parser = ParserModule(
+        val parser = Ack(
             logger = ConsolidatedLogger(writer)
         ).defaultParser()
         runBlocking {

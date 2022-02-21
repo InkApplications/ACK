@@ -8,7 +8,7 @@ import org.junit.Test
 import java.io.File
 
 class FunctionalTests {
-    val parser = ParserModule().defaultParser()
+    val parser = Ack().defaultParser()
     val adapter = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()

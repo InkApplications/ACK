@@ -5,11 +5,11 @@ import com.inkapplications.ack.structures.*
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
-internal class KarpsParser(
+internal class AckCodec(
     private val dataParsers: Array<out PacketDataParser>,
     private val dataGenerators: Array<out PacketDataGenerator>,
     private val logger: KimchiLogger = EmptyLogger,
-): AprsParser {
+): AprsCodec {
     override fun fromString(packet: String): AprsPacket {
         logger.trace("Parsing packet: $packet")
         val source = packet.substringBefore('>').parseAddress()
