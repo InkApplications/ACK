@@ -12,13 +12,13 @@ import com.inkapplications.ack.codec.format.leftPad
 import com.inkapplications.ack.codec.requireType
 import com.inkapplications.ack.structures.EncodingConfig
 import com.inkapplications.ack.structures.PacketData
-import com.inkapplications.ack.structures.toAddress
+import com.inkapplications.ack.structures.station.toStationAddress
 
 class MessageTransformer: PacketDataTransformer {
     private val dataTypeCharacter = ':'
     private val dataTypeChunker = ControlCharacterChunker(dataTypeCharacter)
     private val addresseeParser = SpanChunker(9)
-        .mapParsed { it.trim().toAddress() }
+        .mapParsed { it.toStationAddress() }
     private val startControl = ControlCharacterChunker(':')
     private val endControl = ControlCharacterChunker('{')
     private val messageParser = SpanUntilChunker(

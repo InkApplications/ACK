@@ -1,6 +1,7 @@
 package com.inkapplications.ack.structures
 
 import com.inkapplications.ack.structures.capabilities.*
+import com.inkapplications.ack.structures.station.StationAddress
 import inkapplications.spondee.measure.Irradiance
 import inkapplications.spondee.measure.Length
 import inkapplications.spondee.measure.Pressure
@@ -69,7 +70,7 @@ sealed class PacketData {
     ): PacketData(), Named, Report, Commented
 
     data class Message(
-        val addressee: Address,
+        val addressee: StationAddress,
         val message: String,
         val messageNumber: Int? = null,
     ): PacketData()

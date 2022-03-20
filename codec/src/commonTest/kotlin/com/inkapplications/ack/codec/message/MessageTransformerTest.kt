@@ -1,6 +1,6 @@
 package com.inkapplications.ack.codec.message
 
-import com.inkapplications.ack.structures.Address
+import com.inkapplications.ack.structures.station.StationAddress
 import com.inkapplications.ack.structures.PacketData
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,8 +14,8 @@ class MessageTransformerTest {
 
         val result = MessageTransformer().parse(given)
 
-        assertEquals("WU2Z", result.addressee.callsign)
-        assertEquals("0", result.addressee.ssid)
+        assertEquals("WU2Z", result.addressee.callsign.canonical)
+        assertEquals("0", result.addressee.ssid.value)
         assertEquals("Testing", result.message)
         assertNull(result.messageNumber)
     }
@@ -26,8 +26,8 @@ class MessageTransformerTest {
 
         val result = MessageTransformer().parse(given)
 
-        assertEquals("WU2Z", result.addressee.callsign)
-        assertEquals("2", result.addressee.ssid)
+        assertEquals("WU2Z", result.addressee.callsign.canonical)
+        assertEquals("2", result.addressee.ssid.value)
         assertEquals("Testing", result.message)
         assertEquals(3, result.messageNumber)
     }
@@ -42,7 +42,7 @@ class MessageTransformerTest {
     @Test
     fun generate() {
         val given = PacketData.Message(
-            addressee = Address("KE0YOG", "3"),
+            addressee = StationAddress("KE0YOG", "3"),
             message = "Hello World",
             messageNumber = 3,
         )
@@ -55,7 +55,7 @@ class MessageTransformerTest {
     @Test
     fun generateNoNumber() {
         val given = PacketData.Message(
-            addressee = Address("KE0YOG", "3"),
+            addressee = StationAddress("KE0YOG", "3"),
             message = "Hello World",
             messageNumber = null,
         )

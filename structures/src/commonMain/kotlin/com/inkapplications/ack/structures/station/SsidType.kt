@@ -1,4 +1,4 @@
-package com.inkapplications.ack.structures
+package com.inkapplications.ack.structures.station
 
 /**
  * Recommended SSID Type categories.

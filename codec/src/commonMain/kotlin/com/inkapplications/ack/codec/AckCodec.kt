@@ -2,6 +2,7 @@ package com.inkapplications.ack.codec
 
 import com.inkapplications.ack.codec.format.fixedLength
 import com.inkapplications.ack.structures.*
+import com.inkapplications.ack.structures.station.StationAddress
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger
 
@@ -46,11 +47,11 @@ internal class AckCodec(
         logger.trace("Parsing packet from bytes: $packet")
         val unsignedByteArray = packet.toUByteArray()
 
-        val destination = Address(
+        val destination = StationAddress(
             callsign = unsignedByteArray.slice(0..5).toCallsign(),
             ssid = unsignedByteArray[6].toSsid()
         )
-        val source = Address(
+        val source = StationAddress(
             callsign = unsignedByteArray.slice(7..12).toCallsign(),
             ssid = unsignedByteArray[13].toSsid()
         )
@@ -59,7 +60,7 @@ internal class AckCodec(
             .drop(14)
             .take(lastDigipeater + 1)
             .chunked(7)
-            .map { Address(it.slice(0..5).toCallsign(), it[6].toSsid()) }
+            .map { StationAddress(it.slice(0..5).toCallsign(), it[6].toSsid()) }
             .map { Digipeater(it) }
 
         val body = packet.drop(17 + lastDigipeater).map { it.toInt().toChar() }.toCharArray().concatToString()
@@ -125,15 +126,15 @@ internal class AckCodec(
 
     }
 
-    private fun Address.toBytes(hBit: Boolean = false, extensionBit: Boolean = false): ByteArray {
-        val callsign = callsign
+    private fun StationAddress.toBytes(hBit: Boolean = false, extensionBit: Boolean = false): ByteArray {
+        val callsign = callsign.canonical
             .fixedLength(6)
             .encodeToByteArray()
             .map { it.toInt() shl 1 }
             .map { it.toUByte() }
             .toUByteArray()
             .toByteArray()
-        val ssid = ssid.toCharArray().firstOrNull()
+        val ssid = ssid.value.toCharArray().firstOrNull()
             ?.code
             ?.shl(1)
             .let { it ?: 0 }
@@ -159,7 +160,7 @@ internal class AckCodec(
             .toString()
     }
 
-    private fun String.parseAddress() = Address(
+    private fun String.parseAddress() = StationAddress(
         callsign = substringBefore('-'),
         ssid = substringAfter('-', "0")
     )

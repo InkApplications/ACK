@@ -1,7 +1,7 @@
 package com.inkapplications.ack.codec
 
 import com.inkapplications.ack.codec.timestamp.TimestampModule
-import com.inkapplications.ack.structures.Address
+import com.inkapplications.ack.structures.station.StationAddress
 import com.inkapplications.ack.structures.PacketRoute
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -18,8 +18,8 @@ internal object TestData {
     )
 
     val route = PacketRoute(
-        source = Address("KE0YOG"),
-        destination = Address("KE0YOG"),
+        source = StationAddress("KE0YOG"),
+        destination = StationAddress("KE0YOG"),
         digipeaters = emptyList(),
     )
 }
