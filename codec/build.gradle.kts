@@ -7,30 +7,30 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libraries.coroutines.core)
+                api(kotlinLibraries.coroutines.core)
                 api(projects.structures)
-                api(libraries.kimchi.logger)
+                api(inkLibraries.kimchi.logger)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libraries.kotlin.reflect)
-                implementation(libraries.kotlin.test.core)
-                implementation(libraries.kotlin.test.annotations)
+                implementation(kotlinLibraries.kotlin.reflect)
+                implementation(kotlinLibraries.kotlin.test.core)
+                implementation(kotlinLibraries.kotlin.test.annotations)
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                api(libraries.coroutines.core)
+                api(kotlinLibraries.coroutines.core)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(libraries.kotlin.reflect)
-                implementation(libraries.kotlin.test.junit)
+                implementation(kotlinLibraries.kotlin.reflect)
+                implementation(kotlinLibraries.kotlin.test.junit)
                 implementation("com.squareup.moshi:moshi-kotlin:1.9.3")
             }
         }

@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libraries.coroutines.core)
+                api(kotlinLibraries.coroutines.core)
             }
         }
 

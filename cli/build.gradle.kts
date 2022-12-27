@@ -11,6 +11,6 @@ application {
 dependencies {
     implementation(projects.client)
     implementation(projects.codec)
-    implementation(libraries.coroutines.core)
+    implementation(kotlinLibraries.coroutines.core)
     implementation("com.github.ajalt.clikt:clikt:3.2.0")
 }

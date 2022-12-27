@@ -2,10 +2,14 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 dependencyResolutionManagement {
     versionCatalogs {
-        create("libraries") {
-            from(fileTree("../gradle/versions").matching {
-                include("*.toml")
-            })
+        create("thirdParty") {
+            from(files("../gradle/versions/thirdparty.toml"))
+        }
+        create("kotlinLibraries") {
+            from(files("../gradle/versions/kotlin.toml"))
+        }
+        create("inkLibraries") {
+            from(files("../gradle/versions/ink.toml"))
         }
     }
 }

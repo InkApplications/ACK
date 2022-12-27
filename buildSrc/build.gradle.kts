@@ -6,7 +6,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation(libraries.kotlin.gradle)
-    implementation(libraries.mosaic)
-    implementation(libraries.ink.publishing)
+    implementation(kotlinLibraries.kotlin.gradle)
+    implementation(thirdParty.mosaic)
+    implementation(inkLibraries.ink.publishing)
 }

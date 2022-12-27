@@ -7,21 +7,21 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libraries.kotlinx.datetime.core)
+                api(kotlinLibraries.kotlinx.datetime.core)
                 api("com.inkapplications.spondee:measures:0.3.0")
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libraries.kotlin.test.core)
-                implementation(libraries.kotlin.test.annotations)
+                implementation(kotlinLibraries.kotlin.test.core)
+                implementation(kotlinLibraries.kotlin.test.annotations)
             }
         }
 
         val jvmTest by getting {
             dependencies {
-                implementation(libraries.kotlin.test.junit)
+                implementation(kotlinLibraries.kotlin.test.junit)
             }
         }
     }
