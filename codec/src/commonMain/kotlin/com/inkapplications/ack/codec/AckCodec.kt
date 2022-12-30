@@ -1,7 +1,10 @@
 package com.inkapplications.ack.codec
 
 import com.inkapplications.ack.codec.format.fixedLength
-import com.inkapplications.ack.structures.*
+import com.inkapplications.ack.structures.AprsPacket
+import com.inkapplications.ack.structures.Digipeater
+import com.inkapplications.ack.structures.EncodingConfig
+import com.inkapplications.ack.structures.PacketRoute
 import com.inkapplications.ack.structures.station.StationAddress
 import kimchi.logger.EmptyLogger
 import kimchi.logger.KimchiLogger

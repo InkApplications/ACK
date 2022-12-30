@@ -1,12 +1,14 @@
 package com.inkapplications.ack.codec.extension
 
 import com.inkapplications.ack.structures.unit.Strength
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.toFeet
+import inkapplications.spondee.scalar.bels
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.toAngle
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.roundToInt
+import inkapplications.spondee.structure.scale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,8 +21,8 @@ class SignalExtensionChunkerTest {
 
         assertEquals(Strength(2), result.result.value.strength)
         assertEquals(Cardinal.South.toAngle(), result.result.value.direction)
-        assertEquals(Bels.of(Deci, 6), result.result.value.gain)
-        assertEquals(Feet.of(80), result.result.value.height)
+        assertEquals(6.scale(Deci).bels, result.result.value.gain)
+        assertEquals(80.feet.roundToInt(), result.result.value.height?.toFeet()?.roundToInt())
         assertEquals("Test", result.remainingData, "Parsed data is removed")
     }
 }

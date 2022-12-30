@@ -1,7 +1,7 @@
 package com.inkapplications.ack.codec.extension
 
-import com.inkapplications.ack.structures.unit.Knots
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.knots
+import inkapplications.spondee.spatial.degrees
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -14,8 +14,8 @@ class TrajectoryExtensionChunkerTest {
 
         val result = TrajectoryExtensionChunker.popChunk(given)
 
-        assertEquals(Degrees.of(88), result.result.value.direction)
-        assertEquals(Knots.of(36), result.result.value.speed)
+        assertEquals(88.degrees, result.result.value.direction)
+        assertEquals(36.knots, result.result.value.speed)
         assertEquals("Hello World", result.remainingData)
     }
 

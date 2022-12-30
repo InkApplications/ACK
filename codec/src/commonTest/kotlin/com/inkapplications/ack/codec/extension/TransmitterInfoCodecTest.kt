@@ -1,13 +1,17 @@
 package com.inkapplications.ack.codec.extension
 
 import com.inkapplications.ack.structures.TransmitterInfo
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.measure.Watts
+import inkapplications.spondee.measure.metric.watts
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.toFeet
+import inkapplications.spondee.scalar.bels
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.toAngle
+import inkapplications.spondee.spatial.toDegrees
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.scale
+import inkapplications.spondee.structure.toDouble
+import inkapplications.spondee.structure.value
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -19,10 +23,10 @@ class TransmitterInfoCodecTest {
 
         val result = TransmitterInfoCodec.decode(given)
 
-        assertEquals(Watts.of(25), result.power)
-        assertEquals(Feet.of(20), result.height)
-        assertEquals(Bels.of(Deci, 3), result.gain)
-        assertEquals(Cardinal.East.toAngle(), result.direction)
+        assertEquals(25.0, result.power?.toWatts()!!.toDouble(), 1e-15)
+        assertEquals(20.0, result.height?.toFeet()!!.toDouble(), 1e-15)
+        assertEquals(3.0, result.gain?.toBels()!!.value(Deci).toDouble(), 1e-15)
+        assertEquals(Cardinal.East.toAngle().toDegrees().toDouble(), result.direction?.toDegrees()!!.toDouble(), 1e-15)
     }
 
     @Test
@@ -42,9 +46,9 @@ class TransmitterInfoCodecTest {
     @Test
     fun encode() {
         val given = TransmitterInfo(
-            power = Watts.of(25),
-            height = Feet.of(20),
-            gain = Bels.of(Deci, 3),
+            power = 25.watts,
+            height = 20.feet,
+            gain = 3.scale(Deci).bels,
             direction = Cardinal.East.toAngle(),
         )
 

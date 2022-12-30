@@ -4,16 +4,18 @@ import com.inkapplications.ack.codec.TestData
 import com.inkapplications.ack.codec.assertEquals
 import com.inkapplications.ack.codec.timestamp.withUtcValues
 import com.inkapplications.ack.structures.*
-import com.inkapplications.ack.structures.unit.Knots
-import inkapplications.spondee.measure.*
-import inkapplications.spondee.scalar.WholePercentage
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.metric.pascals
+import inkapplications.spondee.measure.metric.wattsPerSquareMeter
+import inkapplications.spondee.measure.us.*
+import inkapplications.spondee.scalar.percent
 import inkapplications.spondee.spatial.GeoCoordinates
+import inkapplications.spondee.spatial.degrees
 import inkapplications.spondee.spatial.latitude
 import inkapplications.spondee.spatial.longitude
 import inkapplications.spondee.structure.Deka
-import inkapplications.spondee.structure.of
-import inkapplications.spondee.structure.value
+import inkapplications.spondee.structure.Hundreths
+import inkapplications.spondee.structure.scale
+import inkapplications.spondee.structure.toDouble
 import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -40,15 +42,15 @@ class WeatherParserTest {
         assertEquals(expectedTime, result.timestamp)
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
         assertEquals(-72.0291, result.coordinates?.longitude?.asDecimal, 0.0001)
-        assertEquals(Degrees.of(220), result.windData.direction)
-        assertEquals(Knots.of(4), result.windData.speed)
-        assertEquals(MilesPerHour.of(5), result.windData.gust)
-        assertEquals(Fahrenheit.of((-7)), result.temperature)
-        assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
-        assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
-        assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
-        assertEquals(WholePercentage.of(50), result.humidity)
-        assertEquals(Pascals.of(Deka, 9900), result.pressure)
+        assertEquals(220.degrees, result.windData.direction)
+        assertEquals(4.knots, result.windData.speed)
+        assertEquals(5.milesPerHour, result.windData.gust)
+        assertEquals((-7).fahrenheit, result.temperature)
+        assertEquals(3.scale(Hundreths).inches, result.precipitation.rainToday)
+        assertEquals(2.scale(Hundreths).inches, result.precipitation.rainLast24Hours)
+        assertEquals(1.scale(Hundreths).inches, result.precipitation.rainLastHour)
+        assertEquals(50.percent, result.humidity)
+        assertEquals(9900.scale(Deka).pascals, result.pressure)
         assertEquals(symbolOf('/', '_'), result.symbol)
         assertNull(result.irradiance)
     }
@@ -62,8 +64,8 @@ class WeatherParserTest {
         assertNull(result.timestamp)
         assertEquals(49.0583, result.coordinates?.latitude?.asDecimal, 0.0001)
         assertEquals(-72.0291, result.coordinates?.longitude?.asDecimal, 0.0001)
-        assertEquals(Degrees.of(220), result.windData.direction)
-        assertEquals(Knots.of(4), result.windData.speed)
+        assertEquals(220.degrees, result.windData.direction)
+        assertEquals(4.knots, result.windData.speed)
         assertNull(result.windData.gust)
         assertNull(result.temperature)
         assertNull(result.precipitation.rainToday)
@@ -100,15 +102,15 @@ class WeatherParserTest {
         assertEquals(expectedTime, result.timestamp)
         assertEquals(49.5, result.coordinates?.latitude?.asDecimal, 0.1)
         assertEquals(-72.75, result.coordinates?.longitude?.asDecimal, 0.1)
-        assertEquals(Degrees.of(88), result.windData.direction)
-        assertEquals(36.2, result.windData.speed!!.value(Knots), 1e-1)
-        assertEquals(MilesPerHour.of(5), result.windData.gust)
-        assertEquals(Fahrenheit.of((77)), result.temperature)
-        assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
-        assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
-        assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
-        assertEquals(WholePercentage.of(50), result.humidity)
-        assertEquals(Pascals.of(Deka, 9900), result.pressure)
+        assertEquals(88.degrees, result.windData.direction)
+        assertEquals(36.2, result.windData.speed!!.toKnots().toDouble(), 1e-1)
+        assertEquals(5.milesPerHour, result.windData.gust)
+        assertEquals(77.fahrenheit, result.temperature)
+        assertEquals(3.scale(Hundreths).inches, result.precipitation.rainToday)
+        assertEquals(2.scale(Hundreths).inches, result.precipitation.rainLast24Hours)
+        assertEquals(1.scale(Hundreths).inches, result.precipitation.rainLastHour)
+        assertEquals(50.percent, result.humidity)
+        assertEquals(9900.scale(Deka).pascals, result.pressure)
         assertEquals(symbolOf('/', '_'), result.symbol)
         assertNull(result.irradiance)
     }
@@ -153,23 +155,23 @@ class WeatherParserTest {
                 nanosecond = 0
             ),
             windData = WindData(
-                direction = Degrees.of(220),
-                speed = MilesPerHour.of(4),
-                gust = MilesPerHour.of(5),
+                direction = 220.degrees,
+                speed = 4.milesPerHour,
+                gust = 5.milesPerHour,
             ),
             precipitation = Precipitation(
-                rainLastHour = HundredthInches.of(1),
-                rainLast24Hours = HundredthInches.of(2),
-                rainToday = HundredthInches.of(3),
-                snowLast24Hours = Inches.of(4),
+                rainLastHour = 1.scale(Hundreths).inches,
+                rainLast24Hours = 2.scale(Hundreths).inches,
+                rainToday = 3.scale(Hundreths).inches,
+                snowLast24Hours = 4.inches,
                 rawRain = 789,
             ),
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
             symbol = symbolOf('/', '_'),
-            temperature = Fahrenheit.of(-7),
-            humidity = WholePercentage.of(50),
-            pressure = Pascals.of(Deka, 9900),
-            irradiance = WattsPerSquareMeter.of(69),
+            temperature = (-7).fahrenheit,
+            humidity = 50.percent,
+            pressure = 9900.scale(Deka).pascals,
+            irradiance = 69.wattsPerSquareMeter,
         )
 
         val result = parser.generate(given, EncodingConfig(compression = EncodingPreference.Disfavored))

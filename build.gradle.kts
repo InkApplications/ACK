@@ -4,6 +4,7 @@ subprojects {
     repositories {
         mavenCentral()
         maven(url = "https://kotlin.bintray.com/kotlinx/")
+        google()
     }
 
     tasks.withType(Test::class) {

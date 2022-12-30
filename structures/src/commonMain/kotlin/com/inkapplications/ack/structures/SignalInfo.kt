@@ -2,7 +2,7 @@ package com.inkapplications.ack.structures
 
 import com.inkapplications.ack.structures.unit.Strength
 import inkapplications.spondee.measure.Length
-import inkapplications.spondee.measure.Level
+import inkapplications.spondee.scalar.Level
 import inkapplications.spondee.spatial.Angle
 
 /**

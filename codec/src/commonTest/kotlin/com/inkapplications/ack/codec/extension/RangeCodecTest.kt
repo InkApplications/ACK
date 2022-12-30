@@ -1,6 +1,6 @@
 package com.inkapplications.ack.codec.extension
 
-import inkapplications.spondee.measure.Miles
+import inkapplications.spondee.measure.us.miles
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -12,7 +12,7 @@ class RangeCodecTest {
 
         val result = RangeCodec.decode(given)
 
-        assertEquals(Miles.of(50), result, "Range is parsed as miles.")
+        assertEquals(50.miles, result, "Range is parsed as miles.")
     }
 
     @Test
@@ -31,7 +31,7 @@ class RangeCodecTest {
 
     @Test
     fun encode() {
-        val given = Miles.of(50)
+        val given = 50.miles
 
         val result = RangeCodec.encode(given)
 

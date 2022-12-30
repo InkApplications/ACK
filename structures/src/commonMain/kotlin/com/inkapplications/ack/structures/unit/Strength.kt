@@ -1,7 +1,5 @@
 package com.inkapplications.ack.structures.unit
 
-import kotlin.jvm.JvmInline
-
 /**
  * S-Meter strength measurement.
  */

@@ -7,12 +7,13 @@ import com.inkapplications.ack.codec.extension.TransmitterInfoCodec
 import com.inkapplications.ack.codec.format.Base91
 import com.inkapplications.ack.codec.format.fixedLength
 import com.inkapplications.ack.structures.*
-import com.inkapplications.ack.structures.unit.Knots
 import inkapplications.spondee.measure.Length
-import inkapplications.spondee.measure.MilesPerHour
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.toKnots
+import inkapplications.spondee.measure.us.toMilesPerHourValue
 import inkapplications.spondee.spatial.GeoCoordinates
-import inkapplications.spondee.structure.value
+import inkapplications.spondee.spatial.toDegrees
+import inkapplications.spondee.structure.roundToInt
+import inkapplications.spondee.structure.toInt
 import kotlin.math.roundToInt
 
 object PositionCodec {
@@ -76,22 +77,26 @@ object PositionCodec {
         val longitude = PlainPositionStringCodec.encodeLongitude(coordinates.longitude)
         val extra = when {
             directionReport != null -> {
-                val cse = directionReport.trajectory.direction?.value(Degrees)?.toInt()?.fixedLength(3) ?: "   "
-                val spd = directionReport.trajectory.speed?.value(Knots)?.toInt()?.fixedLength(3) ?: "   "
-                val bng = directionReport.bearing.value(Degrees).toInt().fixedLength(3)
+                val cse = directionReport.trajectory.direction?.toDegrees()?.toInt()?.fixedLength(3) ?: "   "
+                val spd = directionReport.trajectory.speed?.toKnots()?.toInt()?.fixedLength(3) ?: "   "
+                val bng = directionReport.bearing.toDegrees().toInt().fixedLength(3)
                 val nrq = QualityReportCodec.encode(directionReport.quality)
 
                 "$cse/$spd/$bng/$nrq"
             }
             signalInfo != null -> SignalInfoCodec.encode(signalInfo)
             trajectory != null -> {
-                val dir = trajectory.direction?.value(Degrees)?.roundToInt()?.fixedLength(3) ?: "   "
-                val spd = trajectory.speed?.value(Knots)?.roundToInt()?.fixedLength(3) ?: "   "
+                val dir = trajectory.direction?.toDegrees()?.roundToInt()?.fixedLength(3) ?: "   "
+                val spd = trajectory.speed?.toKnots()?.roundToInt()?.fixedLength(3) ?: "   "
                 "$dir/$spd"
             }
             windData != null -> {
-                val dir = windData.direction?.value(Degrees)?.roundToInt()?.fixedLength(3) ?: "   "
-                val spd = windData.speed?.value(MilesPerHour)?.roundToInt()?.fixedLength(3) ?: "   "
+                val dir = windData.direction?.toDegrees()?.roundToInt()?.fixedLength(3) ?: "   "
+                val spd = windData.speed
+                    ?.toMilesPerHourValue()
+                    ?.roundToInt()
+                    ?.fixedLength(3)
+                    ?: "   "
                 "$dir/$spd"
             }
             transmitterInfo != null -> TransmitterInfoCodec.encode(transmitterInfo)

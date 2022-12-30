@@ -6,8 +6,8 @@ import com.inkapplications.ack.codec.chunk.requireControl
 import com.inkapplications.ack.codec.extension.DataExtensions.TrajectoryExtra
 import com.inkapplications.ack.codec.optionalValue
 import com.inkapplications.ack.structures.at
-import com.inkapplications.ack.structures.unit.Knots
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.knots
+import inkapplications.spondee.spatial.degrees
 
 /**
  * Parse a bearing/speed extension.
@@ -21,8 +21,8 @@ import inkapplications.spondee.spatial.Degrees
 internal object TrajectoryExtensionChunker: Chunker<TrajectoryExtra> {
     override fun popChunk(data: String): Chunk<TrajectoryExtra> {
         data[3].requireControl('/')
-        val bearing = data.substring(0, 3).optionalValue?.let(Degrees::of)
-        val speed = data.substring(4, 7).optionalValue?.let { Knots.of(it) }
+        val bearing = data.substring(0, 3).optionalValue?.degrees
+        val speed = data.substring(4, 7).optionalValue?.knots
 
         return TrajectoryExtra(bearing at speed)
             .let { Chunk(it, data.substring(7)) }

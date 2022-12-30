@@ -5,15 +5,15 @@ import com.inkapplications.ack.structures.PacketData
 import com.inkapplications.ack.structures.ReportState
 import com.inkapplications.ack.structures.TransmitterInfo
 import com.inkapplications.ack.structures.symbolOf
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.measure.Watts
+import inkapplications.spondee.measure.metric.watts
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.scalar.bels
 import inkapplications.spondee.spatial.GeoCoordinates
 import inkapplications.spondee.spatial.latitude
 import inkapplications.spondee.spatial.longitude
 import inkapplications.spondee.spatial.toAngle
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.scale
 import kotlin.test.*
 
 class ItemTransformerTest {
@@ -60,9 +60,9 @@ class ItemTransformerTest {
             trajectory = null,
             range = null,
             transmitterInfo = TransmitterInfo(
-                power = Watts.of(25),
-                height = Feet.of(20),
-                gain = Bels.of(Deci, 3),
+                power = 25.watts,
+                height = 20.feet,
+                gain = 3.scale(Deci).bels,
                 direction = inkapplications.spondee.spatial.Cardinal.East.toAngle(),
             ),
             signalInfo = null,
@@ -86,9 +86,9 @@ class ItemTransformerTest {
             trajectory = null,
             range = null,
             transmitterInfo = TransmitterInfo(
-                power = Watts.of(25),
-                height = Feet.of(20),
-                gain = Bels.of(Deci, 3),
+                power = 25.watts,
+                height = 20.feet,
+                gain = 3.scale(Deci).bels,
                 direction = inkapplications.spondee.spatial.Cardinal.East.toAngle(),
             ),
             signalInfo = null,

@@ -1,8 +1,8 @@
 package com.inkapplications.ack.codec
 
 import com.inkapplications.ack.codec.timestamp.TimestampModule
-import com.inkapplications.ack.structures.station.StationAddress
 import com.inkapplications.ack.structures.PacketRoute
+import com.inkapplications.ack.structures.station.StationAddress
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone

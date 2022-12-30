@@ -7,8 +7,8 @@ import com.inkapplications.ack.codec.extension.DataExtensions.DirectionReportExt
 import com.inkapplications.ack.codec.optionalValue
 import com.inkapplications.ack.structures.DirectionReport
 import com.inkapplications.ack.structures.at
-import com.inkapplications.ack.structures.unit.Knots
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.knots
+import inkapplications.spondee.spatial.degrees
 
 /**
  * Parse a direction with quality report extension.
@@ -22,9 +22,9 @@ internal object DirectionReportExtensionChunker: Chunker<DirectionReportExtra> {
         data[7].requireControl('/')
         data[11].requireControl('/')
 
-        val course = data.substring(0, 3).optionalValue?.let(Degrees::of)
-        val speed = data.substring(4, 7).optionalValue?.let { Knots.of(it) }
-        val bearing = data.substring(8, 11).toInt().let(Degrees::of)
+        val course = data.substring(0, 3).optionalValue?.degrees
+        val speed = data.substring(4, 7).optionalValue?.knots
+        val bearing = data.substring(8, 11).toInt().degrees
         val quality = data.substring(12, 15).let {
             QualityReportCodec.decode(it)
         }

@@ -3,9 +3,11 @@ package com.inkapplications.ack.codec.extension
 import com.inkapplications.ack.codec.SimpleCodec
 import com.inkapplications.ack.codec.digit
 import com.inkapplications.ack.structures.QualityReport
-import inkapplications.spondee.measure.Miles
-import inkapplications.spondee.spatial.Degrees
-import inkapplications.spondee.structure.value
+import inkapplications.spondee.measure.us.miles
+import inkapplications.spondee.measure.us.toMiles
+import inkapplications.spondee.spatial.degrees
+import inkapplications.spondee.spatial.toDegrees
+import inkapplications.spondee.structure.toDouble
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -20,20 +22,22 @@ internal object QualityReportCodec: SimpleCodec<QualityReport> {
     override fun decode(data: String): QualityReport {
         return QualityReport(
             data[0].digit,
-            Miles.of(RANGE_BASE.pow(data[1].digit.toInt())),
-            Degrees.of(QUALITY_BASE.pow(QUALITY_OFFSET - data[2].digit))
+            RANGE_BASE.pow(data[1].digit.toInt()).miles,
+            QUALITY_BASE.pow(QUALITY_OFFSET - data[2].digit).degrees,
         )
     }
 
     override fun encode(data: QualityReport): String {
         val n = data.number.toString()[0]
-        val r = data.range.value(Miles)
+        val r = data.range.toMiles()
+            .toDouble()
             .let { log10(it) }
             .div(log10(RANGE_BASE))
             .toInt()
             .toString()
             .get(0)
-        val q = data.accuracy.value(Degrees)
+        val q = data.accuracy.toDegrees()
+            .toDouble()
             .let { log10(it) }
             .div(log10(QUALITY_BASE))
             .plus(QUALITY_OFFSET)

@@ -34,7 +34,7 @@ internal class KtorAprsDataClient(
             launch {
                 while (isActive && !socketRead.isClosedForRead) {
                     socketRead.readLine {
-                        receiveChannel.offer(it)
+                        receiveChannel.trySend(it)
                     }
                 }
             }

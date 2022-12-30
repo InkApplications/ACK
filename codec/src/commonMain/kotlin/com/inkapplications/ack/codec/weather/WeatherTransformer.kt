@@ -8,19 +8,18 @@ import com.inkapplications.ack.codec.chunk.parseOptionalAfter
 import com.inkapplications.ack.codec.extension.TrajectoryExtensionChunker
 import com.inkapplications.ack.codec.format.fixedLength
 import com.inkapplications.ack.codec.position.*
-import com.inkapplications.ack.codec.position.CompressedPositionExtensions
-import com.inkapplications.ack.codec.position.MixedPositionChunker
-import com.inkapplications.ack.codec.position.PositionReport
-import com.inkapplications.ack.codec.position.compressedExtension
 import com.inkapplications.ack.codec.requireType
 import com.inkapplications.ack.codec.timestamp.TimestampModule
 import com.inkapplications.ack.codec.valueFor
 import com.inkapplications.ack.structures.*
 import inkapplications.spondee.measure.*
-import inkapplications.spondee.scalar.WholePercentage
-import inkapplications.spondee.structure.Deka
-import inkapplications.spondee.structure.of
-import inkapplications.spondee.structure.value
+import inkapplications.spondee.measure.metric.pascals
+import inkapplications.spondee.measure.metric.toWattsPerSquareMeter
+import inkapplications.spondee.measure.metric.wattsPerSquareMeter
+import inkapplications.spondee.measure.us.*
+import inkapplications.spondee.scalar.percent
+import inkapplications.spondee.scalar.toWholePercentage
+import inkapplications.spondee.structure.*
 import kotlin.math.roundToInt
 
 internal class WeatherTransformer(
@@ -53,20 +52,20 @@ internal class WeatherTransformer(
             windData = WindData(
                 direction = windData?.direction,
                 speed = windData?.speed,
-                gust = weatherData.result['g']?.let { MilesPerHour.of(it) }
+                gust = weatherData.result['g']?.milesPerHour,
             ),
             precipitation = Precipitation(
-                rainLastHour = weatherData.result['r']?.let { HundredthInches.of(it) },
-                rainLast24Hours = weatherData.result['p']?.let { HundredthInches.of(it) },
-                rainToday = weatherData.result['P']?.let { HundredthInches.of(it) },
+                rainLastHour = weatherData.result['r']?.scale(Hundreths)?.inches,
+                rainLast24Hours = weatherData.result['p']?.scale(Hundreths)?.inches,
+                rainToday = weatherData.result['P']?.scale(Hundreths)?.inches,
                 rawRain = weatherData.result['#'],
-                snowLast24Hours = weatherData.result['s']?.let { Inches.of(it) },
+                snowLast24Hours = weatherData.result['s']?.inches,
             ),
-            temperature = weatherData.result['t']?.let { Fahrenheit.of(it) },
-            humidity = weatherData.result['h']?.let { WholePercentage.of(it) },
-            pressure = weatherData.result['b']?.let { Pascals.of(Deka, it) },
-            irradiance = weatherData.result['L']?.let { WattsPerSquareMeter.of(it) }
-                ?: weatherData.result['l']?.plus(1000)?.let { WattsPerSquareMeter.of(it) }
+            temperature = weatherData.result['t']?.fahrenheit,
+            humidity = weatherData.result['h']?.percent,
+            pressure = weatherData.result['b']?.scale(Deka)?.pascals,
+            irradiance = weatherData.result['L']?.wattsPerSquareMeter
+                ?: weatherData.result['l']?.plus(1000)?.wattsPerSquareMeter,
         )
     }
 
@@ -85,16 +84,16 @@ internal class WeatherTransformer(
             symbol = symbol,
             windData = packet.windData,
         )
-        val g = packet.windData.gust?.value(MilesPerHour).generateChunk('g')
-        val t = packet.temperature?.value(Fahrenheit).generateChunk('t')
-        val r = packet.precipitation.rainLastHour?.value(HundredthInches).generateChunk('r')
-        val p = packet.precipitation.rainLast24Hours?.value(HundredthInches).generateChunk('p')
-        val P = packet.precipitation.rainToday?.value(HundredthInches).generateChunk('P')
-        val h = packet.humidity?.value(WholePercentage).generateChunk('h', 2)
-        val b = packet.pressure?.value(Deka, Pascals).generateChunk('b', 5)
-        val L = packet.irradiance?.value(WattsPerSquareMeter)?.takeIf { it.roundToInt() < 1000 }.generateChunk('L')
-        val l = packet.irradiance?.value(WattsPerSquareMeter)?.takeIf { it.roundToInt() >= 1000 }?.minus(1000).generateChunk('l')
-        val sn = packet.precipitation.snowLast24Hours?.value(Inches).generateChunk('s')
+        val g = packet.windData.gust?.toMilesPerHourValue().generateChunk('g')
+        val t = packet.temperature?.toFahrenheit()?.value.generateChunk('t')
+        val r = packet.precipitation.rainLastHour?.toInches()?.value(Hundreths).generateChunk('r')
+        val p = packet.precipitation.rainLast24Hours?.toInches()?.value(Hundreths).generateChunk('p')
+        val P = packet.precipitation.rainToday?.toInches()?.value(Hundreths).generateChunk('P')
+        val h = packet.humidity?.toWholePercentage()?.value.generateChunk('h', 2)
+        val b = packet.pressure?.toPascals()?.value(Deka).generateChunk('b', 5)
+        val L = packet.irradiance?.toWattsPerSquareMeter()?.value()?.takeIf { it.roundToInt() < 1000 }.generateChunk('L')
+        val l = packet.irradiance?.toWattsPerSquareMeter()?.value()?.takeIf { it.roundToInt() >= 1000 }?.minus(1000).generateChunk('l')
+        val sn = packet.precipitation.snowLast24Hours?.toInches()?.value.generateChunk('s')
         val rawRain = packet.precipitation.rawRain.generateChunk('#')
 
         return "$identifier$time$position$g$t$r$p$P$h$b$L$l$sn$rawRain"

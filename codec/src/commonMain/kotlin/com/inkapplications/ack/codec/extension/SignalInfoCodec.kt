@@ -7,11 +7,14 @@ import com.inkapplications.ack.codec.format.fixedLength
 import com.inkapplications.ack.codec.format.orZero
 import com.inkapplications.ack.structures.SignalInfo
 import com.inkapplications.ack.structures.unit.Strength
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.toFeet
+import inkapplications.spondee.scalar.bels
+import inkapplications.spondee.spatial.degrees
+import inkapplications.spondee.spatial.toDegrees
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.scale
+import inkapplications.spondee.structure.toDouble
 import inkapplications.spondee.structure.value
 import kotlin.math.log10
 import kotlin.math.pow
@@ -29,9 +32,9 @@ internal object SignalInfoCodec: SimpleCodec<SignalInfo> {
 
         return SignalInfo(
             strength = Strength(data[3].digit),
-            height = Feet.of(HEIGHT_BASE.pow(data[4].digit.toInt()).times(HEIGHT_MULTIPLIER)),
-            gain = Bels.of(Deci, data[5].digit),
-            direction = data[6].digit.times(DIRECTION_MULTIPLIER).takeIf { it != 0 }?.let(Degrees::of)
+            height = HEIGHT_BASE.pow(data[4].digit.toInt()).times(HEIGHT_MULTIPLIER).feet,
+            gain = data[5].digit.scale(Deci).bels,
+            direction = data[6].digit.times(DIRECTION_MULTIPLIER).takeIf { it != 0 }?.degrees
         )
     }
 
@@ -42,7 +45,8 @@ internal object SignalInfoCodec: SimpleCodec<SignalInfo> {
             .orZero()
             .fixedLength(1)
         val h = data.height
-            ?.value(Feet)
+            ?.toFeet()
+            ?.toDouble()
             ?.div(HEIGHT_MULTIPLIER)
             ?.let { log10(it) }
             ?.div(log10(HEIGHT_BASE))
@@ -50,12 +54,14 @@ internal object SignalInfoCodec: SimpleCodec<SignalInfo> {
             .orZero()
             .fixedLength(1)
         val g = data.gain
-            ?.value(Deci, Bels)
+            ?.toBels()
+            ?.value(Deci)
             ?.toInt()
             .orZero()
             .fixedLength(1)
         val d = data.direction
-            ?.value(Degrees)
+            ?.toDegrees()
+            ?.toDouble()
             ?.div(DIRECTION_MULTIPLIER)
             ?.roundToInt()
             .orZero()

@@ -1,7 +1,5 @@
 package com.inkapplications.ack.structures.station
 
-import kotlin.jvm.JvmInline
-
 /**
  * Wraps a canonical SSID value.
  */

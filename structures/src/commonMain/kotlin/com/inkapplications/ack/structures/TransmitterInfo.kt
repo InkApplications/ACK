@@ -1,8 +1,8 @@
 package com.inkapplications.ack.structures
 
 import inkapplications.spondee.measure.Length
-import inkapplications.spondee.measure.Level
 import inkapplications.spondee.measure.Power
+import inkapplications.spondee.scalar.Level
 import inkapplications.spondee.spatial.Angle
 
 /**

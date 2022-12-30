@@ -1,6 +1,6 @@
 package com.inkapplications.ack.codec.altitude
 
-import inkapplications.spondee.measure.Feet
+import inkapplications.spondee.measure.us.feet
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -12,7 +12,7 @@ class AltitudeChunkerTest {
 
         val result = AltitudeChunker.popChunk(given)
 
-        assertEquals(Feet.of(123456), result.result, "Altitude is parsed from body.")
+        assertEquals(123456.feet, result.result, "Altitude is parsed from body.")
         assertEquals("Hello World", result.remainingData, "Parsed data is removed from body.")
     }
 
@@ -22,7 +22,7 @@ class AltitudeChunkerTest {
 
         val result = AltitudeChunker.popChunk(given)
 
-        assertEquals(Feet.of(1234), result.result, "Altitude is parsed from body.")
+        assertEquals(1234.feet, result.result, "Altitude is parsed from body.")
         assertEquals("Hello I'm at!", result.remainingData, "Parsed data is removed from body.")
     }
 

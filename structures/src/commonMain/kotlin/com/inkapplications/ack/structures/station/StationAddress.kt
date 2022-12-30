@@ -1,6 +1,6 @@
 package com.inkapplications.ack.structures.station
 
-import com.inkapplications.ack.structures.station.SsidType.*
+import com.inkapplications.ack.structures.station.SsidType.Primary
 
 /**
  * Callsign/SSID pair used in AX.25 to identify a station.

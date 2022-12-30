@@ -7,13 +7,13 @@ import com.inkapplications.ack.codec.digitBasedValue
 import com.inkapplications.ack.codec.format.fixedLength
 import com.inkapplications.ack.codec.format.orZero
 import com.inkapplications.ack.structures.TransmitterInfo
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.measure.Watts
-import inkapplications.spondee.spatial.Degrees
-import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
-import inkapplications.spondee.structure.value
+import inkapplications.spondee.measure.metric.watts
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.toFeet
+import inkapplications.spondee.scalar.bels
+import inkapplications.spondee.spatial.degrees
+import inkapplications.spondee.spatial.toDegrees
+import inkapplications.spondee.structure.*
 import kotlin.math.log10
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -32,36 +32,39 @@ object TransmitterInfoCodec: SimpleCodec<TransmitterInfo> {
             .digit
             .toFloat()
             .pow(POWER_EXPONENT)
-            .let(Watts::of)
+            .watts
         val height = data[4]
             .digitBasedValue
             .toInt()
             .let { HEIGHT_BASE.pow(it) }
             .times(HEIGHT_MULTIPLIER)
-            .let(Feet::of)
+            .feet
         val gain = data[5]
             .digit
             .toInt()
-            .let { Bels.of(Deci, it) }
+            .scale(Deci)
+            .bels
         val direction = data[6]
             .digit
             .toInt()
             .times(DIRECTION_MULTIPLIER)
             .takeIf { it != 0 }
-            ?.let(Degrees::of)
+            ?.degrees
 
         return TransmitterInfo(power, height, gain, direction)
     }
 
     override fun encode(data: TransmitterInfo): String {
         val power = data.power
-            ?.value(Watts)
+            ?.toWatts()
+            ?.toDouble()
             ?.pow(1.0 / POWER_EXPONENT)
             ?.roundToInt()
             .orZero()
             .fixedLength(1)
         val height = data.height
-            ?.value(Feet)
+            ?.toFeet()
+            ?.toDouble()
             ?.div(HEIGHT_MULTIPLIER)
             ?.let { log10(it) }
             ?.div(log10(HEIGHT_BASE))
@@ -69,12 +72,14 @@ object TransmitterInfoCodec: SimpleCodec<TransmitterInfo> {
             .orZero()
             .fixedLength(1)
         val gain = data.gain
-            ?.value(Deci, Bels)
+            ?.toBels()
+            ?.value(Deci)
+            ?.toDouble()
             ?.roundToInt()
             .orZero()
             .fixedLength(1)
         val direction = data.direction
-            ?.value(Degrees)
+            ?.toDegrees()
             ?.div(DIRECTION_MULTIPLIER)
             ?.roundToInt()
             .orZero()

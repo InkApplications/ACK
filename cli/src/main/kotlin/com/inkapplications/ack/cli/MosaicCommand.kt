@@ -10,7 +10,6 @@ import com.jakewharton.mosaic.MosaicScope
 import com.jakewharton.mosaic.runMosaic
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.sample
 
 /**

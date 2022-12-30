@@ -11,7 +11,6 @@ import com.inkapplications.ack.client.AprsClientModule
 import com.inkapplications.ack.client.Credentials
 import com.inkapplications.ack.codec.Ack
 import kimchi.logger.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.runBlocking

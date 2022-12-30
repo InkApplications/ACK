@@ -1,6 +1,9 @@
 package com.inkapplications.ack.codec
 
-import com.inkapplications.ack.structures.*
+import com.inkapplications.ack.structures.AprsPacket
+import com.inkapplications.ack.structures.Digipeater
+import com.inkapplications.ack.structures.PacketData
+import com.inkapplications.ack.structures.PacketRoute
 import com.inkapplications.ack.structures.station.StationAddress
 import kotlin.test.Test
 import kotlin.test.assertEquals

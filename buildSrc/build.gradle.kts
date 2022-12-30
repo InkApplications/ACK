@@ -4,6 +4,7 @@ plugins {
 repositories {
     gradlePluginPortal()
     mavenCentral()
+    google()
 }
 dependencies {
     implementation(kotlinLibraries.kotlin.gradle)

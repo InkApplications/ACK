@@ -1,8 +1,11 @@
 package com.inkapplications.ack.codec.extension
 
 import com.inkapplications.ack.structures.QualityReport
-import inkapplications.spondee.measure.Miles
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.miles
+import inkapplications.spondee.measure.us.toMiles
+import inkapplications.spondee.spatial.degrees
+import inkapplications.spondee.spatial.toDegrees
+import inkapplications.spondee.structure.toDouble
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,16 +17,16 @@ class QualityReportCodecTest {
         val result = QualityReportCodec.decode(given)
 
         assertEquals(7.toShort(), result.number)
-        assertEquals(Miles.of(4), result.range)
-        assertEquals(Degrees.of(1), result.accuracy)
+        assertEquals(4.0, result.range.toMiles().toDouble(), 1e-15)
+        assertEquals(1.0, result.accuracy.toDegrees().toDouble(), 1e-15)
     }
 
     @Test
     fun encode() {
         val given = QualityReport(
             number = 7,
-            range = Miles.of(4),
-            accuracy = Degrees.of(1),
+            range = 4.miles,
+            accuracy = 1.degrees,
         )
 
         val result = QualityReportCodec.encode(given)

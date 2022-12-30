@@ -5,11 +5,16 @@ import com.inkapplications.ack.codec.timestamp.withUtcValues
 import com.inkapplications.ack.structures.PacketData
 import com.inkapplications.ack.structures.Precipitation
 import com.inkapplications.ack.structures.WindData
-import inkapplications.spondee.measure.*
-import inkapplications.spondee.scalar.WholePercentage
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.metric.pascals
+import inkapplications.spondee.measure.metric.wattsPerSquareMeter
+import inkapplications.spondee.measure.us.fahrenheit
+import inkapplications.spondee.measure.us.inches
+import inkapplications.spondee.measure.us.milesPerHour
+import inkapplications.spondee.scalar.percent
+import inkapplications.spondee.spatial.degrees
 import inkapplications.spondee.structure.Deka
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.Hundreths
+import inkapplications.spondee.structure.scale
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Month
 import kotlin.test.Test
@@ -36,14 +41,14 @@ class PositionlessWeatherParserTest {
             )
 
         assertEquals(expectedTime, result.timestamp)
-        assertEquals(Degrees.of(220), result.windData.direction)
-        assertEquals(MilesPerHour.of(4), result.windData.speed)
-        assertEquals(MilesPerHour.of(5), result.windData.gust)
-        assertEquals(HundredthInches.of(1), result.precipitation.rainLastHour)
-        assertEquals(HundredthInches.of(2), result.precipitation.rainLast24Hours)
-        assertEquals(HundredthInches.of(3), result.precipitation.rainToday)
-        assertEquals(WholePercentage.of(50), result.humidity)
-        assertEquals(Pascals.of(Deka, 9900), result.pressure)
+        assertEquals(220.degrees, result.windData.direction)
+        assertEquals(4.milesPerHour, result.windData.speed)
+        assertEquals(5.milesPerHour, result.windData.gust)
+        assertEquals(1.scale(Hundreths).inches, result.precipitation.rainLastHour)
+        assertEquals(2.scale(Hundreths).inches, result.precipitation.rainLast24Hours)
+        assertEquals(3.scale(Hundreths).inches, result.precipitation.rainToday)
+        assertEquals(50.percent, result.humidity)
+        assertEquals(9900.scale(Deka).pascals, result.pressure)
         assertNull(result.irradiance)
         assertNull(result.symbol)
         assertNull(result.coordinates)
@@ -70,7 +75,7 @@ class PositionlessWeatherParserTest {
         assertNull(result.windData.gust)
         assertNull(result.precipitation.rainLastHour)
         assertNull(result.precipitation.rainLast24Hours)
-        assertEquals(HundredthInches.of(12), result.precipitation.rainToday)
+        assertEquals(12.scale(Hundreths).inches, result.precipitation.rainToday)
         assertNull(result.humidity)
         assertNull(result.pressure)
         assertNull(result.irradiance)
@@ -97,23 +102,23 @@ class PositionlessWeatherParserTest {
                 nanosecond = 0
             ),
             windData = WindData(
-                direction = Degrees.of(220),
-                speed = MilesPerHour.of(4),
-                gust = MilesPerHour.of(5),
+                direction = 220.degrees,
+                speed = 4.milesPerHour,
+                gust = 5.milesPerHour,
             ),
             precipitation = Precipitation(
-                rainLastHour = HundredthInches.of(1),
-                rainLast24Hours = HundredthInches.of(2),
-                rainToday = HundredthInches.of(3),
-                snowLast24Hours = Inches.of(4),
+                rainLastHour = 1.scale(Hundreths).inches,
+                rainLast24Hours = 2.scale(Hundreths).inches,
+                rainToday = 3.scale(Hundreths).inches,
+                snowLast24Hours = 4.inches,
                 rawRain = 789,
             ),
             coordinates = null,
             symbol = null,
-            temperature = Fahrenheit.of(77),
-            humidity = WholePercentage.of(50),
-            pressure = Pascals.of(Deka, 9900),
-            irradiance = WattsPerSquareMeter.of(69),
+            temperature = 77.fahrenheit,
+            humidity = 50.percent,
+            pressure = 9900.scale(Deka).pascals,
+            irradiance = 69.wattsPerSquareMeter,
         )
 
         val result = parser.generate(given)
@@ -165,7 +170,7 @@ class PositionlessWeatherParserTest {
             temperature = null,
             humidity = null,
             pressure = null,
-            irradiance = WattsPerSquareMeter.of(1025),
+            irradiance = 1025.wattsPerSquareMeter,
         )
 
         val result = parser.generate(given)

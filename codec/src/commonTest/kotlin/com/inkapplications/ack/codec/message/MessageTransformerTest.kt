@@ -1,7 +1,7 @@
 package com.inkapplications.ack.codec.message
 
-import com.inkapplications.ack.structures.station.StationAddress
 import com.inkapplications.ack.structures.PacketData
+import com.inkapplications.ack.structures.station.StationAddress
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails

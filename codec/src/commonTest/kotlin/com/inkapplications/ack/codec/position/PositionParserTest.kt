@@ -7,13 +7,11 @@ import com.inkapplications.ack.structures.EncodingConfig
 import com.inkapplications.ack.structures.EncodingPreference
 import com.inkapplications.ack.structures.PacketData
 import com.inkapplications.ack.structures.symbolOf
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.measure.Miles
-import inkapplications.spondee.measure.Watts
+import inkapplications.spondee.measure.us.toFeet
+import inkapplications.spondee.measure.us.toMiles
 import inkapplications.spondee.spatial.*
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.toDouble
 import inkapplications.spondee.structure.value
 import kotlinx.datetime.Clock
 import kotlin.test.*
@@ -52,12 +50,12 @@ class PositionParserTest {
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test 001234", result.comment)
         assertEquals(symbolOf('/', '#'), result.symbol)
-        assertEquals(Watts.of(25), result.transmitterInfo?.power)
-        assertEquals(Feet.of(20), result.transmitterInfo?.height)
-        assertEquals(Bels.of(Deci, 3), result.transmitterInfo?.gain)
+        assertEquals(25.0, result.transmitterInfo?.power?.toWatts()!!.toDouble(), 1e-15)
+        assertEquals(20.0, result.transmitterInfo?.height?.toFeet()!!.toDouble(), 1e-15)
+        assertEquals(3.0, result.transmitterInfo?.gain?.toBels()?.value(Deci)!!.toDouble(), 1e-15)
         assertTrue(result.supportsMessaging)
         assertNull(result.timestamp)
-        assertEquals(Cardinal.East.toAngle(), result.transmitterInfo?.direction)
+        assertEquals(Cardinal.East.toAngle().toDegrees().toDouble(), result.transmitterInfo?.direction?.toDegrees()!!.toDouble(), 1e-15)
         assertNull(result.altitude)
         assertNull(result.trajectory)
         assertNull(result.range)
@@ -77,7 +75,7 @@ class PositionParserTest {
         assertEquals(symbolOf('/', '-'), result.symbol)
         assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
-        assertEquals(Feet.of(1234), result.altitude)
+        assertEquals(1234.0, result.altitude?.toFeet()!!.toDouble())
         assertNull(result.trajectory)
         assertNull(result.range)
         assertNull(result.transmitterInfo)
@@ -149,7 +147,7 @@ class PositionParserTest {
         assertNull(result.timestamp)
         assertNull(result.altitude)
         assertNull(result.trajectory)
-        assertEquals(20.1253137781, result.range?.value(Miles), 1e-10)
+        assertEquals(20.1253137781, result.range?.toMiles()?.toDouble(), 1e-10)
         assertNull(result.transmitterInfo)
         assertNull(result.signalInfo)
         assertNull(result.directionReportExtra)
@@ -178,7 +176,7 @@ class PositionParserTest {
         assertEquals(expected, result.timestamp)
         assertNull(result.altitude)
         assertNull(result.trajectory)
-        assertEquals(20.1253137781, result.range?.value(Miles), 1e-10)
+        assertEquals(20.1253137781, result.range?.toMiles()?.toDouble(), 1e-10)
         assertNull(result.transmitterInfo)
         assertNull(result.signalInfo)
         assertNull(result.directionReportExtra)

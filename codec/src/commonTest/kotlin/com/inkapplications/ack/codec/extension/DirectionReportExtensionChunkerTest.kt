@@ -1,8 +1,9 @@
 package com.inkapplications.ack.codec.extension
 
-import com.inkapplications.ack.structures.unit.Knots
-import inkapplications.spondee.measure.Miles
-import inkapplications.spondee.spatial.Degrees
+import inkapplications.spondee.measure.us.toKnots
+import inkapplications.spondee.measure.us.toMiles
+import inkapplications.spondee.spatial.toDegrees
+import inkapplications.spondee.structure.toDouble
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -15,12 +16,12 @@ class DirectionReportExtensionChunkerTest {
 
         val result = DirectionReportExtensionChunker.popChunk(given)
 
-        assertEquals(Degrees.of(88), result.result.value.trajectory.direction)
-        assertEquals(Knots.of(36), result.result.value.trajectory.speed)
-        assertEquals(Degrees.of(270), result.result.value.bearing)
-        assertEquals(7.toShort(), result.result.value.quality?.number)
-        assertEquals(Miles.of(4), result.result.value.quality?.range)
-        assertEquals(Degrees.of(1), result.result.value.quality?.accuracy)
+        assertEquals(88.0, result.result.value.trajectory.direction?.toDegrees()!!.toDouble(), 1e-15)
+        assertEquals(36.0, result.result.value.trajectory.speed?.toKnots()!!.toDouble(), 1e-15)
+        assertEquals(270.0, result.result.value.bearing.toDegrees().toDouble(), 1e-15)
+        assertEquals(7.toShort(), result.result.value.quality.number)
+        assertEquals(4.0, result.result.value.quality.range.toMiles().toDouble(), 1e-15)
+        assertEquals(1.0, result.result.value.quality.accuracy.toDegrees().toDouble(), 1e-15)
         assertEquals("Hello World", result.remainingData)
     }
 
@@ -32,10 +33,10 @@ class DirectionReportExtensionChunkerTest {
 
         assertNull(result.result.value.trajectory.direction)
         assertNull(result.result.value.trajectory.speed)
-        assertEquals(Degrees.of(270), result.result.value.bearing)
-        assertEquals(7.toShort(), result.result.value.quality?.number)
-        assertEquals(Miles.of(4), result.result.value.quality?.range)
-        assertEquals(Degrees.of(1), result.result.value.quality?.accuracy)
+        assertEquals(270.0, result.result.value.bearing.toDegrees().toDouble(), 1e-15)
+        assertEquals(7.toShort(), result.result.value.quality.number)
+        assertEquals(4.0, result.result.value.quality.range.toMiles().toDouble(), 1e-15)
+        assertEquals(1.0, result.result.value.quality.accuracy.toDegrees().toDouble(), 1e-15)
         assertEquals("Hello World", result.remainingData)
     }
 

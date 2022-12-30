@@ -1,15 +1,15 @@
 package com.inkapplications.ack.codec.position
 
 import com.inkapplications.ack.structures.*
-import com.inkapplications.ack.structures.unit.Knots
 import com.inkapplications.ack.structures.unit.Strength
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.measure.Miles
-import inkapplications.spondee.measure.Watts
+import inkapplications.spondee.measure.metric.watts
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.knots
+import inkapplications.spondee.measure.us.miles
+import inkapplications.spondee.scalar.bels
 import inkapplications.spondee.spatial.*
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.scale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -64,8 +64,8 @@ class PositionCodecTest {
                 signalInfo = SignalInfo(
                     strength = Strength(2),
                     direction = Cardinal.South.toAngle(),
-                    height = Feet.of(80),
-                    gain = Bels.of(Deci, 6),
+                    height = 80.feet,
+                    gain = 6.scale(Deci).bels,
                 )
             )
         }
@@ -80,7 +80,7 @@ class PositionCodecTest {
                 ),
                 coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
                 symbol = symbolOf('/', '>'),
-                altitude = Feet.of(10004),
+                altitude = 10004.feet,
             )
         }
     }
@@ -92,12 +92,12 @@ class PositionCodecTest {
                 config = EncodingConfig(),
                 coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
                 symbol = symbolOf('/', '>'),
-                altitude = Feet.of(10004),
+                altitude = 10004.feet,
                 signalInfo = SignalInfo(
                     strength = Strength(2),
                     direction = Cardinal.South.toAngle(),
-                    height = Feet.of(80),
-                    gain = Bels.of(Deci, 6),
+                    height = 80.feet,
+                    gain = 6.scale(Deci).bels,
                 )
             )
         }
@@ -109,7 +109,7 @@ class PositionCodecTest {
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
             symbol = symbolOf('/', '>'),
-            altitude = Feet.of(10004),
+            altitude = 10004.feet,
         )
 
         assertEquals("/5L!!<*e7>S]Q", result)
@@ -121,7 +121,7 @@ class PositionCodecTest {
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
             symbol = symbolOf('/', '>'),
-            range = Miles.of(20),
+            range = 20.miles,
         )
 
         assertEquals("/5L!!<*e7>{?Q", result)
@@ -133,7 +133,7 @@ class PositionCodecTest {
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
             symbol = symbolOf('/', '>'),
-            trajectory = Trajectory(Degrees.of(88), Knots.of(36.2)),
+            trajectory = Trajectory(88.degrees, 36.2.knots),
         )
 
         assertEquals("/5L!!<*e7>7PQ", result)
@@ -146,12 +146,12 @@ class PositionCodecTest {
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
             symbol = symbolOf('/', '>'),
             directionReport = DirectionReport(
-                trajectory = Degrees.of(88) at Knots.of(36),
-                bearing = Degrees.of(270),
+                trajectory = 88.degrees at 36.knots,
+                bearing = 270.degrees,
                 quality = QualityReport(
                     number = 7,
-                    range = Miles.of(4),
-                    accuracy = Degrees.of(1),
+                    range = 4.miles,
+                    accuracy = 1.degrees,
                 )
             )
         )
@@ -168,8 +168,8 @@ class PositionCodecTest {
             signalInfo = SignalInfo(
                 strength = Strength(2),
                 direction = Cardinal.South.toAngle(),
-                height = Feet.of(80),
-                gain = Bels.of(Deci, 6),
+                height = 80.feet,
+                gain = 6.scale(Deci).bels,
             )
         )
 
@@ -183,9 +183,9 @@ class PositionCodecTest {
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
             symbol = symbolOf('/', '>'),
             transmitterInfo = TransmitterInfo(
-                power = Watts.of(25),
-                height = Feet.of(20),
-                gain = Bels.of(Deci, 3),
+                power = 25.watts,
+                height = 20.feet,
+                gain = 3.scale(Deci).bels,
                 direction = Cardinal.East.toAngle(),
             )
         )

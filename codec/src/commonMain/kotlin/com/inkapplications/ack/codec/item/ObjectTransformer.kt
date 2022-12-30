@@ -1,7 +1,7 @@
 package com.inkapplications.ack.codec.item
 
-import com.inkapplications.ack.codec.PacketFormatException
 import com.inkapplications.ack.codec.PacketDataTransformer
+import com.inkapplications.ack.codec.PacketFormatException
 import com.inkapplications.ack.codec.chunk.common.CharChunker
 import com.inkapplications.ack.codec.chunk.common.ControlCharacterChunker
 import com.inkapplications.ack.codec.chunk.common.SpanChunker

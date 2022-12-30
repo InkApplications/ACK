@@ -4,13 +4,13 @@ import com.inkapplications.ack.codec.TestData
 import com.inkapplications.ack.codec.assertEquals
 import com.inkapplications.ack.codec.timestamp.withUtcValues
 import com.inkapplications.ack.structures.*
-import com.inkapplications.ack.structures.unit.Knots
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
-import inkapplications.spondee.measure.Watts
+import inkapplications.spondee.measure.metric.watts
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.knots
+import inkapplications.spondee.scalar.bels
 import inkapplications.spondee.spatial.*
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.scale
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.*
@@ -34,7 +34,7 @@ class ObjectTransformerTest {
         assertEquals(45, resultDateTime?.minute)
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
-        assertEquals(Degrees.of(88) at Knots.of(36), result.trajectory)
+        assertEquals(88.degrees at 36.knots, result.trajectory)
     }
 
     @Test
@@ -51,7 +51,7 @@ class ObjectTransformerTest {
         assertEquals(45, resultDateTime?.minute)
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
-        assertEquals(Degrees.of(88) at Knots.of(36), result.trajectory)
+        assertEquals(88.degrees at 36.knots, result.trajectory)
     }
 
     @Test
@@ -78,9 +78,9 @@ class ObjectTransformerTest {
             trajectory = null,
             range = null,
             transmitterInfo = TransmitterInfo(
-                power = Watts.of(25),
-                height = Feet.of(20),
-                gain = Bels.of(Deci, 3),
+                power = 25.watts,
+                height = 20.feet,
+                gain = 3.scale(Deci).bels,
                 direction = Cardinal.East.toAngle(),
             ),
             signalInfo = null,

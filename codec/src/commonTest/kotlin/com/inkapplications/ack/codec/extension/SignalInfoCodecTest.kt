@@ -2,12 +2,14 @@ package com.inkapplications.ack.codec.extension
 
 import com.inkapplications.ack.structures.SignalInfo
 import com.inkapplications.ack.structures.unit.Strength
-import inkapplications.spondee.measure.Bels
-import inkapplications.spondee.measure.Feet
+import inkapplications.spondee.measure.us.feet
+import inkapplications.spondee.measure.us.toFeet
+import inkapplications.spondee.scalar.bels
 import inkapplications.spondee.spatial.Cardinal
 import inkapplications.spondee.spatial.toAngle
 import inkapplications.spondee.structure.Deci
-import inkapplications.spondee.structure.of
+import inkapplications.spondee.structure.scale
+import inkapplications.spondee.structure.toDouble
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -22,8 +24,8 @@ class SignalInfoCodecTest {
 
         assertEquals(Strength(2), result.strength)
         assertEquals(Cardinal.South.toAngle(), result.direction)
-        assertEquals(Bels.of(Deci, 6), result.gain)
-        assertEquals(Feet.of(80), result.height)
+        assertEquals(6.scale(Deci).bels, result.gain)
+        assertEquals(80.0, result.height?.toFeet()!!.toDouble(), 1e-15)
     }
 
     @Test
@@ -34,8 +36,8 @@ class SignalInfoCodecTest {
 
         assertEquals(Strength(2), result.strength)
         assertNull(result.direction)
-        assertEquals(Bels.of(Deci, 6), result.gain)
-        assertEquals(Feet.of(80), result.height)
+        assertEquals(6.scale(Deci).bels, result.gain)
+        assertEquals(80.0, result.height?.toFeet()!!.toDouble(), 1e-15)
     }
 
     @Test
@@ -64,8 +66,8 @@ class SignalInfoCodecTest {
         val given = SignalInfo(
             strength = Strength(2),
             direction = Cardinal.South.toAngle(),
-            height = Feet.of(80),
-            gain = Bels.of(Deci, 6),
+            height = 80.feet,
+            gain = 6.scale(Deci).bels,
         )
 
         val result = SignalInfoCodec.encode(given)
