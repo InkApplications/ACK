@@ -19,7 +19,7 @@ internal object CompressedPositionChunker: Chunker<PositionReport.Compressed> {
         return Chunk(
             result = PositionReport.Compressed(
                 coordinates = GeoCoordinates(latitude, longitude),
-                symbol = symbolOf(tableIdentifier, codeIdentifier),
+                symbol = symbolOf(codeIdentifier, tableIdentifier),
                 extension = extension
             ),
             remainingData = data.substring(13)

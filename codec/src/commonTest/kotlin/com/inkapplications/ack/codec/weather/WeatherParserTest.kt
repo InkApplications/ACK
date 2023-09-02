@@ -51,7 +51,7 @@ class WeatherParserTest {
         assertEquals(1.scale(Hundreths).inches, result.precipitation.rainLastHour)
         assertEquals(50.percent, result.humidity)
         assertEquals(9900.scale(Deka).pascals, result.pressure)
-        assertEquals(symbolOf('/', '_'), result.symbol)
+        assertEquals(symbolOf('_', '/'), result.symbol)
         assertNull(result.irradiance)
     }
 
@@ -73,7 +73,7 @@ class WeatherParserTest {
         assertNull(result.precipitation.rainLastHour)
         assertNull(result.humidity)
         assertNull(result.pressure)
-        assertEquals(symbolOf('/', '_'), result.symbol)
+        assertEquals(symbolOf('_', '/'), result.symbol)
         assertNull(result.irradiance)
     }
 
@@ -111,7 +111,7 @@ class WeatherParserTest {
         assertEquals(1.scale(Hundreths).inches, result.precipitation.rainLastHour)
         assertEquals(50.percent, result.humidity)
         assertEquals(9900.scale(Deka).pascals, result.pressure)
-        assertEquals(symbolOf('/', '_'), result.symbol)
+        assertEquals(symbolOf('_', '/'), result.symbol)
         assertNull(result.irradiance)
     }
 
@@ -133,7 +133,7 @@ class WeatherParserTest {
         assertNull(result.precipitation.rainLastHour)
         assertNull(result.humidity)
         assertNull(result.pressure)
-        assertEquals(symbolOf('/', '_'), result.symbol)
+        assertEquals(symbolOf('_', '/'), result.symbol)
         assertNull(result.irradiance)
     }
 
@@ -167,7 +167,7 @@ class WeatherParserTest {
                 rawRain = 789,
             ),
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
-            symbol = symbolOf('/', '_'),
+            symbol = symbolOf('_', '/'),
             temperature = (-7).fahrenheit,
             humidity = 50.percent,
             pressure = 9900.scale(Deka).pascals,
@@ -190,7 +190,7 @@ class WeatherParserTest {
             ),
             precipitation = Precipitation(),
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
-            symbol = symbolOf('/', '_'),
+            symbol = symbolOf('_', '/'),
             temperature = null,
             humidity = null,
             pressure = null,

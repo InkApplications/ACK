@@ -20,7 +20,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
         )
 
         assertEquals("/5L!!<*e7>  Q", result)
@@ -33,7 +33,7 @@ class PositionCodecTest {
                 compression = EncodingPreference.Disfavored
             ),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
         )
 
         assertEquals("4930.00N/07245.00W>", result)
@@ -46,7 +46,7 @@ class PositionCodecTest {
                 compression = EncodingPreference.Barred
             ),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
         )
 
         assertEquals("4930.00N/07245.00W>", result)
@@ -60,7 +60,7 @@ class PositionCodecTest {
                     compression = EncodingPreference.Required
                 ),
                 coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-                symbol = symbolOf('/', '>'),
+                symbol = symbolOf('>', '/'),
                 signalInfo = SignalInfo(
                     strength = Strength(2),
                     direction = Cardinal.South.toAngle(),
@@ -79,7 +79,7 @@ class PositionCodecTest {
                     compression = EncodingPreference.Barred
                 ),
                 coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-                symbol = symbolOf('/', '>'),
+                symbol = symbolOf('>', '/'),
                 altitude = 10004.feet,
             )
         }
@@ -91,7 +91,7 @@ class PositionCodecTest {
             PositionCodec.encodeBody(
                 config = EncodingConfig(),
                 coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-                symbol = symbolOf('/', '>'),
+                symbol = symbolOf('>', '/'),
                 altitude = 10004.feet,
                 signalInfo = SignalInfo(
                     strength = Strength(2),
@@ -108,7 +108,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             altitude = 10004.feet,
         )
 
@@ -120,7 +120,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             range = 20.miles,
         )
 
@@ -132,7 +132,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             trajectory = Trajectory(88.degrees, 36.2.knots),
         )
 
@@ -144,7 +144,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             directionReport = DirectionReport(
                 trajectory = 88.degrees at 36.knots,
                 bearing = 270.degrees,
@@ -164,7 +164,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             signalInfo = SignalInfo(
                 strength = Strength(2),
                 direction = Cardinal.South.toAngle(),
@@ -181,7 +181,7 @@ class PositionCodecTest {
         val result = PositionCodec.encodeBody(
             config = EncodingConfig(),
             coordinates = GeoCoordinates(49.5.latitude, (-72.75).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             transmitterInfo = TransmitterInfo(
                 power = 25.watts,
                 height = 20.feet,

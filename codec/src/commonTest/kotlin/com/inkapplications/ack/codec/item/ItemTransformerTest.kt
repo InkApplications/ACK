@@ -27,7 +27,7 @@ class ItemTransformerTest {
         assertEquals(ReportState.Live, result.state)
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
-        assertEquals(symbolOf('/', 'A'), result.symbol)
+        assertEquals(symbolOf('A', '/'), result.symbol)
     }
 
     @Test
@@ -40,7 +40,7 @@ class ItemTransformerTest {
         assertEquals(ReportState.Kill, result.state)
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 0.0001)
         assertEquals(-72.0292, result.coordinates.longitude.asDecimal, 0.0001)
-        assertEquals(symbolOf('/', 'A'), result.symbol)
+        assertEquals(symbolOf('A', '/'), result.symbol)
     }
 
     @Test
@@ -54,7 +54,7 @@ class ItemTransformerTest {
             name = "AID #2",
             state = ReportState.Live,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),
-            symbol = symbolOf('/', 'A'),
+            symbol = symbolOf('A', '/'),
             comment = "Hello World",
             altitude = null,
             trajectory = null,
@@ -80,7 +80,7 @@ class ItemTransformerTest {
             name = "AID #2",
             state = ReportState.Kill,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),
-            symbol = symbolOf('/', 'A'),
+            symbol = symbolOf('A', '/'),
             comment = "Hello World",
             altitude = null,
             trajectory = null,

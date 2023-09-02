@@ -72,7 +72,7 @@ class ObjectTransformerTest {
             name = "LEADER",
             state = ReportState.Live,
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0292).longitude),
-            symbol = symbolOf('/', '>'),
+            symbol = symbolOf('>', '/'),
             comment = "Hello World",
             altitude = null,
             trajectory = null,

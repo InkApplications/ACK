@@ -72,7 +72,7 @@ object PositionCodec {
         signalInfo: SignalInfo? = null,
         windData: WindData? = null,
     ): String {
-        val (table, code) = symbol.toTableCodePair()
+        val (id, table) = symbol.toIdTablePair()
         val latitude = PlainPositionStringCodec.encodeLatitude(coordinates.latitude)
         val longitude = PlainPositionStringCodec.encodeLongitude(coordinates.longitude)
         val extra = when {
@@ -104,7 +104,7 @@ object PositionCodec {
             else -> ""
         }
 
-        return "$latitude$table$longitude$code$extra"
+        return "$latitude$table$longitude$id$extra"
     }
 
     private fun encodeCompressed(
@@ -115,10 +115,10 @@ object PositionCodec {
         range: Length? = null,
         windData: WindData? = null,
     ): String {
-        val (table, code) = symbol.toTableCodePair()
+        val (id, table) = symbol.toIdTablePair()
         val latitude = CompressedPositionStringTransformer.encodeLatitude(coordinates.latitude)
         val longitude = CompressedPositionStringTransformer.encodeLongitude(coordinates.longitude)
-        val encodedLocation = "$table$latitude$longitude$code"
+        val encodedLocation = "$table$latitude$longitude$id"
         val compressionInfo = Base91.encode(0b0_0_1_10_000)
         val extra = when {
             trajectory != null -> CompressedExtraStringCodec.encodeTrajectory(trajectory)
