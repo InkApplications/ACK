@@ -29,7 +29,7 @@ class PositionParserTest {
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test 001234", result.comment)
-        assertEquals(symbolOf('/', '-'), result.symbol)
+        assertEquals(symbolOf('-', '/'), result.symbol)
         assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
         assertNull(result.altitude)
@@ -49,7 +49,7 @@ class PositionParserTest {
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test 001234", result.comment)
-        assertEquals(symbolOf('/', '#'), result.symbol)
+        assertEquals(symbolOf('#', '/'), result.symbol)
         assertEquals(25.0, result.transmitterInfo?.power?.toWatts()!!.toDouble(), 1e-15)
         assertEquals(20.0, result.transmitterInfo?.height?.toFeet()!!.toDouble(), 1e-15)
         assertEquals(3.0, result.transmitterInfo?.gain?.toBels()?.value(Deci)!!.toDouble(), 1e-15)
@@ -72,7 +72,7 @@ class PositionParserTest {
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test", result.comment)
-        assertEquals(symbolOf('/', '-'), result.symbol)
+        assertEquals(symbolOf('-', '/'), result.symbol)
         assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
         assertEquals(1234.0, result.altitude?.toFeet()!!.toDouble())
@@ -101,7 +101,7 @@ class PositionParserTest {
         assertEquals(49.0583, result.coordinates.latitude.asDecimal, 1e-4)
         assertEquals(-72.0291, result.coordinates.longitude.asDecimal, 1e-4)
         assertEquals("Test1234", result.comment)
-        assertEquals(symbolOf('/', '>'), result.symbol)
+        assertEquals(symbolOf('>', '/'), result.symbol)
         assertEquals(expected, result.timestamp)
         assertFalse(result.supportsMessaging)
         assertNull(result.altitude)
@@ -122,7 +122,7 @@ class PositionParserTest {
         assertEquals(49.5, result.coordinates.latitude.asDecimal, 1e-1)
         assertEquals(-72.75, result.coordinates.longitude.asDecimal, 1e-2)
         assertEquals("Comment", result.comment)
-        assertEquals(symbolOf('/', '>'), result.symbol)
+        assertEquals(symbolOf('>', '/'), result.symbol)
         assertTrue(result.supportsMessaging)
         assertNull(result.timestamp)
         assertNull(result.altitude)
@@ -142,7 +142,7 @@ class PositionParserTest {
         assertEquals(49.5, result.coordinates.latitude.asDecimal, 1e-1)
         assertEquals(-72.75, result.coordinates.longitude.asDecimal, 1e-2)
         assertEquals("Comment", result.comment)
-        assertEquals(symbolOf('/', '>'), result.symbol)
+        assertEquals(symbolOf('>', '/'), result.symbol)
         assertFalse(result.supportsMessaging)
         assertNull(result.timestamp)
         assertNull(result.altitude)
@@ -171,7 +171,7 @@ class PositionParserTest {
         assertEquals(49.5, result.coordinates.latitude.asDecimal, 1e-1)
         assertEquals(-72.75, result.coordinates.longitude.asDecimal, 1e-2)
         assertEquals("Comment", result.comment)
-        assertEquals(symbolOf('/', '>'), result.symbol)
+        assertEquals(symbolOf('>', '/'), result.symbol)
         assertFalse(result.supportsMessaging)
         assertEquals(expected, result.timestamp)
         assertNull(result.altitude)
@@ -193,7 +193,7 @@ class PositionParserTest {
     fun generatePlainMinimum() {
         val given = PacketData.Position(
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
-            symbol = symbolOf('/', '-'),
+            symbol = symbolOf('-', '/'),
             comment = "Test 01234",
             timestamp = null,
             altitude = null,
@@ -214,7 +214,7 @@ class PositionParserTest {
     fun generateWithMessaging() {
         val given = PacketData.Position(
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
-            symbol = symbolOf('/', '-'),
+            symbol = symbolOf('-', '/'),
             comment = "Test 01234",
             timestamp = null,
             altitude = null,
@@ -243,7 +243,7 @@ class PositionParserTest {
             )
         val given = PacketData.Position(
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
-            symbol = symbolOf('/', '-'),
+            symbol = symbolOf('-', '/'),
             comment = "Test 01234",
             timestamp = Clock.System.now().withUtcValues(
                 dayOfMonth = 9,
@@ -278,7 +278,7 @@ class PositionParserTest {
             )
         val given = PacketData.Position(
             coordinates = GeoCoordinates(49.0583.latitude, (-72.0291).longitude),
-            symbol = symbolOf('/', '-'),
+            symbol = symbolOf('-', '/'),
             comment = "Test 01234",
             timestamp = Clock.System.now().withUtcValues(
                 dayOfMonth = 9,

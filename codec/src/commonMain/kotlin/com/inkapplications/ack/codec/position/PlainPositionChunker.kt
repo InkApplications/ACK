@@ -14,8 +14,8 @@ internal object PlainPositionChunker: Chunker<PositionReport.Plain> {
 
         val coordinates = GeoCoordinates(latitude, longitude)
         val symbol = symbolOf(
-            tableIdentifier = tableIdentifier,
-            codeIdentifier = codeIdentifier
+            id = codeIdentifier,
+            table = tableIdentifier
         )
         val symbolEmbeddedPosition = PositionReport.Plain(coordinates, symbol)
 
