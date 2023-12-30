@@ -1,9 +1,11 @@
 plugins {
-    id("multiplatform.tier1")
+    kotlin("multiplatform")
     id("ink.publishing")
 }
-
 kotlin {
+    jvmToolchain(11)
+    jvm()
+
     sourceSets {
         val commonMain by getting {
             dependencies {

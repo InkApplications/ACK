@@ -9,17 +9,17 @@ repositories {
 kotlin {
     jvmToolchain(11)
     jvm()
-//    js(IR) {
-//        nodejs()
-//        browser()
-//        browser {
-//            testTask {
-//                useKarma {
-//                    useFirefoxHeadless()
-//                }
-//            }
-//        }
-//    }
+    js(IR) {
+        nodejs()
+        browser()
+        browser {
+            testTask {
+                useKarma {
+                    useFirefoxHeadless()
+                }
+            }
+        }
+    }
     macosX64()
     macosArm64()
     iosSimulatorArm64()
