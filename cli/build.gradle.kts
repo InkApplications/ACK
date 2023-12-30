@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClassName = "com.inkapplications.ack.cli.MainKt"
+    mainClass.set("com.inkapplications.ack.cli.MainKt")
 }
 
 dependencies {

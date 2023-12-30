@@ -1,6 +1,6 @@
 [versions]
-kotlin = "1.7.10"
-coroutines = "1.6.4"
+kotlin = "1.9.20"
+coroutines = "1.7.3"
 
 [libraries.kotlin-gradle]
 version.ref = "kotlin"
@@ -31,5 +31,5 @@ version.ref = "coroutines"
 module = "org.jetbrains.kotlinx:kotlinx-coroutines-test"
 
 [libraries.kotlinx-datetime-core]
-version = "0.4.0"
+version = "0.5.0"
 module = "org.jetbrains.kotlinx:kotlinx-datetime"

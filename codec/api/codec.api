@@ -1,0 +1,93 @@
+public final class com/inkapplications/ack/codec/Ack {
+	public fun <init> ()V
+	public fun <init> (Lkimchi/logger/KimchiLogger;Lkotlinx/datetime/TimeZone;Lkotlinx/datetime/Clock;)V
+	public synthetic fun <init> (Lkimchi/logger/KimchiLogger;Lkotlinx/datetime/TimeZone;Lkotlinx/datetime/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun defaultParser ()Lcom/inkapplications/ack/codec/AprsCodec;
+	public final fun defaultTransformers ()[Lcom/inkapplications/ack/codec/PacketDataTransformer;
+	public final fun parser ([Lcom/inkapplications/ack/codec/PacketDataParser;[Lcom/inkapplications/ack/codec/PacketDataGenerator;)Lcom/inkapplications/ack/codec/AprsCodec;
+}
+
+public abstract interface class com/inkapplications/ack/codec/AprsCodec {
+	public abstract fun fromAx25 ([B)Lcom/inkapplications/ack/structures/AprsPacket;
+	public abstract fun fromString (Ljava/lang/String;)Lcom/inkapplications/ack/structures/AprsPacket;
+	public abstract fun toAx25 (Lcom/inkapplications/ack/structures/AprsPacket;Lcom/inkapplications/ack/structures/EncodingConfig;)[B
+	public abstract fun toString (Lcom/inkapplications/ack/structures/AprsPacket;Lcom/inkapplications/ack/structures/EncodingConfig;)Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/codec/AprsCodec$DefaultImpls {
+	public static synthetic fun toAx25$default (Lcom/inkapplications/ack/codec/AprsCodec;Lcom/inkapplications/ack/structures/AprsPacket;Lcom/inkapplications/ack/structures/EncodingConfig;ILjava/lang/Object;)[B
+	public static synthetic fun toString$default (Lcom/inkapplications/ack/codec/AprsCodec;Lcom/inkapplications/ack/structures/AprsPacket;Lcom/inkapplications/ack/structures/EncodingConfig;ILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/codec/CompositePacketFormatException : com/inkapplications/ack/codec/PacketFormatException {
+	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getCauses ()Ljava/util/List;
+}
+
+public abstract interface class com/inkapplications/ack/codec/PacketDataGenerator {
+	public abstract fun generate (Lcom/inkapplications/ack/structures/PacketData;Lcom/inkapplications/ack/structures/EncodingConfig;)Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/codec/PacketDataGenerator$DefaultImpls {
+	public static synthetic fun generate$default (Lcom/inkapplications/ack/codec/PacketDataGenerator;Lcom/inkapplications/ack/structures/PacketData;Lcom/inkapplications/ack/structures/EncodingConfig;ILjava/lang/Object;)Ljava/lang/String;
+}
+
+public abstract interface class com/inkapplications/ack/codec/PacketDataParser {
+	public abstract fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData;
+}
+
+public abstract interface class com/inkapplications/ack/codec/PacketDataTransformer : com/inkapplications/ack/codec/PacketDataGenerator, com/inkapplications/ack/codec/PacketDataParser {
+}
+
+public class com/inkapplications/ack/codec/PacketFormatException : java/lang/IllegalArgumentException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/inkapplications/ack/codec/UnhandledEncodingException : java/lang/IllegalArgumentException {
+	public fun <init> ()V
+}
+
+public final class com/inkapplications/ack/codec/UnknownPacketTransformer : com/inkapplications/ack/codec/PacketDataTransformer {
+	public static final field INSTANCE Lcom/inkapplications/ack/codec/UnknownPacketTransformer;
+	public fun generate (Lcom/inkapplications/ack/structures/PacketData;Lcom/inkapplications/ack/structures/EncodingConfig;)Ljava/lang/String;
+	public fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData;
+}
+
+public final class com/inkapplications/ack/codec/capabilities/CapabilitiesTransformer : com/inkapplications/ack/codec/PacketDataTransformer {
+	public fun <init> ()V
+	public fun generate (Lcom/inkapplications/ack/structures/PacketData;Lcom/inkapplications/ack/structures/EncodingConfig;)Ljava/lang/String;
+	public fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData$CapabilityReport;
+	public synthetic fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData;
+}
+
+public final class com/inkapplications/ack/codec/extension/TransmitterInfoCodec : com/inkapplications/ack/codec/SimpleCodec {
+	public static final field INSTANCE Lcom/inkapplications/ack/codec/extension/TransmitterInfoCodec;
+	public fun decode (Ljava/lang/String;)Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public synthetic fun decode (Ljava/lang/String;)Ljava/lang/Object;
+	public fun encode (Lcom/inkapplications/ack/structures/TransmitterInfo;)Ljava/lang/String;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/codec/message/MessageTransformer : com/inkapplications/ack/codec/PacketDataTransformer {
+	public fun <init> ()V
+	public fun generate (Lcom/inkapplications/ack/structures/PacketData;Lcom/inkapplications/ack/structures/EncodingConfig;)Ljava/lang/String;
+	public fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData$Message;
+	public synthetic fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData;
+}
+
+public final class com/inkapplications/ack/codec/position/PositionCodec {
+	public static final field INSTANCE Lcom/inkapplications/ack/codec/position/PositionCodec;
+	public final fun encodeBody (Lcom/inkapplications/ack/structures/EncodingConfig;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;Lcom/inkapplications/ack/structures/WindData;)Ljava/lang/String;
+	public static synthetic fun encodeBody$default (Lcom/inkapplications/ack/codec/position/PositionCodec;Lcom/inkapplications/ack/structures/EncodingConfig;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;Lcom/inkapplications/ack/structures/WindData;ILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/codec/telemetry/TelemetryTransformer : com/inkapplications/ack/codec/PacketDataTransformer {
+	public fun <init> ()V
+	public fun generate (Lcom/inkapplications/ack/structures/PacketData;Lcom/inkapplications/ack/structures/EncodingConfig;)Ljava/lang/String;
+	public fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData$TelemetryReport;
+	public synthetic fun parse (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData;
+}
+

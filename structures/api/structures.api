@@ -1,0 +1,611 @@
+public final class com/inkapplications/ack/structures/AprsPacket {
+	public fun <init> (Lcom/inkapplications/ack/structures/PacketRoute;Lcom/inkapplications/ack/structures/PacketData;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/PacketRoute;
+	public final fun component2 ()Lcom/inkapplications/ack/structures/PacketData;
+	public final fun copy (Lcom/inkapplications/ack/structures/PacketRoute;Lcom/inkapplications/ack/structures/PacketData;)Lcom/inkapplications/ack/structures/AprsPacket;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/AprsPacket;Lcom/inkapplications/ack/structures/PacketRoute;Lcom/inkapplications/ack/structures/PacketData;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/AprsPacket;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Lcom/inkapplications/ack/structures/PacketData;
+	public final fun getRoute ()Lcom/inkapplications/ack/structures/PacketRoute;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/inkapplications/ack/structures/Capability {
+	public abstract fun getKey ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/Capability$Token : com/inkapplications/ack/structures/Capability {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/inkapplications/ack/structures/Capability$Token;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Capability$Token;Ljava/lang/String;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/Capability$Token;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getKey ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/Capability$Value : com/inkapplications/ack/structures/Capability {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/inkapplications/ack/structures/Capability$Value;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Capability$Value;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/Capability$Value;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getKey ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/CapabilityKt {
+	public static final fun capabilityOf (Ljava/lang/String;Ljava/lang/String;)Lcom/inkapplications/ack/structures/Capability;
+}
+
+public final class com/inkapplications/ack/structures/Digipeater {
+	public fun <init> (Lcom/inkapplications/ack/structures/station/StationAddress;Z)V
+	public synthetic fun <init> (Lcom/inkapplications/ack/structures/station/StationAddress;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/inkapplications/ack/structures/station/StationAddress;Z)Lcom/inkapplications/ack/structures/Digipeater;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Digipeater;Lcom/inkapplications/ack/structures/station/StationAddress;ZILjava/lang/Object;)Lcom/inkapplications/ack/structures/Digipeater;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddress ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun getHeard ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/DirectionReport {
+	public fun <init> (Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/spatial/Angle;Lcom/inkapplications/ack/structures/QualityReport;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/Trajectory;
+	public final fun component2 ()Linkapplications/spondee/spatial/Angle;
+	public final fun component3 ()Lcom/inkapplications/ack/structures/QualityReport;
+	public final fun copy (Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/spatial/Angle;Lcom/inkapplications/ack/structures/QualityReport;)Lcom/inkapplications/ack/structures/DirectionReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/DirectionReport;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/spatial/Angle;Lcom/inkapplications/ack/structures/QualityReport;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/DirectionReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBearing ()Linkapplications/spondee/spatial/Angle;
+	public final fun getQuality ()Lcom/inkapplications/ack/structures/QualityReport;
+	public final fun getTrajectory ()Lcom/inkapplications/ack/structures/Trajectory;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/EncodingConfig {
+	public fun <init> ()V
+	public fun <init> (Lcom/inkapplications/ack/structures/EncodingPreference;C)V
+	public synthetic fun <init> (Lcom/inkapplications/ack/structures/EncodingPreference;CILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/EncodingPreference;
+	public final fun component2 ()C
+	public final fun copy (Lcom/inkapplications/ack/structures/EncodingPreference;C)Lcom/inkapplications/ack/structures/EncodingConfig;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/EncodingConfig;Lcom/inkapplications/ack/structures/EncodingPreference;CILjava/lang/Object;)Lcom/inkapplications/ack/structures/EncodingConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCompression ()Lcom/inkapplications/ack/structures/EncodingPreference;
+	public final fun getWeatherDataFillCharacter ()C
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/EncodingPreference : java/lang/Enum {
+	public static final field Barred Lcom/inkapplications/ack/structures/EncodingPreference;
+	public static final field Disfavored Lcom/inkapplications/ack/structures/EncodingPreference;
+	public static final field Favored Lcom/inkapplications/ack/structures/EncodingPreference;
+	public static final field None Lcom/inkapplications/ack/structures/EncodingPreference;
+	public static final field Required Lcom/inkapplications/ack/structures/EncodingPreference;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/inkapplications/ack/structures/EncodingPreference;
+	public static fun values ()[Lcom/inkapplications/ack/structures/EncodingPreference;
+}
+
+public abstract class com/inkapplications/ack/structures/PacketData {
+}
+
+public final class com/inkapplications/ack/structures/PacketData$CapabilityReport : com/inkapplications/ack/structures/PacketData {
+	public fun <init> (Ljava/util/Set;)V
+	public final fun component1 ()Ljava/util/Set;
+	public final fun copy (Ljava/util/Set;)Lcom/inkapplications/ack/structures/PacketData$CapabilityReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$CapabilityReport;Ljava/util/Set;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$CapabilityReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCapabilityData ()Ljava/util/Set;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$ItemReport : com/inkapplications/ack/structures/PacketData, com/inkapplications/ack/structures/capabilities/Commented, com/inkapplications/ack/structures/capabilities/Named, com/inkapplications/ack/structures/capabilities/Report {
+	public fun <init> (Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Lcom/inkapplications/ack/structures/SignalInfo;
+	public final fun component11 ()Lcom/inkapplications/ack/structures/DirectionReport;
+	public final fun component2 ()Lcom/inkapplications/ack/structures/ReportState;
+	public final fun component3 ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun component4 ()Lcom/inkapplications/ack/structures/Symbol;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Linkapplications/spondee/measure/Length;
+	public final fun component7 ()Lcom/inkapplications/ack/structures/Trajectory;
+	public final fun component8 ()Linkapplications/spondee/measure/Length;
+	public final fun component9 ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public final fun copy (Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;)Lcom/inkapplications/ack/structures/PacketData$ItemReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$ItemReport;Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$ItemReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAltitude ()Linkapplications/spondee/measure/Length;
+	public fun getComment ()Ljava/lang/String;
+	public fun getCoordinates ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun getDirectionReport ()Lcom/inkapplications/ack/structures/DirectionReport;
+	public fun getName ()Ljava/lang/String;
+	public fun getRange ()Linkapplications/spondee/measure/Length;
+	public final fun getSignalInfo ()Lcom/inkapplications/ack/structures/SignalInfo;
+	public final fun getState ()Lcom/inkapplications/ack/structures/ReportState;
+	public fun getSymbol ()Lcom/inkapplications/ack/structures/Symbol;
+	public fun getTrajectory ()Lcom/inkapplications/ack/structures/Trajectory;
+	public fun getTransmitterInfo ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$Message : com/inkapplications/ack/structures/PacketData {
+	public fun <init> (Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/lang/String;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/lang/String;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun copy (Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/lang/String;Ljava/lang/Integer;)Lcom/inkapplications/ack/structures/PacketData$Message;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$Message;Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$Message;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddressee ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getMessageNumber ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$ObjectReport : com/inkapplications/ack/structures/PacketData, com/inkapplications/ack/structures/capabilities/Commented, com/inkapplications/ack/structures/capabilities/Named, com/inkapplications/ack/structures/capabilities/Report, com/inkapplications/ack/structures/capabilities/Timestampable {
+	public fun <init> (Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;)V
+	public synthetic fun <init> (Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun component10 ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public final fun component11 ()Lcom/inkapplications/ack/structures/SignalInfo;
+	public final fun component12 ()Lcom/inkapplications/ack/structures/DirectionReport;
+	public final fun component2 ()Lcom/inkapplications/ack/structures/Symbol;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lcom/inkapplications/ack/structures/ReportState;
+	public final fun component6 ()Lkotlinx/datetime/Instant;
+	public final fun component7 ()Linkapplications/spondee/measure/Length;
+	public final fun component8 ()Lcom/inkapplications/ack/structures/Trajectory;
+	public final fun component9 ()Linkapplications/spondee/measure/Length;
+	public final fun copy (Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;)Lcom/inkapplications/ack/structures/PacketData$ObjectReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$ObjectReport;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Ljava/lang/String;Lcom/inkapplications/ack/structures/ReportState;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$ObjectReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAltitude ()Linkapplications/spondee/measure/Length;
+	public fun getComment ()Ljava/lang/String;
+	public fun getCoordinates ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun getDirectionReport ()Lcom/inkapplications/ack/structures/DirectionReport;
+	public fun getName ()Ljava/lang/String;
+	public fun getRange ()Linkapplications/spondee/measure/Length;
+	public final fun getSignalInfo ()Lcom/inkapplications/ack/structures/SignalInfo;
+	public final fun getState ()Lcom/inkapplications/ack/structures/ReportState;
+	public fun getSymbol ()Lcom/inkapplications/ack/structures/Symbol;
+	public fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public fun getTrajectory ()Lcom/inkapplications/ack/structures/Trajectory;
+	public fun getTransmitterInfo ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$Position : com/inkapplications/ack/structures/PacketData, com/inkapplications/ack/structures/capabilities/Commented, com/inkapplications/ack/structures/capabilities/Report, com/inkapplications/ack/structures/capabilities/Timestampable {
+	public fun <init> (Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;Z)V
+	public synthetic fun <init> (Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun component10 ()Lcom/inkapplications/ack/structures/DirectionReport;
+	public final fun component11 ()Z
+	public final fun component2 ()Lcom/inkapplications/ack/structures/Symbol;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lkotlinx/datetime/Instant;
+	public final fun component5 ()Linkapplications/spondee/measure/Length;
+	public final fun component6 ()Lcom/inkapplications/ack/structures/Trajectory;
+	public final fun component7 ()Linkapplications/spondee/measure/Length;
+	public final fun component8 ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public final fun component9 ()Lcom/inkapplications/ack/structures/SignalInfo;
+	public final fun copy (Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;Z)Lcom/inkapplications/ack/structures/PacketData$Position;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$Position;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Ljava/lang/String;Lkotlinx/datetime/Instant;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/measure/Length;Lcom/inkapplications/ack/structures/TransmitterInfo;Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/DirectionReport;ZILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$Position;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAltitude ()Linkapplications/spondee/measure/Length;
+	public fun getComment ()Ljava/lang/String;
+	public fun getCoordinates ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun getDirectionReportExtra ()Lcom/inkapplications/ack/structures/DirectionReport;
+	public fun getRange ()Linkapplications/spondee/measure/Length;
+	public final fun getSignalInfo ()Lcom/inkapplications/ack/structures/SignalInfo;
+	public final fun getSupportsMessaging ()Z
+	public fun getSymbol ()Lcom/inkapplications/ack/structures/Symbol;
+	public fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public fun getTrajectory ()Lcom/inkapplications/ack/structures/Trajectory;
+	public fun getTransmitterInfo ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$StatusReport : com/inkapplications/ack/structures/PacketData, com/inkapplications/ack/structures/capabilities/Timestampable {
+	public fun <init> (Ljava/lang/String;Lkotlinx/datetime/Instant;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/datetime/Instant;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlinx/datetime/Instant;
+	public final fun copy (Ljava/lang/String;Lkotlinx/datetime/Instant;)Lcom/inkapplications/ack/structures/PacketData$StatusReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$StatusReport;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$StatusReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getStatus ()Ljava/lang/String;
+	public fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$TelemetryReport : com/inkapplications/ack/structures/PacketData, com/inkapplications/ack/structures/capabilities/Commented {
+	public fun <init> (Ljava/lang/String;Lcom/inkapplications/ack/structures/TelemetryValues;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/inkapplications/ack/structures/TelemetryValues;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lcom/inkapplications/ack/structures/TelemetryValues;Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData$TelemetryReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$TelemetryReport;Ljava/lang/String;Lcom/inkapplications/ack/structures/TelemetryValues;Ljava/lang/String;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$TelemetryReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getComment ()Ljava/lang/String;
+	public final fun getData ()Lcom/inkapplications/ack/structures/TelemetryValues;
+	public final fun getSequenceId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$Unknown : com/inkapplications/ack/structures/PacketData {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/inkapplications/ack/structures/PacketData$Unknown;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$Unknown;Ljava/lang/String;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$Unknown;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBody ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketData$Weather : com/inkapplications/ack/structures/PacketData, com/inkapplications/ack/structures/capabilities/Mapable, com/inkapplications/ack/structures/capabilities/Timestampable {
+	public fun <init> ()V
+	public fun <init> (Lkotlinx/datetime/Instant;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Lcom/inkapplications/ack/structures/WindData;Lcom/inkapplications/ack/structures/Precipitation;Linkapplications/spondee/measure/Temperature;Linkapplications/spondee/scalar/Percentage;Linkapplications/spondee/measure/Pressure;Linkapplications/spondee/structure/Ratio;)V
+	public synthetic fun <init> (Lkotlinx/datetime/Instant;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Lcom/inkapplications/ack/structures/WindData;Lcom/inkapplications/ack/structures/Precipitation;Linkapplications/spondee/measure/Temperature;Linkapplications/spondee/scalar/Percentage;Linkapplications/spondee/measure/Pressure;Linkapplications/spondee/structure/Ratio;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/datetime/Instant;
+	public final fun component2 ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun component3 ()Lcom/inkapplications/ack/structures/Symbol;
+	public final fun component4 ()Lcom/inkapplications/ack/structures/WindData;
+	public final fun component5 ()Lcom/inkapplications/ack/structures/Precipitation;
+	public final fun component6 ()Linkapplications/spondee/measure/Temperature;
+	public final fun component7 ()Linkapplications/spondee/scalar/Percentage;
+	public final fun component8 ()Linkapplications/spondee/measure/Pressure;
+	public final fun component9 ()Linkapplications/spondee/structure/Ratio;
+	public final fun copy (Lkotlinx/datetime/Instant;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Lcom/inkapplications/ack/structures/WindData;Lcom/inkapplications/ack/structures/Precipitation;Linkapplications/spondee/measure/Temperature;Linkapplications/spondee/scalar/Percentage;Linkapplications/spondee/measure/Pressure;Linkapplications/spondee/structure/Ratio;)Lcom/inkapplications/ack/structures/PacketData$Weather;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketData$Weather;Lkotlinx/datetime/Instant;Linkapplications/spondee/spatial/GeoCoordinates;Lcom/inkapplications/ack/structures/Symbol;Lcom/inkapplications/ack/structures/WindData;Lcom/inkapplications/ack/structures/Precipitation;Linkapplications/spondee/measure/Temperature;Linkapplications/spondee/scalar/Percentage;Linkapplications/spondee/measure/Pressure;Linkapplications/spondee/structure/Ratio;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketData$Weather;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getCoordinates ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public final fun getHumidity ()Linkapplications/spondee/scalar/Percentage;
+	public final fun getIrradiance ()Linkapplications/spondee/structure/Ratio;
+	public final fun getLuminosity ()Linkapplications/spondee/structure/Ratio;
+	public final fun getPrecipitation ()Lcom/inkapplications/ack/structures/Precipitation;
+	public final fun getPressure ()Linkapplications/spondee/measure/Pressure;
+	public fun getSymbol ()Lcom/inkapplications/ack/structures/Symbol;
+	public final fun getTemperature ()Linkapplications/spondee/measure/Temperature;
+	public fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public final fun getWindData ()Lcom/inkapplications/ack/structures/WindData;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/PacketRoute {
+	public fun <init> (Lcom/inkapplications/ack/structures/station/StationAddress;Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/util/List;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun component2 ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (Lcom/inkapplications/ack/structures/station/StationAddress;Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/util/List;)Lcom/inkapplications/ack/structures/PacketRoute;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/PacketRoute;Lcom/inkapplications/ack/structures/station/StationAddress;Lcom/inkapplications/ack/structures/station/StationAddress;Ljava/util/List;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/PacketRoute;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDestination ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public final fun getDigipeaters ()Ljava/util/List;
+	public final fun getSource ()Lcom/inkapplications/ack/structures/station/StationAddress;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/Precipitation {
+	public fun <init> ()V
+	public fun <init> (Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Linkapplications/spondee/measure/Length;
+	public final fun component2 ()Linkapplications/spondee/measure/Length;
+	public final fun component3 ()Linkapplications/spondee/measure/Length;
+	public final fun component4 ()Linkapplications/spondee/measure/Length;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun copy (Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Ljava/lang/Integer;)Lcom/inkapplications/ack/structures/Precipitation;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Precipitation;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Linkapplications/spondee/measure/Length;Ljava/lang/Integer;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/Precipitation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRainLast24Hours ()Linkapplications/spondee/measure/Length;
+	public final fun getRainLastHour ()Linkapplications/spondee/measure/Length;
+	public final fun getRainToday ()Linkapplications/spondee/measure/Length;
+	public final fun getRawRain ()Ljava/lang/Integer;
+	public final fun getSnowLast24Hours ()Linkapplications/spondee/measure/Length;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/QualityReport {
+	public fun <init> (SLinkapplications/spondee/measure/Length;Linkapplications/spondee/spatial/Angle;)V
+	public final fun component1 ()S
+	public final fun component2 ()Linkapplications/spondee/measure/Length;
+	public final fun component3 ()Linkapplications/spondee/spatial/Angle;
+	public final fun copy (SLinkapplications/spondee/measure/Length;Linkapplications/spondee/spatial/Angle;)Lcom/inkapplications/ack/structures/QualityReport;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/QualityReport;SLinkapplications/spondee/measure/Length;Linkapplications/spondee/spatial/Angle;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/QualityReport;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccuracy ()Linkapplications/spondee/spatial/Angle;
+	public final fun getNumber ()S
+	public final fun getRange ()Linkapplications/spondee/measure/Length;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/ReportState : java/lang/Enum {
+	public static final field Kill Lcom/inkapplications/ack/structures/ReportState;
+	public static final field Live Lcom/inkapplications/ack/structures/ReportState;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/inkapplications/ack/structures/ReportState;
+	public static fun values ()[Lcom/inkapplications/ack/structures/ReportState;
+}
+
+public final class com/inkapplications/ack/structures/SignalInfo {
+	public synthetic fun <init> (Lcom/inkapplications/ack/structures/unit/Strength;Linkapplications/spondee/measure/Length;Linkapplications/spondee/scalar/Level;Linkapplications/spondee/spatial/Angle;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-6-ZTPTI ()Lcom/inkapplications/ack/structures/unit/Strength;
+	public final fun component2 ()Linkapplications/spondee/measure/Length;
+	public final fun component3 ()Linkapplications/spondee/scalar/Level;
+	public final fun component4 ()Linkapplications/spondee/spatial/Angle;
+	public final fun copy-j-LWg34 (Lcom/inkapplications/ack/structures/unit/Strength;Linkapplications/spondee/measure/Length;Linkapplications/spondee/scalar/Level;Linkapplications/spondee/spatial/Angle;)Lcom/inkapplications/ack/structures/SignalInfo;
+	public static synthetic fun copy-j-LWg34$default (Lcom/inkapplications/ack/structures/SignalInfo;Lcom/inkapplications/ack/structures/unit/Strength;Linkapplications/spondee/measure/Length;Linkapplications/spondee/scalar/Level;Linkapplications/spondee/spatial/Angle;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/SignalInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDirection ()Linkapplications/spondee/spatial/Angle;
+	public final fun getGain ()Linkapplications/spondee/scalar/Level;
+	public final fun getHeight ()Linkapplications/spondee/measure/Length;
+	public final fun getStrength-6-ZTPTI ()Lcom/inkapplications/ack/structures/unit/Strength;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/inkapplications/ack/structures/Symbol {
+	public abstract fun getId ()C
+}
+
+public final class com/inkapplications/ack/structures/Symbol$Alternate : com/inkapplications/ack/structures/Symbol {
+	public static final field Companion Lcom/inkapplications/ack/structures/Symbol$Alternate$Companion;
+	public fun <init> (CLjava/lang/Character;)V
+	public synthetic fun <init> (CLjava/lang/Character;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()C
+	public final fun component2 ()Ljava/lang/Character;
+	public final fun copy (CLjava/lang/Character;)Lcom/inkapplications/ack/structures/Symbol$Alternate;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Symbol$Alternate;CLjava/lang/Character;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/Symbol$Alternate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlphaNumeric ()Z
+	public fun getId ()C
+	public final fun getOverlay ()Ljava/lang/Character;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/Symbol$Alternate$Companion {
+	public final fun getBASE ()Ljava/util/List;
+}
+
+public final class com/inkapplications/ack/structures/Symbol$Primary : com/inkapplications/ack/structures/Symbol {
+	public static final field Companion Lcom/inkapplications/ack/structures/Symbol$Primary$Companion;
+	public fun <init> (C)V
+	public final fun component1 ()C
+	public final fun copy (C)Lcom/inkapplications/ack/structures/Symbol$Primary;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Symbol$Primary;CILjava/lang/Object;)Lcom/inkapplications/ack/structures/Symbol$Primary;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getId ()C
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/Symbol$Primary$Companion {
+	public final fun getALL ()Ljava/util/List;
+}
+
+public final class com/inkapplications/ack/structures/Symbol$Schema {
+	public static final field ALTERNATE_TABLE C
+	public static final field CHAR_RANGE_END C
+	public static final field CHAR_RANGE_START C
+	public static final field INSTANCE Lcom/inkapplications/ack/structures/Symbol$Schema;
+	public static final field PRIMARY_TABLE C
+	public final fun getALPHANUMERIC_OVERLAYS ()[Ljava/lang/Character;
+	public final fun getSYMBOL_RANGE ()Lkotlin/ranges/CharRange;
+	public final fun getVALID_OVERLAY ()Ljava/util/List;
+	public final fun validate (CC)V
+	public final fun validate (Ljava/lang/String;)V
+}
+
+public final class com/inkapplications/ack/structures/SymbolKt {
+	public static final fun getCode (Lcom/inkapplications/ack/structures/Symbol;)Ljava/lang/String;
+	public static final fun symbolOf (CC)Lcom/inkapplications/ack/structures/Symbol;
+	public static final fun symbolOf (Ljava/lang/String;)Lcom/inkapplications/ack/structures/Symbol;
+	public static final fun symbolOfOrNull (Ljava/lang/String;)Lcom/inkapplications/ack/structures/Symbol;
+	public static final fun toIdTablePair (Lcom/inkapplications/ack/structures/Symbol;)Lkotlin/Pair;
+	public static final fun toTableCodePair (Lcom/inkapplications/ack/structures/Symbol;)Lkotlin/Pair;
+}
+
+public final class com/inkapplications/ack/structures/TelemetryValues {
+	public synthetic fun <init> (FFFFFBLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6-w2LRezQ ()B
+	public final fun copy-Q1Gd0Rw (FFFFFB)Lcom/inkapplications/ack/structures/TelemetryValues;
+	public static synthetic fun copy-Q1Gd0Rw$default (Lcom/inkapplications/ack/structures/TelemetryValues;FFFFFBILjava/lang/Object;)Lcom/inkapplications/ack/structures/TelemetryValues;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAnalog1 ()F
+	public final fun getAnalog2 ()F
+	public final fun getAnalog3 ()F
+	public final fun getAnalog4 ()F
+	public final fun getAnalog5 ()F
+	public final fun getAnalogValues ()[Ljava/lang/Float;
+	public final fun getDigital-w2LRezQ ()B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/Trajectory {
+	public fun <init> (Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;)V
+	public final fun component1 ()Linkapplications/spondee/spatial/Angle;
+	public final fun component2 ()Linkapplications/spondee/structure/Ratio;
+	public final fun copy (Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;)Lcom/inkapplications/ack/structures/Trajectory;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/Trajectory;Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/Trajectory;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDirection ()Linkapplications/spondee/spatial/Angle;
+	public final fun getSpeed ()Linkapplications/spondee/structure/Ratio;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/TrajectoryKt {
+	public static final fun at (Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;)Lcom/inkapplications/ack/structures/Trajectory;
+}
+
+public final class com/inkapplications/ack/structures/TransmitterInfo {
+	public fun <init> (Linkapplications/spondee/measure/Power;Linkapplications/spondee/measure/Length;Linkapplications/spondee/scalar/Level;Linkapplications/spondee/spatial/Angle;)V
+	public final fun component1 ()Linkapplications/spondee/measure/Power;
+	public final fun component2 ()Linkapplications/spondee/measure/Length;
+	public final fun component3 ()Linkapplications/spondee/scalar/Level;
+	public final fun component4 ()Linkapplications/spondee/spatial/Angle;
+	public final fun copy (Linkapplications/spondee/measure/Power;Linkapplications/spondee/measure/Length;Linkapplications/spondee/scalar/Level;Linkapplications/spondee/spatial/Angle;)Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/TransmitterInfo;Linkapplications/spondee/measure/Power;Linkapplications/spondee/measure/Length;Linkapplications/spondee/scalar/Level;Linkapplications/spondee/spatial/Angle;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/TransmitterInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDirection ()Linkapplications/spondee/spatial/Angle;
+	public final fun getGain ()Linkapplications/spondee/scalar/Level;
+	public final fun getHeight ()Linkapplications/spondee/measure/Length;
+	public final fun getPower ()Linkapplications/spondee/measure/Power;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/WindData {
+	public fun <init> ()V
+	public fun <init> (Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;Linkapplications/spondee/structure/Ratio;)V
+	public synthetic fun <init> (Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;Linkapplications/spondee/structure/Ratio;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Linkapplications/spondee/spatial/Angle;
+	public final fun component2 ()Linkapplications/spondee/structure/Ratio;
+	public final fun component3 ()Linkapplications/spondee/structure/Ratio;
+	public final fun copy (Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;Linkapplications/spondee/structure/Ratio;)Lcom/inkapplications/ack/structures/WindData;
+	public static synthetic fun copy$default (Lcom/inkapplications/ack/structures/WindData;Linkapplications/spondee/spatial/Angle;Linkapplications/spondee/structure/Ratio;Linkapplications/spondee/structure/Ratio;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/WindData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDirection ()Linkapplications/spondee/spatial/Angle;
+	public final fun getGust ()Linkapplications/spondee/structure/Ratio;
+	public final fun getSpeed ()Linkapplications/spondee/structure/Ratio;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/inkapplications/ack/structures/capabilities/Commented {
+	public abstract fun getComment ()Ljava/lang/String;
+}
+
+public abstract interface class com/inkapplications/ack/structures/capabilities/Mapable {
+	public abstract fun getCoordinates ()Linkapplications/spondee/spatial/GeoCoordinates;
+	public abstract fun getSymbol ()Lcom/inkapplications/ack/structures/Symbol;
+}
+
+public abstract interface class com/inkapplications/ack/structures/capabilities/Named {
+	public abstract fun getName ()Ljava/lang/String;
+}
+
+public abstract interface class com/inkapplications/ack/structures/capabilities/Report : com/inkapplications/ack/structures/capabilities/Mapable {
+	public abstract fun getAltitude ()Linkapplications/spondee/measure/Length;
+	public abstract fun getRange ()Linkapplications/spondee/measure/Length;
+	public abstract fun getTrajectory ()Lcom/inkapplications/ack/structures/Trajectory;
+	public abstract fun getTransmitterInfo ()Lcom/inkapplications/ack/structures/TransmitterInfo;
+}
+
+public abstract interface class com/inkapplications/ack/structures/capabilities/Timestampable {
+	public abstract fun getTimestamp ()Lkotlinx/datetime/Instant;
+}
+
+public final class com/inkapplications/ack/structures/station/Callsign {
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanonical ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/station/Ssid {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/inkapplications/ack/structures/station/Ssid;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public static synthetic fun constructor-impl$default (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public static final fun getType-impl (Ljava/lang/String;)Lcom/inkapplications/ack/structures/station/SsidType;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/station/SsidType : java/lang/Enum {
+	public static final field Air Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Boat Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Generic Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Ht Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Internet Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Mobile Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Network Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Primary Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Special Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Tracker Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Trucking Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Unknown Lcom/inkapplications/ack/structures/station/SsidType;
+	public static final field Weather Lcom/inkapplications/ack/structures/station/SsidType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/inkapplications/ack/structures/station/SsidType;
+	public static fun values ()[Lcom/inkapplications/ack/structures/station/SsidType;
+}
+
+public final class com/inkapplications/ack/structures/station/StationAddress {
+	public fun <init> (Lcom/inkapplications/ack/structures/station/Callsign;)V
+	public synthetic fun <init> (Lcom/inkapplications/ack/structures/station/Callsign;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Lcom/inkapplications/ack/structures/station/Callsign;
+	public final fun component2-hAW3xgc ()Ljava/lang/String;
+	public final fun copy-7I_IBxM (Lcom/inkapplications/ack/structures/station/Callsign;Ljava/lang/String;)Lcom/inkapplications/ack/structures/station/StationAddress;
+	public static synthetic fun copy-7I_IBxM$default (Lcom/inkapplications/ack/structures/station/StationAddress;Lcom/inkapplications/ack/structures/station/Callsign;Ljava/lang/String;ILjava/lang/Object;)Lcom/inkapplications/ack/structures/station/StationAddress;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCallsign ()Lcom/inkapplications/ack/structures/station/Callsign;
+	public final fun getSsid-hAW3xgc ()Ljava/lang/String;
+	public final fun getType ()Lcom/inkapplications/ack/structures/station/SsidType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/inkapplications/ack/structures/station/StationAddressKt {
+	public static final fun toStationAddress (Ljava/lang/String;)Lcom/inkapplications/ack/structures/station/StationAddress;
+}
+
+public final class com/inkapplications/ack/structures/unit/Strength {
+	public static final synthetic fun box-impl (S)Lcom/inkapplications/ack/structures/unit/Strength;
+	public static fun constructor-impl (S)S
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (SLjava/lang/Object;)Z
+	public static final fun equals-impl0 (SS)Z
+	public final fun getValue ()S
+	public fun hashCode ()I
+	public static fun hashCode-impl (S)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (S)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()S
+}
+

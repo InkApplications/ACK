@@ -1,10 +1,10 @@
 package com.inkapplications.ack.cli.parse
 
 import androidx.compose.runtime.Composable
-import com.jakewharton.mosaic.Color
-import com.jakewharton.mosaic.Row
-import com.jakewharton.mosaic.Text
-import com.jakewharton.mosaic.TextStyle
+import com.jakewharton.mosaic.ui.Color
+import com.jakewharton.mosaic.ui.Row
+import com.jakewharton.mosaic.ui.Text
+import com.jakewharton.mosaic.ui.TextStyle
 
 @Composable
 fun ParseSummary(state: ParserState) = when (state) {

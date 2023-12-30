@@ -1,6 +1,6 @@
 plugins {
-    id("library.multiplatform")
-    id("com.inkapplications.publishing")
+    id("multiplatform.tier2")
+    id("ink.publishing")
 }
 
 kotlin {
@@ -18,12 +18,6 @@ kotlin {
                 implementation(kotlinLibraries.kotlin.reflect)
                 implementation(kotlinLibraries.kotlin.test.core)
                 implementation(kotlinLibraries.kotlin.test.annotations)
-            }
-        }
-
-        val jvmMain by getting {
-            dependencies {
-                api(kotlinLibraries.coroutines.core)
             }
         }
 

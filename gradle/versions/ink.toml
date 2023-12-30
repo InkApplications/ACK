@@ -1,9 +1,9 @@
 [versions]
 
 [libraries.kimchi-logger]
-version = "2.0.0"
+version = "2.1.0"
 module = "com.inkapplications.kimchi:logger"
 
-[libraries.ink-publishing]
-version = "1.0.0"
-module = "com.inkapplications.publishing:ink-publishing"
+[libraries.spondee-units]
+version = "1.3.0"
+module = "com.inkapplications.spondee:units"
