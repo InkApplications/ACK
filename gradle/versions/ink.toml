@@ -5,5 +5,5 @@ version = "2.1.0"
 module = "com.inkapplications.kimchi:logger"
 
 [libraries.spondee-units]
-version = "1.3.0"
+version = "1.4.0"
 module = "com.inkapplications.spondee:units"
