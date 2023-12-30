@@ -1,4 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "ack"
@@ -21,4 +20,3 @@ include("cli")
 include("client")
 include("codec")
 include("structures")
-

@@ -9,5 +9,6 @@ repositories {
 dependencies {
     implementation(kotlinLibraries.kotlin.gradle)
     implementation(thirdParty.mosaic)
-    implementation(inkLibraries.ink.publishing)
+    implementation(thirdParty.dokka)
+    implementation(thirdParty.kotlinx.binary.compatibility)
 }

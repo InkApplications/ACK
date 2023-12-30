@@ -3,12 +3,18 @@ on:
     push:
         branches: [master]
 jobs:
-    build:
+    tests:
         runs-on: ubuntu-latest
         steps:
             -
                 name: Checkout
-                uses: actions/checkout@v2.3.1
+                uses: actions/checkout@v2.3.4
             -
-                name: Build
-                run: ./gradlew build jvmTest
+                name: Configure Java
+                uses: actions/setup-java@v4.0.0
+                with:
+                    java-version: 17
+                    distribution: oracle
+            -
+                name: Tests
+                run: ./gradlew check

@@ -1,9 +1,13 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
-subprojects {
+repositories {
+    mavenCentral()
+    google()
+}
+
+allprojects {
     repositories {
         mavenCentral()
-        maven(url = "https://kotlin.bintray.com/kotlinx/")
         google()
     }
 

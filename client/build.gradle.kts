@@ -1,6 +1,6 @@
 plugins {
-    id("library.multiplatform")
-    id("com.inkapplications.publishing")
+    id("multiplatform.tier1")
+    id("ink.publishing")
 }
 
 kotlin {

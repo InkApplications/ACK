@@ -56,36 +56,39 @@ abstract class MosaicCommand<T>(
     protected abstract suspend fun start(): T
 
     final override fun run() {
-        runMosaic {
-            mosaicScope = this
-            val initial = initialValue()
-            jobState.value = JobState.Progress(initial)
-            val snapshot = mutableStateOf(initial)
+        runBlocking {
+            runMosaic {
+                mosaicScope = this
+                val initial = initialValue()
+                jobState.value = JobState.Progress(initial)
+                val snapshot = mutableStateOf(initial)
 
-            renderMosaic(snapshot)
+                renderMosaic(snapshot)
 
-            val job = launch {
-                jobState.let {
-                    if (!plain) it.sample(40) else it
-                }.collect {
-                    when (it) {
-                        is JobState.Initial -> {}
-                        is JobState.Progress -> {
-                            if (plain) renderPlain(it.value)
-                            else snapshot.value = it.value
-                        }
-                        is JobState.Complete -> {
-                            if (plain) renderPlain(it.final)
-                            else snapshot.value = it.final
-                            cancel()
+                val job = launch {
+                    jobState.let {
+                        if (!plain) it.sample(40) else it
+                    }.collect {
+                        when (it) {
+                            is JobState.Initial -> {}
+                            is JobState.Progress -> {
+                                if (plain) renderPlain(it.value)
+                                else snapshot.value = it.value
+                            }
+
+                            is JobState.Complete -> {
+                                if (plain) renderPlain(it.final)
+                                else snapshot.value = it.final
+                                cancel()
+                            }
                         }
                     }
                 }
+
+                jobState.value = withContext(Dispatchers.Default) { JobState.Complete(start()) }
+
+                job.join()
             }
-
-            jobState.value = withContext(Dispatchers.Default) { JobState.Complete(start()) }
-
-            job.join()
         }
     }
 

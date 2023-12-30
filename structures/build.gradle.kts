@@ -1,6 +1,6 @@
 plugins {
-    id("library.multiplatform")
-    id("com.inkapplications.publishing")
+    id("multiplatform.tier2")
+    id("ink.publishing")
 }
 
 kotlin {
@@ -8,7 +8,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(kotlinLibraries.kotlinx.datetime.core)
-                api("com.inkapplications.spondee:units:1.2.0")
+                api(inkLibraries.spondee.units)
             }
         }
 
